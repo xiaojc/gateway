@@ -50,9 +50,9 @@ public class RestfulClient implements GatewayClient {
             ResponseExtractor<?> responseExtractor = PartUtil.newPartInstance(gatewayPartClasses, ResponseExtractor.class, gatewayConfig, gatewayRequest, gatewayDefine);
             Object result = gatewayExecutor.execute(uri, httpMethod, requestCallback, responseExtractor);
             if (null != result && result instanceof GatewayEntity) {
-                GatewayWrapping gatewayWrapping = PartUtil.newPartInstance(gatewayPartClasses, GatewayWrapping.class, gatewayConfig, gatewayRequest, gatewayDefine);
+                GatewayWrapper gatewayWrapper = PartUtil.newPartInstance(gatewayPartClasses, GatewayWrapper.class, gatewayConfig, gatewayRequest, gatewayDefine);
                 GatewayEntity gatewayEntity = (GatewayEntity) result;
-                gatewayWrapping.wrap(gatewayEntity, gatewayConfig);
+                gatewayWrapper.wrap(gatewayEntity, gatewayConfig, gatewayRequest, gatewayDefine);
             }
         } catch (Exception ex) {
             throw new GatewayException(ex);

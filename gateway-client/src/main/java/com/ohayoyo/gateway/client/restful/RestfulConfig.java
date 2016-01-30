@@ -3,15 +3,15 @@ package com.ohayoyo.gateway.client.restful;
 import com.ohayoyo.gateway.client.core.GatewayConfig;
 import com.ohayoyo.gateway.client.core.GatewayPart;
 import com.ohayoyo.gateway.client.parts.*;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.format.support.DefaultFormattingConversionService;
+import org.springframework.http.converter.*;
 import org.springframework.http.converter.feed.AtomFeedHttpMessageConverter;
 import org.springframework.http.converter.feed.RssChannelHttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2CollectionHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
@@ -19,6 +19,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 
 import javax.xml.transform.Source;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,9 +37,13 @@ public class RestfulConfig implements GatewayConfig {
 
     private static final boolean gsonPresent = ClassUtils.isPresent("com.google.gson.Gson", RestfulExecutor.class.getClassLoader());
 
+    public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+
     private List<HttpMessageConverter<?>> httpMessageConverters;
 
     private Set<Class<? extends GatewayPart<?>>> gatewayPartClasses;
+
+    private ConversionService conversionService;
 
     public RestfulConfig() {
         this(null, null, true);
@@ -49,14 +54,21 @@ public class RestfulConfig implements GatewayConfig {
     }
 
     public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, Set<Class<? extends GatewayPart<?>>> gatewayPartClasses, boolean isDefaultConfig) {
+        this(httpMessageConverters, gatewayPartClasses, null, isDefaultConfig);
+    }
+
+    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, Set<Class<? extends GatewayPart<?>>> gatewayPartClasses, ConversionService conversionService, boolean isDefaultConfig) {
+        this.httpMessageConverters = httpMessageConverters;
+        this.gatewayPartClasses = gatewayPartClasses;
+        this.conversionService = conversionService;
         if (isDefaultConfig) {
+            if (null == this.conversionService) {
+                this.conversionService = new DefaultFormattingConversionService();
+            }
             this.configDefaultGatewayPartClasses();
             this.configDefaultHttpMessageConverters();
             this.configOtherGatewayPartClasses(gatewayPartClasses);
             this.configOtherHttpMessageConverters(httpMessageConverters);
-        } else {
-            this.httpMessageConverters = httpMessageConverters;
-            this.gatewayPartClasses = gatewayPartClasses;
         }
     }
 
@@ -66,7 +78,7 @@ public class RestfulConfig implements GatewayConfig {
         this.gatewayPartClasses.add(HttpMethodPart.class);
         this.gatewayPartClasses.add(RequestCallbackPart.class);
         this.gatewayPartClasses.add(ResponseExtractorPart.class);
-        this.gatewayPartClasses.add(ResponseWrappingPart.class);
+        this.gatewayPartClasses.add(ResponseWrapperPart.class);
     }
 
     public void configOtherGatewayPartClasses(Set<Class<? extends GatewayPart<?>>> otherGatewayPartClasses) {
@@ -79,11 +91,27 @@ public class RestfulConfig implements GatewayConfig {
 
         this.httpMessageConverters = new ArrayList<HttpMessageConverter<?>>();
 
+        this.httpMessageConverters.add(new BufferedImageHttpMessageConverter());
+
+        this.httpMessageConverters.add(new FormHttpMessageConverter());
+
         this.httpMessageConverters.add(new ByteArrayHttpMessageConverter());
-        this.httpMessageConverters.add(new StringHttpMessageConverter());
+
+        this.httpMessageConverters.add(new StringHttpMessageConverter(DEFAULT_CHARSET));
+
         this.httpMessageConverters.add(new ResourceHttpMessageConverter());
+
         this.httpMessageConverters.add(new SourceHttpMessageConverter<Source>());
+
         this.httpMessageConverters.add(new AllEncompassingFormHttpMessageConverter());
+
+        if (null != this.conversionService) {
+            this.httpMessageConverters.add(new ObjectToStringHttpMessageConverter(this.conversionService, DEFAULT_CHARSET));
+        }
+
+        //MarshallingHttpMessageConverter : 暂时不支持
+
+        //ProtobufHttpMessageConverter : 暂时不支持
 
         if (romePresent) {
             this.httpMessageConverters.add(new AtomFeedHttpMessageConverter());
@@ -92,15 +120,21 @@ public class RestfulConfig implements GatewayConfig {
 
         if (jackson2XmlPresent) {
             this.httpMessageConverters.add(new MappingJackson2XmlHttpMessageConverter());
-        } else if (jaxb2Present) {
+        }
+
+        if (jaxb2Present) {
+            this.httpMessageConverters.add(new Jaxb2CollectionHttpMessageConverter());
             this.httpMessageConverters.add(new Jaxb2RootElementHttpMessageConverter());
         }
 
         if (jackson2Present) {
             this.httpMessageConverters.add(new MappingJackson2HttpMessageConverter());
-        } else if (gsonPresent) {
+        }
+
+        if (gsonPresent) {
             this.httpMessageConverters.add(new GsonHttpMessageConverter());
         }
+
     }
 
     public void configOtherHttpMessageConverters(List<HttpMessageConverter<?>> otherHttpMessageConverters) {
@@ -135,6 +169,15 @@ public class RestfulConfig implements GatewayConfig {
 
     public RestfulConfig setGatewayPartClasses(Set<Class<? extends GatewayPart<?>>> gatewayPartClasses) {
         this.gatewayPartClasses = gatewayPartClasses;
+        return this;
+    }
+
+    public ConversionService getConversionService() {
+        return conversionService;
+    }
+
+    public RestfulConfig setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
         return this;
     }
 

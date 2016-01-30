@@ -1,4 +1,4 @@
-package com.ohayoyo.virtual.gateway.core.test;
+package com.ohayoyo.gateway.test;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -7,15 +7,37 @@ import com.ohayoyo.gateway.client.core.GatewayException;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
 import com.ohayoyo.gateway.client.restful.RestfulClient;
 import com.ohayoyo.gateway.client.restful.RestfulDefine;
+import com.ohayoyo.gateway.client.restful.RestfulExecutor;
 import com.ohayoyo.gateway.client.restful.RestfulRequest;
 import com.ohayoyo.gateway.define.core.QueryDefine;
 import com.ohayoyo.gateway.define.memory.*;
-import org.junit.Test;
+import org.junit.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Set;
 
-public class RestfulClientTest extends SimpleTest {
+public class RestfulClientTest {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
 
     @Test
     public void testRestfulClient1() {
@@ -78,7 +100,7 @@ public class RestfulClientTest extends SimpleTest {
     @Test
     public void testRestfulClient3() throws GatewayException {
 
-        RestfulClient restfulClient = new RestfulClient();
+        RestfulClient restfulClient = new RestfulClient(RestfulExecutor.byNetty4());
 
         Map<String, Object> requestQueries = Maps.newHashMap();
         requestQueries.put("num", "20");
@@ -116,6 +138,34 @@ public class RestfulClientTest extends SimpleTest {
                                                 .setType(QueryDefine.STRING)
                                                 .setRequired(true)
                                 ))
+                        )
+        );
+
+        restfulClient.session(gatewayRequest, gatewayDefine);
+
+        logger.debug("{}", restfulClient);
+
+    }
+
+    @Test
+    public void testRestfulClient4() throws GatewayException {
+
+        RestfulClient restfulClient = new RestfulClient(RestfulExecutor.byNetty4());
+
+        GatewayRequest gatewayRequest = new RestfulRequest()
+                .setResponseType(BufferedImage.class);
+        //http://t1.27270.com/uploads/tu/201508/05/slt.jpg
+        GatewayDefine gatewayDefine = new RestfulDefine(
+                new MemoryInterfaceDefine()
+                        .setKey("vg_txapi_mvtp_meinv")
+                        .setRequest(new MemoryRequestDefine()
+                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("t1.27270.com")))
+                                .setPath(new MemoryPathDefine()
+                                        .setModule("uploads")
+                                        .setResource("tu/201508/05/slt.jpg")
+                                )
+                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
         );
 

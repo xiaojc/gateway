@@ -23,4 +23,5 @@ public class ResponseTypeUtil {
         String type = entityDefine.getType();
         return null;
     }
+
 }

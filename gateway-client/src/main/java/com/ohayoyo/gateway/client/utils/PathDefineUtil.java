@@ -18,7 +18,7 @@ public class PathDefineUtil {
         return false;
     }
 
-    public static void putPathSegments(String path, List<String> values) {
+    public static void pathSegmentItems(String path, List<String> values) {
         if (!StringUtils.isEmpty(path)) {
             if (hasPathDelimiter(path)) {
                 List<String> paths = Arrays.asList(path.split(PATH_DELIMITER));
@@ -36,10 +36,10 @@ public class PathDefineUtil {
             String module = pathDefine.getModule();
             String operate = pathDefine.getOperate();
             String resource = pathDefine.getResource();
-            putPathSegments(project, names);
-            putPathSegments(module, names);
-            putPathSegments(operate, names);
-            putPathSegments(resource, names);
+            pathSegmentItems(project, names);
+            pathSegmentItems(module, names);
+            pathSegmentItems(operate, names);
+            pathSegmentItems(resource, names);
         }
         int pathSegmentsSize = names.size();
         String[] pathSegments = new String[pathSegmentsSize];
