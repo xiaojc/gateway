@@ -8,6 +8,14 @@ import java.net.URI;
 
 public interface GatewayExecutor {
 
+    void enableBuffering();
+
+    void disableBuffering();
+
+    void open() throws GatewayException;
+
     <T> T execute(URI url, HttpMethod method, RequestCallback requestCallback, ResponseExtractor<T> responseExtractor) throws GatewayException;
+
+    void close() throws GatewayException;
 
 }

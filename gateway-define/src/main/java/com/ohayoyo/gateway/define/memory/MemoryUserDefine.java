@@ -4,6 +4,7 @@ import com.ohayoyo.gateway.define.core.UserDefine;
 
 import java.util.Set;
 
+@Deprecated
 public class MemoryUserDefine implements UserDefine {
 
     private String username;

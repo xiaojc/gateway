@@ -1,21 +1,21 @@
 package com.ohayoyo.gateway.test;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ohayoyo.gateway.client.core.GatewayDefine;
 import com.ohayoyo.gateway.client.core.GatewayException;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
+import com.ohayoyo.gateway.client.core.GatewayResponse;
 import com.ohayoyo.gateway.client.restful.RestfulClient;
 import com.ohayoyo.gateway.client.restful.RestfulDefine;
-import com.ohayoyo.gateway.client.restful.RestfulExecutor;
 import com.ohayoyo.gateway.client.restful.RestfulRequest;
-import com.ohayoyo.gateway.define.core.QueryDefine;
 import com.ohayoyo.gateway.define.memory.*;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,11 +40,33 @@ public class RestfulClientTest {
     }
 
     @Test
-    public void testRestfulClient1() {
+    public void testRestfulClient1() throws GatewayException {
 
         RestfulClient restfulClient = new RestfulClient();
 
-        logger.debug("{}", restfulClient);
+        MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();
+        requestQueries.set("key", "29e069ec39101eb669121554bf67024f");
+        requestQueries.set("num", "10");
+
+        GatewayRequest gatewayRequest = new RestfulRequest()
+                .setRequestQueries(requestQueries);
+
+        GatewayDefine gatewayDefine = new RestfulDefine(
+                new MemoryInterfaceDefine()
+                        .setRequest(new MemoryRequestDefine()
+                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("api.huceo.com")))
+                                .setPath(new MemoryPathDefine()
+                                        .setModule("meinv")
+                                        .setResource("other")
+                                )
+                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
+                        )
+        );
+
+        GatewayResponse<Map> objectGatewayResponse = restfulClient.session(Map.class, gatewayDefine, gatewayRequest);
+
+        logger.debug("{}", objectGatewayResponse.getResponseEntity());
 
     }
 
@@ -53,107 +75,38 @@ public class RestfulClientTest {
 
         RestfulClient restfulClient = new RestfulClient();
 
-        Map<String, Object> requestQueries = Maps.newHashMap();
-        requestQueries.put("num", "20");
-
-        Map<String, Object> requestHeaders = Maps.newHashMap();
-
-        requestHeaders.put("apikey", "6df781b1b4d9d3d31712fdd9df616032");
+        MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();
+        requestQueries.set("key", "29e069ec39101eb669121554bf67024f");
+        requestQueries.set("num", "10");
 
         GatewayRequest gatewayRequest = new RestfulRequest()
-                .setRequestQueries(requestQueries)
-                .setRequestHeaders(requestHeaders);
+                .setRequestQueries(requestQueries);
 
         GatewayDefine gatewayDefine = new RestfulDefine(
                 new MemoryInterfaceDefine()
-                        .setKey("vg_txapi_mvtp_meinv")
                         .setRequest(new MemoryRequestDefine()
                                 .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
-                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("apis.baidu.com")))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("api.huceo.com")))
                                 .setPath(new MemoryPathDefine()
-                                        .setModule("txapi")
-                                        .setOperate("mvtp")
-                                        .setResource("meinv")
+                                        .setModule("meinv")
+                                        .setResource("other")
                                 )
-                                .setQueries((Set) Sets.newHashSet(
-                                        new MemoryQueryDefine()
-                                                .setName("num")
-                                                .setType(QueryDefine.STRING)
-                                                .setRequired(false)
-                                ))
                                 .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
-                                .setHeaders((Set) Sets.newHashSet(
-                                        new MemoryHeaderDefine()
-                                                .setName("apikey")
-                                                .setType(QueryDefine.STRING)
-                                                .setRequired(true)
-                                ))
                         )
         );
 
-        restfulClient.session(gatewayRequest, gatewayDefine);
+        GatewayResponse<TestPack> objectGatewayResponse = restfulClient.session(TestPack.class, gatewayDefine, gatewayRequest);
 
-        logger.debug("{}", restfulClient);
+        logger.debug("{}", objectGatewayResponse.getResponseEntity());
 
     }
 
     @Test
     public void testRestfulClient3() throws GatewayException {
 
-        RestfulClient restfulClient = new RestfulClient(RestfulExecutor.byNetty4());
+        RestfulClient restfulClient = new RestfulClient();
 
-        Map<String, Object> requestQueries = Maps.newHashMap();
-        requestQueries.put("num", "20");
-
-        Map<String, Object> requestHeaders = Maps.newHashMap();
-
-        requestHeaders.put("apikey", "6df781b1b4d9d3d31712fdd9df616032");
-
-        GatewayRequest gatewayRequest = new RestfulRequest()
-                .setResponseType(String.class)
-                .setRequestQueries(requestQueries)
-                .setRequestHeaders(requestHeaders);
-
-        GatewayDefine gatewayDefine = new RestfulDefine(
-                new MemoryInterfaceDefine()
-                        .setKey("vg_txapi_mvtp_meinv")
-                        .setRequest(new MemoryRequestDefine()
-                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
-                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("apis.baidu.com")))
-                                .setPath(new MemoryPathDefine()
-                                        .setModule("txapi")
-                                        .setOperate("mvtp")
-                                        .setResource("meinv")
-                                )
-                                .setQueries((Set) Sets.newHashSet(
-                                        new MemoryQueryDefine()
-                                                .setName("num")
-                                                .setType(QueryDefine.STRING)
-                                                .setRequired(false)
-                                ))
-                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
-                                .setHeaders((Set) Sets.newHashSet(
-                                        new MemoryHeaderDefine()
-                                                .setName("apikey")
-                                                .setType(QueryDefine.STRING)
-                                                .setRequired(true)
-                                ))
-                        )
-        );
-
-        restfulClient.session(gatewayRequest, gatewayDefine);
-
-        logger.debug("{}", restfulClient);
-
-    }
-
-    @Test
-    public void testRestfulClient4() throws GatewayException {
-
-        RestfulClient restfulClient = new RestfulClient(RestfulExecutor.byNetty4());
-
-        GatewayRequest gatewayRequest = new RestfulRequest()
-                .setResponseType(BufferedImage.class);
+        GatewayRequest gatewayRequest = new RestfulRequest();
         //http://t1.27270.com/uploads/tu/201508/05/slt.jpg
         GatewayDefine gatewayDefine = new RestfulDefine(
                 new MemoryInterfaceDefine()
@@ -169,9 +122,31 @@ public class RestfulClientTest {
                         )
         );
 
-        restfulClient.session(gatewayRequest, gatewayDefine);
+        GatewayResponse<Object> objectGatewayResponse = restfulClient.session(gatewayDefine, gatewayRequest);
 
-        logger.debug("{}", restfulClient);
+        logger.debug("{}", objectGatewayResponse.getResponseEntity());
+
+    }
+
+    @Test
+    public void testRestfulClient4() throws GatewayException {
+        RestfulClient restfulClient = new RestfulClient();
+        GatewayRequest gatewayRequest = new RestfulRequest();
+        GatewayDefine gatewayDefine = new RestfulDefine(
+                new MemoryInterfaceDefine()
+                        .setRequest(new MemoryRequestDefine()
+                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("repo.ohayoyo.com")))
+                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
+                        )
+        );
+        GatewayResponse<Object> objectGatewayResponse = restfulClient.session(gatewayDefine, gatewayRequest);
+        Object object = objectGatewayResponse.getResponseEntity();
+        ConversionService conversionService = restfulClient.getGatewayConfig().getConversionService();
+        if (conversionService.canConvert(object.getClass(), String.class)) {
+            logger.debug("{}", new String((byte[]) object));
+        }
+        logger.debug("{}", objectGatewayResponse.getResponseEntity());
 
     }
 

@@ -1,6 +1,7 @@
 package com.ohayoyo.gateway.client.core;
 
-import java.lang.reflect.Type;
+import org.springframework.util.MultiValueMap;
+
 import java.util.Map;
 
 public interface GatewayRequest {
@@ -9,32 +10,26 @@ public interface GatewayRequest {
 
     GatewayRequest setSelect(String select);
 
-    Map<String, Object> getRequestPathVariables();
+    Map<String, String> getRequestPathVariables();
 
-    GatewayRequest setRequestPathVariables(Map<String, Object> requestPathVariables);
-
-    @Deprecated
-    Map<String, Object> getRequestParameters();
+    GatewayRequest setRequestPathVariables(Map<String, String> requestPathVariables);
 
     @Deprecated
-    GatewayRequest setRequestParameters(Map<String, Object> requestParameters);
+    MultiValueMap<String, String> getRequestParameters();
 
-    Map<String, Object> getRequestQueries();
+    @Deprecated
+    GatewayRequest setRequestParameters(MultiValueMap<String, String> requestParameters);
 
-    GatewayRequest setRequestQueries(Map<String, Object> requestQueries);
+    MultiValueMap<String, String> getRequestQueries();
 
-    Map<String, Object> getRequestHeaders();
+    GatewayRequest setRequestQueries(MultiValueMap<String, String> requestQueries);
 
-    GatewayRequest setRequestHeaders(Map<String, Object> requestHeaders);
+    MultiValueMap<String, String> getRequestHeaders();
+
+    GatewayRequest setRequestHeaders(MultiValueMap<String, String> requestHeaders);
 
     Object getRequestEntity();
 
     GatewayRequest setRequestEntity(Object requestEntity);
-
-    Type getResponseType();
-
-    GatewayRequest setResponseType(Type responseType);
-
-    GatewayRequest setResponseType(Class<?> responseType);
 
 }

@@ -1,9 +1,11 @@
 package com.ohayoyo.gateway.client.restful;
 
 import com.ohayoyo.gateway.client.core.GatewayConfig;
-import com.ohayoyo.gateway.client.core.GatewayPart;
-import com.ohayoyo.gateway.client.parts.*;
+import com.rometools.rome.feed.atom.Feed;
+import com.rometools.rome.feed.rss.Channel;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.core.io.Resource;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.feed.AtomFeedHttpMessageConverter;
@@ -15,35 +17,20 @@ import org.springframework.http.converter.xml.Jaxb2CollectionHttpMessageConverte
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MultiValueMap;
 
 import javax.xml.transform.Source;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.awt.image.BufferedImage;
+import java.util.*;
 
 public class RestfulConfig implements GatewayConfig {
 
-    private static boolean romePresent = ClassUtils.isPresent("com.rometools.rome.feed.WireFeed", RestfulExecutor.class.getClassLoader());
-
-    private static final boolean jaxb2Present = ClassUtils.isPresent("javax.xml.bind.Binder", RestfulExecutor.class.getClassLoader());
-
-    private static final boolean jackson2Present = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", RestfulExecutor.class.getClassLoader()) && ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", RestfulExecutor.class.getClassLoader());
-
-    private static final boolean jackson2XmlPresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.xml.XmlMapper", RestfulExecutor.class.getClassLoader());
-
-    private static final boolean gsonPresent = ClassUtils.isPresent("com.google.gson.Gson", RestfulExecutor.class.getClassLoader());
-
-    public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
-
     private List<HttpMessageConverter<?>> httpMessageConverters;
 
-    private Set<Class<? extends GatewayPart<?>>> gatewayPartClasses;
-
     private ConversionService conversionService;
+
+    private Set<Class<?>> autoRecognitionClassSupports;
 
     public RestfulConfig() {
         this(null, null, true);
@@ -53,38 +40,54 @@ public class RestfulConfig implements GatewayConfig {
         this(otherHttpMessageConverters, null, true);
     }
 
-    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, Set<Class<? extends GatewayPart<?>>> gatewayPartClasses, boolean isDefaultConfig) {
-        this(httpMessageConverters, gatewayPartClasses, null, isDefaultConfig);
+    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, boolean isDefaultConfig) {
+        this(httpMessageConverters, null, isDefaultConfig);
     }
 
-    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, Set<Class<? extends GatewayPart<?>>> gatewayPartClasses, ConversionService conversionService, boolean isDefaultConfig) {
+    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, boolean isDefaultConfig) {
+        this(httpMessageConverters, conversionService, null, isDefaultConfig);
+    }
+
+    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, Set<Class<?>> autoRecognitionClassSupports, boolean isDefaultConfig) {
         this.httpMessageConverters = httpMessageConverters;
-        this.gatewayPartClasses = gatewayPartClasses;
         this.conversionService = conversionService;
+        this.autoRecognitionClassSupports = autoRecognitionClassSupports;
         if (isDefaultConfig) {
-            if (null == this.conversionService) {
-                this.conversionService = new DefaultFormattingConversionService();
-            }
-            this.configDefaultGatewayPartClasses();
+            this.configDefaultConversionService();
+            this.configDefaultAutoRecognitionClassSupports();
             this.configDefaultHttpMessageConverters();
-            this.configOtherGatewayPartClasses(gatewayPartClasses);
             this.configOtherHttpMessageConverters(httpMessageConverters);
+        } else if (null == this.autoRecognitionClassSupports) {
+            this.configDefaultAutoRecognitionClassSupports();
         }
     }
 
-    public void configDefaultGatewayPartClasses() {
-        this.gatewayPartClasses = new HashSet<Class<? extends GatewayPart<?>>>();
-        this.gatewayPartClasses.add(UriPart.class);
-        this.gatewayPartClasses.add(HttpMethodPart.class);
-        this.gatewayPartClasses.add(RequestCallbackPart.class);
-        this.gatewayPartClasses.add(ResponseExtractorPart.class);
-        this.gatewayPartClasses.add(ResponseWrapperPart.class);
+    private void configDefaultConversionService() {
+        if (null == this.conversionService) {
+            this.conversionService = new DefaultFormattingConversionService();
+            //this.conversionService = new DefaultConversionService();
+
+        }
     }
 
-    public void configOtherGatewayPartClasses(Set<Class<? extends GatewayPart<?>>> otherGatewayPartClasses) {
-        if (!CollectionUtils.isEmpty(otherGatewayPartClasses)) {
-            this.gatewayPartClasses.addAll(otherGatewayPartClasses);
+    public void configDefaultAutoRecognitionClassSupports() {
+        this.autoRecognitionClassSupports = new HashSet<Class<?>>();
+        if (romePresent) {
+            this.autoRecognitionClassSupports.add(Feed.class);
+            this.autoRecognitionClassSupports.add(Channel.class);
         }
+        if (jackson2XmlPresent || jaxb2Present || jackson2Present || gsonPresent) {
+            this.autoRecognitionClassSupports.add(Collection.class);
+            this.autoRecognitionClassSupports.add(List.class);
+            this.autoRecognitionClassSupports.add(Set.class);
+            this.autoRecognitionClassSupports.add(Map.class);
+        }
+        this.autoRecognitionClassSupports.add(BufferedImage.class);
+        this.autoRecognitionClassSupports.add(MultiValueMap.class);
+        this.autoRecognitionClassSupports.add(String.class);
+        this.autoRecognitionClassSupports.add(Resource.class);
+        this.autoRecognitionClassSupports.add(Source.class);
+        this.autoRecognitionClassSupports.add(byte[].class);
     }
 
     public void configDefaultHttpMessageConverters() {
@@ -163,21 +166,21 @@ public class RestfulConfig implements GatewayConfig {
         return this;
     }
 
-    public Set<Class<? extends GatewayPart<?>>> getGatewayPartClasses() {
-        return gatewayPartClasses;
-    }
-
-    public RestfulConfig setGatewayPartClasses(Set<Class<? extends GatewayPart<?>>> gatewayPartClasses) {
-        this.gatewayPartClasses = gatewayPartClasses;
-        return this;
-    }
-
     public ConversionService getConversionService() {
         return conversionService;
     }
 
     public RestfulConfig setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
+        return this;
+    }
+
+    public Set<Class<?>> getAutoRecognitionClassSupports() {
+        return autoRecognitionClassSupports;
+    }
+
+    public RestfulConfig setAutoRecognitionClassSupports(Set<Class<?>> autoRecognitionClassSupports) {
+        this.autoRecognitionClassSupports = autoRecognitionClassSupports;
         return this;
     }
 

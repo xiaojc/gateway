@@ -8,6 +8,7 @@ public class MemoryRequestDefine implements RequestDefine {
 
     private Set<ProtocolDefine> protocols;
 
+    @Deprecated
     private Set<UserDefine> userDefines;
 
     private Set<HostDefine> hosts;
@@ -39,10 +40,12 @@ public class MemoryRequestDefine implements RequestDefine {
         return this;
     }
 
+    @Deprecated
     public Set<UserDefine> getUserDefines() {
         return userDefines;
     }
 
+    @Deprecated
     public MemoryRequestDefine setUserDefines(Set<UserDefine> userDefines) {
         this.userDefines = userDefines;
         return this;

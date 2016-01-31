@@ -1,7 +1,9 @@
 package com.ohayoyo.gateway.client.core;
 
-public interface GatewayWrapper {
+import java.io.IOException;
 
-    GatewayResponse wrap(GatewayEntity gatewayEntity, GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine) throws GatewayException;
+public interface GatewayWrapper<T> extends GatewayComponent<GatewayWrapper<T>> {
+
+    GatewayResponse<T> wrapGatewayResponse() throws IOException;
 
 }

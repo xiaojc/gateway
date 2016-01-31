@@ -3,6 +3,7 @@ package com.ohayoyo.gateway.define.core;
 import java.io.Serializable;
 import java.util.Set;
 
+@Deprecated
 public interface UserDefine extends Serializable {
 
     String getUsername();

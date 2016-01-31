@@ -1,18 +1,17 @@
 package com.ohayoyo.gateway.client.restful;
 
 import com.ohayoyo.gateway.client.core.GatewayResponse;
+import org.springframework.util.MultiValueMap;
 
-import java.util.Map;
-
-public class RestfulResponse implements GatewayResponse {
+public class RestfulResponse<T> implements GatewayResponse<T> {
 
     private String statusCode;
 
     private String reasonPhrase;
 
-    private Map<String, Object> responseHeaders;
+    private MultiValueMap<String, String> responseHeaders;
 
-    private Object responseEntity;
+    private T responseEntity;
 
     public String getStatusCode() {
         return statusCode;
@@ -32,20 +31,20 @@ public class RestfulResponse implements GatewayResponse {
         return this;
     }
 
-    public Map<String, Object> getResponseHeaders() {
+    public MultiValueMap<String, String> getResponseHeaders() {
         return responseHeaders;
     }
 
-    public RestfulResponse setResponseHeaders(Map<String, Object> responseHeaders) {
+    public RestfulResponse setResponseHeaders(MultiValueMap<String, String> responseHeaders) {
         this.responseHeaders = responseHeaders;
         return this;
     }
 
-    public Object getResponseEntity() {
+    public T getResponseEntity() {
         return responseEntity;
     }
 
-    public RestfulResponse setResponseEntity(Object responseEntity) {
+    public RestfulResponse setResponseEntity(T responseEntity) {
         this.responseEntity = responseEntity;
         return this;
     }

@@ -15,11 +15,15 @@ import java.net.URI;
 
 public class RestfulExecutor extends InterceptingHttpAccessor implements GatewayExecutor {
 
-    private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
+    private static final ThreadLocal<ClientHttpResponse> CLIENT_HTTP_RESPONSE_THREAD_LOCAL = new ThreadLocal<ClientHttpResponse>();
 
-    private ClientHttpRequestFactory delegateClientHttpRequestFactory;
+    private static final ThreadLocal<Boolean> EXECUTION_THREAD_LOCAL = new ThreadLocal<Boolean>();
 
-    private boolean buffering = false;
+    private final ClientHttpRequestFactory delegateClientHttpRequestFactory;
+
+    private volatile boolean buffering = false;
+
+    private volatile ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
 
     public RestfulExecutor() {
         this(new SimpleClientHttpRequestFactory(), false);
@@ -51,46 +55,66 @@ public class RestfulExecutor extends InterceptingHttpAccessor implements Gateway
         return new RestfulExecutor(new OkHttpClientHttpRequestFactory(), false);
     }
 
+
+    @Override
     public void enableBuffering() {
         BufferingClientHttpRequestFactory bufferingClientHttpRequestFactory = new BufferingClientHttpRequestFactory(this.delegateClientHttpRequestFactory);
         this.setRequestFactory(bufferingClientHttpRequestFactory);
         this.buffering = true;
     }
 
+    @Override
     public void disableBuffering() {
         this.setRequestFactory(this.delegateClientHttpRequestFactory);
         this.buffering = false;
     }
 
     @Override
-    public <T> T execute(URI url, HttpMethod method, RequestCallback requestCallback, ResponseExtractor<T> responseExtractor) throws GatewayException {
-        ClientHttpResponse response = null;
-        try {
-            ClientHttpRequest request = createRequest(url, method);
-            if (requestCallback != null) {
-                requestCallback.doWithRequest(request);
-            }
-            response = request.execute();
-            handleResponse(url, method, response);
-            if (responseExtractor != null) {
-                return responseExtractor.extractData(response);
-            } else {
-                return null;
-            }
-        } catch (IOException ex) {
-            throw new GatewayException("I/O error on " + method.name() + " request for \"" + url + "\": " + ex.getMessage(), ex);
-        } finally {
-            if (response != null) {
-                response.close();
-            }
+    public void open() throws GatewayException {
+        Boolean isExecution = EXECUTION_THREAD_LOCAL.get();
+        if (null != isExecution && isExecution) {
+            CLIENT_HTTP_RESPONSE_THREAD_LOCAL.set(null);
         }
     }
 
-    protected void handleResponse(URI url, HttpMethod method, ClientHttpResponse response) throws IOException {
-        ResponseErrorHandler errorHandler = getErrorHandler();
-        boolean hasError = errorHandler.hasError(response);
+    @Override
+    public <T> T execute(URI url, HttpMethod method, RequestCallback requestCallback, ResponseExtractor<T> responseExtractor) throws GatewayException {
+        EXECUTION_THREAD_LOCAL.set(true);
+        GatewayException gatewayException = null;
+        T result = null;
+        try {
+            ClientHttpRequest clientHttpRequest = createRequest(url, method);
+            requestCallback.doWithRequest(clientHttpRequest);
+            ClientHttpResponse clientHttpResponse = clientHttpRequest.execute();
+            CLIENT_HTTP_RESPONSE_THREAD_LOCAL.set(clientHttpResponse);
+            responseErrorHandler(clientHttpResponse);
+            result = responseExtractor.extractData(clientHttpResponse);
+
+        } catch (IOException ex) {
+            gatewayException = new GatewayException(ex);
+        }
+        EXECUTION_THREAD_LOCAL.set(false);
+        if (null != gatewayException) {
+            throw gatewayException;
+        }
+        return result;
+    }
+
+    @Override
+    public void close() throws GatewayException {
+        ClientHttpResponse clientHttpResponse = CLIENT_HTTP_RESPONSE_THREAD_LOCAL.get();
+        if (null != clientHttpResponse) {
+            clientHttpResponse.close();
+        }
+        EXECUTION_THREAD_LOCAL.set(null);
+        CLIENT_HTTP_RESPONSE_THREAD_LOCAL.set(null);
+    }
+
+    protected void responseErrorHandler(ClientHttpResponse response) throws IOException {
+        ResponseErrorHandler responseErrorHandler = getErrorHandler();
+        boolean hasError = responseErrorHandler.hasError(response);
         if (hasError) {
-            errorHandler.handleError(response);
+            responseErrorHandler.handleError(response);
         }
     }
 

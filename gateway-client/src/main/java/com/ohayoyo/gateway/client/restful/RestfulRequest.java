@@ -1,26 +1,24 @@
 package com.ohayoyo.gateway.client.restful;
 
 import com.ohayoyo.gateway.client.core.GatewayRequest;
+import org.springframework.util.MultiValueMap;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 
 public class RestfulRequest implements GatewayRequest {
 
     private String select;
 
-    private Map<String, Object> requestPathVariables;
+    private Map<String, String> requestPathVariables;
 
     @Deprecated
-    private Map<String, Object> requestParameters;
+    private MultiValueMap<String, String> requestParameters;
 
-    private Map<String, Object> requestQueries;
+    private MultiValueMap<String, String> requestQueries;
 
-    private Map<String, Object> requestHeaders;
+    private MultiValueMap<String, String> requestHeaders;
 
     private Object requestEntity;
-
-    private Type responseType;
 
     public String getSelect() {
         return select;
@@ -31,40 +29,40 @@ public class RestfulRequest implements GatewayRequest {
         return this;
     }
 
-    public Map<String, Object> getRequestPathVariables() {
+    public Map<String, String> getRequestPathVariables() {
         return requestPathVariables;
     }
 
-    public RestfulRequest setRequestPathVariables(Map<String, Object> requestPathVariables) {
+    public RestfulRequest setRequestPathVariables(Map<String, String> requestPathVariables) {
         this.requestPathVariables = requestPathVariables;
         return this;
     }
 
     @Deprecated
-    public Map<String, Object> getRequestParameters() {
+    public MultiValueMap<String, String> getRequestParameters() {
         return requestParameters;
     }
 
     @Deprecated
-    public RestfulRequest setRequestParameters(Map<String, Object> requestParameters) {
+    public RestfulRequest setRequestParameters(MultiValueMap<String, String> requestParameters) {
         this.requestParameters = requestParameters;
         return this;
     }
 
-    public Map<String, Object> getRequestQueries() {
+    public MultiValueMap<String, String> getRequestQueries() {
         return requestQueries;
     }
 
-    public RestfulRequest setRequestQueries(Map<String, Object> requestQueries) {
+    public RestfulRequest setRequestQueries(MultiValueMap<String, String> requestQueries) {
         this.requestQueries = requestQueries;
         return this;
     }
 
-    public Map<String, Object> getRequestHeaders() {
+    public MultiValueMap<String, String> getRequestHeaders() {
         return requestHeaders;
     }
 
-    public RestfulRequest setRequestHeaders(Map<String, Object> requestHeaders) {
+    public RestfulRequest setRequestHeaders(MultiValueMap<String, String> requestHeaders) {
         this.requestHeaders = requestHeaders;
         return this;
     }
@@ -78,17 +76,4 @@ public class RestfulRequest implements GatewayRequest {
         return this;
     }
 
-    public Type getResponseType() {
-        return responseType;
-    }
-
-    public RestfulRequest setResponseType(Type responseType) {
-        this.responseType = responseType;
-        return this;
-    }
-
-    @Override
-    public GatewayRequest setResponseType(Class<?> responseType) {
-        return setResponseType((Type) responseType);
-    }
 }

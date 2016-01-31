@@ -1,40 +1,27 @@
-package com.ohayoyo.gateway.client.parts;
+package com.ohayoyo.gateway.client.components;
 
 import com.ohayoyo.gateway.client.core.GatewayConfig;
 import com.ohayoyo.gateway.client.core.GatewayDefine;
 import com.ohayoyo.gateway.client.core.GatewayException;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
-import com.ohayoyo.gateway.client.utils.MapUtil;
-import com.ohayoyo.gateway.client.utils.MediaTypeUtil;
-import com.ohayoyo.gateway.client.utils.ResponseTypeUtil;
 import com.ohayoyo.gateway.define.core.EntityDefine;
 import com.ohayoyo.gateway.define.core.RequestDefine;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequest;
-import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.converter.GenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RequestCallback;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class RequestCallbackPart extends AbstractGatewayPart<RequestCallback> implements RequestCallback {
+public class GatewayRequestCallback extends AbstractGatewayComponent<RequestCallback> implements RequestCallback {
 
-    private static final String HTTP_HEADER_VALUE_AS_MAP_DELIMITER = ",";
-
-    @Override
-    public RequestCallback getPart() throws GatewayException {
-        return this;
-    }
+    private ClientHttpRequest clientHttpRequest;
 
     @Override
     public void doWithRequest(ClientHttpRequest request) throws IOException {
@@ -45,22 +32,20 @@ public class RequestCallbackPart extends AbstractGatewayPart<RequestCallback> im
         GatewayRequest gatewayRequest = this.getGatewayRequest();
         GatewayDefine gatewayDefine = this.getGatewayDefine();
         ClientHttpRequest clientHttpRequest = this.getClientHttpRequest();
-        ClientHttpResponse clientHttpResponse = this.getClientHttpResponse();
 
         try {
-            this.doParameterHeaderRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest, clientHttpResponse);
-            this.doAcceptHeaderRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest, clientHttpResponse);
-            this.doHttpEntityRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest, clientHttpResponse);
+            this.doParameterHeaderRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest);
+            this.autoAcceptHeaderRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest);
+            this.doHttpEntityRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest);
         } catch (GatewayException e) {
             throw new IOException(e);
         }
     }
 
-    private void doParameterHeaderRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest, ClientHttpResponse clientHttpResponse) throws GatewayException {
-        Map<String, Object> requestHeadersData = gatewayRequest.getRequestHeaders();
-        if (!CollectionUtils.isEmpty(requestHeadersData)) {
+    private void doParameterHeaderRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest) throws GatewayException {
+        MultiValueMap<String, String> requestHeaders = gatewayRequest.getRequestHeaders();
+        if (!CollectionUtils.isEmpty(requestHeaders)) {
             HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
-            Map<String, List<String>> requestHeaders = MapUtil.stringObjectMapToStringListMap(requestHeadersData, HTTP_HEADER_VALUE_AS_MAP_DELIMITER);
             Set<Map.Entry<String, List<String>>> requestHeadersEntries = requestHeaders.entrySet();
             for (Map.Entry<String, List<String>> requestHeadersEntry : requestHeadersEntries) {
                 String headerName = requestHeadersEntry.getKey();
@@ -77,34 +62,29 @@ public class RequestCallbackPart extends AbstractGatewayPart<RequestCallback> im
         }
     }
 
-    private void doAcceptHeaderRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest, ClientHttpResponse clientHttpResponse) throws GatewayException {
-        Type responseType = ResponseTypeUtil.resolve(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest, clientHttpResponse);
-        if (null != responseType) {
-            Class<?> responseClass = null;
-            if (responseType instanceof Class) {
-                responseClass = (Class<?>) responseType;
-            }
-            List<MediaType> allSupportedMediaTypes = new ArrayList<MediaType>();
-            for (HttpMessageConverter<?> converter : gatewayConfig.getHttpMessageConverters()) {
-                if (null != responseClass) {
-                    if (converter.canRead(responseClass, null)) {
-                        allSupportedMediaTypes.addAll(MediaTypeUtil.supportedMediaTypes(converter));
-                    }
-                } else if (converter instanceof GenericHttpMessageConverter) {
-                    GenericHttpMessageConverter<?> genericConverter = (GenericHttpMessageConverter<?>) converter;
-                    if (genericConverter.canRead(responseType, null, null)) {
-                        allSupportedMediaTypes.addAll(MediaTypeUtil.supportedMediaTypes(converter));
+    private void autoAcceptHeaderRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest) throws GatewayException {
+        List<MediaType> accept = clientHttpRequest.getHeaders().getAccept(); //获取所支持接收的媒体类型
+        if (CollectionUtils.isEmpty(accept)) { //如果不存在,自动设置所支持的媒体类型
+            Set<MediaType> allSupportedMediaTypeSet = new HashSet<MediaType>();
+            List<HttpMessageConverter<?>> httpMessageConverters = gatewayConfig.getHttpMessageConverters();
+            for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
+                List<MediaType> mediaTypes = httpMessageConverter.getSupportedMediaTypes();
+                if (!CollectionUtils.isEmpty(mediaTypes)) {
+                    for (MediaType mediaType : mediaTypes) {
+                        allSupportedMediaTypeSet.add(mediaType);
                     }
                 }
             }
-            if (!allSupportedMediaTypes.isEmpty()) {
-                MediaType.sortBySpecificity(allSupportedMediaTypes);
-                clientHttpRequest.getHeaders().setAccept(allSupportedMediaTypes);
+            List<MediaType> mediaTypeList = new ArrayList<MediaType>();
+            mediaTypeList.addAll(allSupportedMediaTypeSet);
+            if (!allSupportedMediaTypeSet.isEmpty()) {
+                MediaType.sortBySpecificity(mediaTypeList);
+                clientHttpRequest.getHeaders().setAccept(mediaTypeList);
             }
         }
     }
 
-    private void doHttpEntityRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest, ClientHttpResponse clientHttpResponse) throws GatewayException {
+    private void doHttpEntityRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest) throws GatewayException {
         HttpEntity<?> httpRequestEntity;
         Object requestEntityData = gatewayRequest.getRequestEntity();
         RequestDefine requestDefine = gatewayDefine.getRequest();
@@ -155,6 +135,20 @@ public class RequestCallbackPart extends AbstractGatewayPart<RequestCallback> im
             }
             throw new GatewayException(message);
         }
+    }
+
+    @Override
+    public RequestCallback getComponent() throws GatewayException {
+        return this;
+    }
+
+    public ClientHttpRequest getClientHttpRequest() {
+        return clientHttpRequest;
+    }
+
+    public GatewayRequestCallback setClientHttpRequest(ClientHttpRequest clientHttpRequest) {
+        this.clientHttpRequest = clientHttpRequest;
+        return this;
     }
 
 }

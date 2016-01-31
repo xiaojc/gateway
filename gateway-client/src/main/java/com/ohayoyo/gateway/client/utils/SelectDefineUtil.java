@@ -52,6 +52,7 @@ public class SelectDefineUtil {
         return selectProtocolDefine;
     }
 
+    @Deprecated
     public static UserDefine selectUserDefine(String select, Set<UserDefine> userDefines) {
         UserDefine selectUserDefine = null;
         if (!StringUtils.isEmpty(select) && (!CollectionUtils.isEmpty(userDefines))) {

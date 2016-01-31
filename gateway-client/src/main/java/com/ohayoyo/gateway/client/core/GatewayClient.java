@@ -10,6 +10,8 @@ public interface GatewayClient {
 
     GatewayClient setGatewayExecutor(GatewayExecutor gatewayExecutor);
 
-    GatewayResponse session(GatewayRequest gatewayRequest, GatewayDefine gatewayDefine) throws GatewayException;
+    GatewayResponse session(GatewayDefine gatewayDefine, GatewayRequest gatewayRequest) throws GatewayException;
+
+    <T> GatewayResponse session(Class<T> responseType, GatewayDefine gatewayDefine, GatewayRequest gatewayRequest) throws GatewayException;
 
 }

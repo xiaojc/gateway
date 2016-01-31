@@ -12,8 +12,10 @@ public interface RequestDefine extends Serializable {
 
     RequestDefine setProtocols(Set<ProtocolDefine> protocols);
 
+    @Deprecated
     Set<UserDefine> getUserDefines();
 
+    @Deprecated
     RequestDefine setUserDefines(Set<UserDefine> userDefines);
 
     Set<HostDefine> getHosts();

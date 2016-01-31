@@ -1,15 +1,15 @@
 package com.ohayoyo.gateway.client.core;
 
-import java.util.Map;
+import org.springframework.util.MultiValueMap;
 
-public interface GatewayResponse {
+public interface GatewayResponse<T> {
 
     String getStatusCode();
 
     String getReasonPhrase();
 
-    Map<String, Object> getResponseHeaders();
+    MultiValueMap<String, String> getResponseHeaders();
 
-    Object getResponseEntity();
+    T getResponseEntity();
 
 }
