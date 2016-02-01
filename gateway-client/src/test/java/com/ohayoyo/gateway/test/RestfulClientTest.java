@@ -134,7 +134,7 @@ public class RestfulClientTest {
                                 .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
         );
-        GatewayResponse<String> objectGatewayResponse = restfulClient.session(String.class, gatewayDefine, gatewayRequest);
+        GatewayResponse<String> objectGatewayResponse = restfulClient.session(gatewayDefine, gatewayRequest);
         logger.debug("{}", objectGatewayResponse.getResponseEntity());
 
     }

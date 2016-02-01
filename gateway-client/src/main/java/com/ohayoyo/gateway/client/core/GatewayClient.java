@@ -36,7 +36,7 @@ public interface GatewayClient {
     GatewayClient setGatewayExecutor(GatewayExecutor gatewayExecutor);
 
     /**
-     * 通过网关客户端进行一次会话
+     * 通过网关客户端进行一次会话,使用默认响应类型为字符串
      *
      * @param gatewayDefine  网关定义
      * @param gatewayRequest 网关请求

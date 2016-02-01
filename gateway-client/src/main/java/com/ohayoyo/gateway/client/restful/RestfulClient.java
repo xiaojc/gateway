@@ -66,7 +66,7 @@ public class RestfulClient implements GatewayClient {
     }
 
     /**
-     * 通过网关客户端进行一次会话
+     * 通过网关客户端进行一次会话,使用默认响应类型为字符串
      *
      * @param gatewayDefine  网关定义
      * @param gatewayRequest 网关请求
@@ -74,8 +74,8 @@ public class RestfulClient implements GatewayClient {
      * @throws GatewayException 抛出网关异常
      */
     @Override
-    public GatewayResponse<Object> session(GatewayDefine gatewayDefine, GatewayRequest gatewayRequest) throws GatewayException {
-        return session(Object.class, gatewayDefine, gatewayRequest);
+    public GatewayResponse<String> session(GatewayDefine gatewayDefine, GatewayRequest gatewayRequest) throws GatewayException {
+        return session(String.class, gatewayDefine, gatewayRequest);
     }
 
     /**
@@ -104,7 +104,7 @@ public class RestfulClient implements GatewayClient {
             //创建网关请求回调器组件
             GatewayRequestCallback requestCallback = createRequestCallback(gatewayConfig, gatewayDefine, gatewayRequest);
             //创建网关响应提取器组件
-            GatewayResponseExtractor<T> responseExtractor = createResponseExtractor(responseType, gatewayConfig, gatewayDefine, gatewayRequest);
+            GatewayResponseExtractor<T> responseExtractor = createResponseExtractor(responseType, gatewayConfig, gatewayDefine, gatewayRequest,httpMethod);
             //执行器执行一个内部调用HTTP请求
             T responseResult = gatewayExecutor.execute(uri, httpMethod, requestCallback, responseExtractor);
             //创建网关包装器组件
@@ -192,8 +192,8 @@ public class RestfulClient implements GatewayClient {
      * @return 返回网关响应提取器组件
      * @throws GatewayException 抛出网关异常
      */
-    protected <T> GatewayResponseExtractor<T> createResponseExtractor(Class<T> responseType, GatewayConfig gatewayConfig, GatewayDefine gatewayDefine, GatewayRequest gatewayRequest) throws GatewayException {
-        return (GatewayResponseExtractor<T>) compileGatewayComponent(new GatewayResponseExtractor<T>(responseType), gatewayConfig, gatewayDefine, gatewayRequest).getComponent();
+    protected <T> GatewayResponseExtractor<T> createResponseExtractor(Class<T> responseType, GatewayConfig gatewayConfig, GatewayDefine gatewayDefine, GatewayRequest gatewayRequest,HttpMethod httpMethod) throws GatewayException {
+        return (GatewayResponseExtractor<T>) compileGatewayComponent(new GatewayResponseExtractor<T>(responseType,httpMethod), gatewayConfig, gatewayDefine, gatewayRequest).getComponent();
     }
 
     /**

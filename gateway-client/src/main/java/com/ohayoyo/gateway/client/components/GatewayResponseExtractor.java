@@ -6,6 +6,7 @@ import com.ohayoyo.gateway.client.core.GatewayException;
 import com.ohayoyo.gateway.define.core.EntityDefine;
 import com.ohayoyo.gateway.define.core.ResponseDefine;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
@@ -20,7 +21,7 @@ import java.io.PushbackInputStream;
 import java.util.List;
 
 /**
- * 网关响应提取器组件
+ * 网关响应提取器组件 HeadersResponseExtractor
  *
  * @param <T> 响应实体类型
  */
@@ -36,17 +37,23 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
      */
     private ClientHttpResponse clientHttpResponse;
 
+    private HttpMethod httpMethod;
+
     /**
      * 构建一个网关响应提取器组件
      *
      * @param responseClass 响应实体类型
      */
-    public GatewayResponseExtractor(Class<T> responseClass) {
+    public GatewayResponseExtractor(Class<T> responseClass, HttpMethod httpMethod) {
         this.responseClass = responseClass;
+        this.httpMethod = httpMethod;
     }
 
     @Override
     public T extractData(ClientHttpResponse response) throws IOException {
+        if (httpMethod.matches(HttpMethod.HEAD.name())) {
+            return (T) response.getHeaders();
+        }
         //设置HTTP响应客户端
         this.setClientHttpResponse(response);
         //提取器执行提取数据
