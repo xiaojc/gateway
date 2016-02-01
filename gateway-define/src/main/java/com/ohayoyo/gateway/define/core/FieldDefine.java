@@ -29,13 +29,21 @@ public interface FieldDefine extends Serializable {
 
     String STRING = "string";
 
+    String OBJECT = "object";
+
+    //流数据类型
+
     String FILE = "file";
 
     //集合类型
 
-    String COLLECTION = "collection"; //collection<user>
+    String COLLECTION = "collection"; //collection<user> 支持泛型,默认泛型object
 
-    String MAP = "map"; //map<object,object>
+    String LIST = "list";//list<object> 支持泛型,默认泛型object
+
+    String SET = "set"; //set<object> 支持泛型,默认泛型object
+
+    String MAP = "map"; //map<object,object> 支持泛型,默认泛型object
 
     String getName();
 
@@ -61,9 +69,9 @@ public interface FieldDefine extends Serializable {
 
     FieldDefine setDescription(String description);
 
-    Object getReference();
+    ReferenceDefine getReference();
 
-    FieldDefine setReference(Object reference);
+    FieldDefine setReference(ReferenceDefine reference);
 
     @Override
     boolean equals(Object o);

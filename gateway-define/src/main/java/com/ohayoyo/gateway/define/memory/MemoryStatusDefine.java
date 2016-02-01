@@ -10,9 +10,6 @@ public class MemoryStatusDefine implements StatusDefine {
 
     private String errorSolution;
 
-    public MemoryStatusDefine() {
-    }
-
     public String getStatusCode() {
         return statusCode;
     }

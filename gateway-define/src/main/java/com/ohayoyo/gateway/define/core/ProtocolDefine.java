@@ -8,16 +8,44 @@ import java.util.Set;
  */
 public interface ProtocolDefine extends Serializable {
 
-    String HTTP = "http";
+    /**
+     * HTTP协议名称
+     */
+    String HTTP_NAME = "http";
 
-    String HTTPS = "https";
+    /**
+     * HTTPS协议名称
+     */
+    String HTTPS_NAME = "https";
 
+    /**
+     * 获取名称
+     *
+     * @return 返回名称
+     */
     String getName();
 
+    /**
+     * 设置名称
+     *
+     * @param name 名称
+     * @return 返回协议定义
+     */
     ProtocolDefine setName(String name);
 
+    /**
+     * 获取可选作用域定义集合
+     *
+     * @return 返回可选作用域定义集合
+     */
     Set<String> getOptions();
 
+    /**
+     * 设置可选作用域定义集合
+     *
+     * @param options 可选作用域定义集合
+     * @return 返回协议定义
+     */
     ProtocolDefine setOptions(Set<String> options);
 
     @Override

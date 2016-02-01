@@ -30,12 +30,6 @@ public class MemoryInterfaceDefine implements InterfaceDefine {
     private ResponseDefine response;
 
     /**
-     * 构建一个内存接口定义
-     */
-    public MemoryInterfaceDefine() {
-    }
-
-    /**
      * 获取键值
      *
      * @return 返回键值

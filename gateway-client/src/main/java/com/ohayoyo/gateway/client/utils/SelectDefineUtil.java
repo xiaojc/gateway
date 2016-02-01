@@ -170,7 +170,7 @@ public class SelectDefineUtil {
      * @return 返回主机端口
      */
     public static Integer selectHostDefinePort(ProtocolDefine protocolDefine, HostDefine hostDefine) {
-        return (!(hostDefine.getPort() != null && hostDefine.getPort() <= 0)) ? (ProtocolDefine.HTTPS.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
+        return (!(hostDefine.getPort() != null && hostDefine.getPort() <= 0)) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
     }
 
 }

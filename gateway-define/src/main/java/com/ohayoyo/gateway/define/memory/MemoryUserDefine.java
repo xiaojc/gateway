@@ -13,9 +13,6 @@ public class MemoryUserDefine implements UserDefine {
 
     private Set<String> options;
 
-    public MemoryUserDefine() {
-    }
-
     public String getUsername() {
         return username;
     }

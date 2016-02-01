@@ -21,7 +21,7 @@ import java.io.PushbackInputStream;
 import java.util.List;
 
 /**
- * 网关响应提取器组件 HeadersResponseExtractor
+ * 网关响应提取器组件
  *
  * @param <T> 响应实体类型
  */
@@ -37,6 +37,9 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
      */
     private ClientHttpResponse clientHttpResponse;
 
+    /**
+     * HTTP方法
+     */
     private HttpMethod httpMethod;
 
     /**
@@ -51,7 +54,7 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
 
     @Override
     public T extractData(ClientHttpResponse response) throws IOException {
-        if (httpMethod.matches(HttpMethod.HEAD.name())) {
+        if (this.responseClass.isAssignableFrom(HttpHeaders.class) && httpMethod.matches(HttpMethod.HEAD.name())) {
             return (T) response.getHeaders();
         }
         //设置HTTP响应客户端

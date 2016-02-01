@@ -15,9 +15,6 @@ public class MemoryResponseDefine implements ResponseDefine {
 
     private EntityDefine entity;
 
-    public MemoryResponseDefine() {
-    }
-
     public Set<StatusDefine> getStatuses() {
         return statuses;
     }

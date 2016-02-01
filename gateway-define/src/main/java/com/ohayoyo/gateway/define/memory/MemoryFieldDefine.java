@@ -1,6 +1,7 @@
 package com.ohayoyo.gateway.define.memory;
 
 import com.ohayoyo.gateway.define.core.FieldDefine;
+import com.ohayoyo.gateway.define.core.ReferenceDefine;
 
 public class MemoryFieldDefine implements FieldDefine {
 
@@ -16,10 +17,7 @@ public class MemoryFieldDefine implements FieldDefine {
 
     private String description;
 
-    private Object reference;
-
-    public MemoryFieldDefine() {
-    }
+    private ReferenceDefine reference;
 
     public String getName() {
         return name;
@@ -75,11 +73,11 @@ public class MemoryFieldDefine implements FieldDefine {
         return this;
     }
 
-    public Object getReference() {
+    public ReferenceDefine getReference() {
         return reference;
     }
 
-    public MemoryFieldDefine setReference(Object reference) {
+    public MemoryFieldDefine setReference(ReferenceDefine reference) {
         this.reference = reference;
         return this;
     }

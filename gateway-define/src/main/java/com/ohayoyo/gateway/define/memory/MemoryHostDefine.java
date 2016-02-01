@@ -10,9 +10,6 @@ public class MemoryHostDefine implements HostDefine {
 
     private String option;
 
-    public MemoryHostDefine() {
-    }
-
     public String getHostname() {
         return hostname;
     }

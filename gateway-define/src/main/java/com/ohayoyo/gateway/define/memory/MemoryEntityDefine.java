@@ -8,9 +8,6 @@ public class MemoryEntityDefine implements EntityDefine {
 
     private Object data;
 
-    public MemoryEntityDefine() {
-    }
-
     public String getType() {
         return type;
     }

@@ -17,9 +17,6 @@ public class MemoryPathDefine implements PathDefine {
 
     private Set<PathVariableDefine> variables;
 
-    public MemoryPathDefine() {
-    }
-
     public String getProject() {
         return project;
     }
