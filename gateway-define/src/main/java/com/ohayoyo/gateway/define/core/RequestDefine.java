@@ -11,6 +11,10 @@ import java.util.Set;
 //http://golang.org/pkg/net/url/
 public interface RequestDefine extends Serializable {
 
+    /**
+     * 获取协议定义集合
+     * @return 返回协议定义集合
+     */
     Set<ProtocolDefine> getProtocols();
 
     RequestDefine setProtocols(Set<ProtocolDefine> protocols);

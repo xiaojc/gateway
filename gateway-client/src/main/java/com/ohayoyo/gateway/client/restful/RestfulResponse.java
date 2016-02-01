@@ -13,7 +13,7 @@ public class RestfulResponse<T> implements GatewayResponse<T> {
     /**
      * HTTP响应状态代码
      */
-    private String statusCode;
+    private Integer statusCode;
 
     /**
      * HTTP响应状态描述
@@ -36,7 +36,7 @@ public class RestfulResponse<T> implements GatewayResponse<T> {
      * @return 返回HTTP响应状态代码
      */
     @Override
-    public String getStatusCode() {
+    public Integer getStatusCode() {
         return statusCode;
     }
 
@@ -47,7 +47,7 @@ public class RestfulResponse<T> implements GatewayResponse<T> {
      * @return 网关响应
      */
     @Override
-    public RestfulResponse<T> setStatusCode(String statusCode) {
+    public RestfulResponse<T> setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
         return this;
     }

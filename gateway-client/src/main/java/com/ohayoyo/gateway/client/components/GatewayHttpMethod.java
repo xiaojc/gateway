@@ -11,8 +11,17 @@ import org.springframework.http.HttpMethod;
 
 import java.util.Set;
 
+/**
+ * HTTP方法组件
+ */
 public class GatewayHttpMethod extends AbstractGatewayComponent<HttpMethod> {
 
+    /**
+     * 获取HTTP方法组件
+     *
+     * @return 返回HTTP方法组件
+     * @throws GatewayException 抛出网关异常
+     */
     @Override
     public HttpMethod getComponent() throws GatewayException {
         GatewayRequest gatewayRequest = this.getGatewayRequest();

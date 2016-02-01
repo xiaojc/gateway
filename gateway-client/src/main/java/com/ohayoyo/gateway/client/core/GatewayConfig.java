@@ -6,7 +6,6 @@ import org.springframework.util.ClassUtils;
 
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 网关配置
@@ -57,21 +56,6 @@ public interface GatewayConfig {
      * @return 返回网关配置
      */
     GatewayConfig setConversionService(ConversionService conversionService);
-
-    /**
-     * 获取自动识别支持的类型集合
-     *
-     * @return 返回自动识别支持的类型集合
-     */
-    Set<Class<?>> getAutoRecognitionClassSupports();
-
-    /**
-     * 设置自动识别支持的类型集合
-     *
-     * @param autoRecognitionClassSupports 自动识别支持的类型集合
-     * @return 返回网关配置
-     */
-    GatewayConfig setAutoRecognitionClassSupports(Set<Class<?>> autoRecognitionClassSupports);
 
     /**
      * 获取HTTP消息转换器集合

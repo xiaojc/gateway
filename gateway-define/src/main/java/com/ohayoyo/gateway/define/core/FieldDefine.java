@@ -2,7 +2,10 @@ package com.ohayoyo.gateway.define.core;
 
 import java.io.Serializable;
 
-public interface DataDefine extends Serializable {
+/**
+ * 字段定义
+ */
+public interface FieldDefine extends Serializable {
 
     //基本数据类型
 
@@ -34,34 +37,33 @@ public interface DataDefine extends Serializable {
 
     String MAP = "map"; //map<object,object>
 
-
     String getName();
 
-    DataDefine setName(String name);
+    FieldDefine setName(String name);
 
     String getType();
 
-    DataDefine setType(String type);
+    FieldDefine setType(String type);
 
     Boolean getRequired();
 
-    DataDefine setRequired(Boolean required);
+    FieldDefine setRequired(Boolean required);
 
     Integer getLength();
 
-    DataDefine setLength(Integer length);
+    FieldDefine setLength(Integer length);
 
     Object getDefaultValue();
 
-    DataDefine setDefaultValue(Object defaultValue);
+    FieldDefine setDefaultValue(Object defaultValue);
 
     String getDescription();
 
-    DataDefine setDescription(String description);
+    FieldDefine setDescription(String description);
 
     Object getReference();
 
-    DataDefine setReference(Object reference);
+    FieldDefine setReference(Object reference);
 
     @Override
     boolean equals(Object o);

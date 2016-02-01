@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.core.DataDefine;
+import com.ohayoyo.gateway.define.core.FieldDefine;
 
-public class MemoryDataDefine implements DataDefine {
+public class MemoryFieldDefine implements FieldDefine {
 
     private String name;
 
@@ -18,14 +18,14 @@ public class MemoryDataDefine implements DataDefine {
 
     private Object reference;
 
-    public MemoryDataDefine() {
+    public MemoryFieldDefine() {
     }
 
     public String getName() {
         return name;
     }
 
-    public MemoryDataDefine setName(String name) {
+    public MemoryFieldDefine setName(String name) {
         this.name = name;
         return this;
     }
@@ -34,7 +34,7 @@ public class MemoryDataDefine implements DataDefine {
         return type;
     }
 
-    public MemoryDataDefine setType(String type) {
+    public MemoryFieldDefine setType(String type) {
         this.type = type;
         return this;
     }
@@ -43,7 +43,7 @@ public class MemoryDataDefine implements DataDefine {
         return required;
     }
 
-    public MemoryDataDefine setRequired(Boolean required) {
+    public MemoryFieldDefine setRequired(Boolean required) {
         this.required = required;
         return this;
     }
@@ -52,7 +52,7 @@ public class MemoryDataDefine implements DataDefine {
         return length;
     }
 
-    public MemoryDataDefine setLength(Integer length) {
+    public MemoryFieldDefine setLength(Integer length) {
         this.length = length;
         return this;
     }
@@ -61,7 +61,7 @@ public class MemoryDataDefine implements DataDefine {
         return defaultValue;
     }
 
-    public MemoryDataDefine setDefaultValue(Object defaultValue) {
+    public MemoryFieldDefine setDefaultValue(Object defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
@@ -70,7 +70,7 @@ public class MemoryDataDefine implements DataDefine {
         return description;
     }
 
-    public MemoryDataDefine setDescription(String description) {
+    public MemoryFieldDefine setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -79,7 +79,7 @@ public class MemoryDataDefine implements DataDefine {
         return reference;
     }
 
-    public MemoryDataDefine setReference(Object reference) {
+    public MemoryFieldDefine setReference(Object reference) {
         this.reference = reference;
         return this;
     }
@@ -87,8 +87,8 @@ public class MemoryDataDefine implements DataDefine {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MemoryDataDefine)) return false;
-        MemoryDataDefine that = (MemoryDataDefine) o;
+        if (!(o instanceof MemoryFieldDefine)) return false;
+        MemoryFieldDefine that = (MemoryFieldDefine) o;
         return name != null ? name.equals(that.name) : that.name == null;
     }
 

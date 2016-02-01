@@ -1,11 +1,8 @@
 package com.ohayoyo.gateway.client.restful;
 
 import com.ohayoyo.gateway.client.core.GatewayConfig;
-import com.rometools.rome.feed.atom.Feed;
-import com.rometools.rome.feed.rss.Channel;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.core.io.Resource;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.feed.AtomFeedHttpMessageConverter;
 import org.springframework.http.converter.feed.RssChannelHttpMessageConverter;
@@ -17,11 +14,12 @@ import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConvert
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.MultiValueMap;
 
 import javax.xml.transform.Source;
-import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Restful网关配置
@@ -32,11 +30,6 @@ public class RestfulConfig implements GatewayConfig {
      * 转换服务
      */
     private ConversionService conversionService;
-
-    /**
-     * 自动识别支持的类型集合
-     */
-    private Set<Class<?>> autoRecognitionClassSupports;
 
     /**
      * HTTP消息转换器集合
@@ -77,32 +70,26 @@ public class RestfulConfig implements GatewayConfig {
      * @param isDefaultConfig            是否使用默认配置
      */
     public RestfulConfig(List<HttpMessageConverter<?>> otherHttpMessageConverters, ConversionService conversionService, boolean isDefaultConfig) {
-        this(null, otherHttpMessageConverters, conversionService, null, isDefaultConfig);
+        this(null, otherHttpMessageConverters, conversionService, isDefaultConfig);
     }
 
     /**
      * 构建一个指定参数的 Restful网关配置
      *
-     * @param httpMessageConverters        HTTP消息转换器集合
-     * @param otherHttpMessageConverters   其他HTTP消息转换器集合
-     * @param conversionService            转换服务
-     * @param autoRecognitionClassSupports 自动识别支持的类型集合
-     * @param isDefaultConfig              是否使用默认配置
+     * @param httpMessageConverters      HTTP消息转换器集合
+     * @param otherHttpMessageConverters 其他HTTP消息转换器集合
+     * @param conversionService          转换服务
+     * @param isDefaultConfig            是否使用默认配置
      */
-    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, List<HttpMessageConverter<?>> otherHttpMessageConverters, ConversionService conversionService, Set<Class<?>> autoRecognitionClassSupports, boolean isDefaultConfig) {
+    public RestfulConfig(List<HttpMessageConverter<?>> httpMessageConverters, List<HttpMessageConverter<?>> otherHttpMessageConverters, ConversionService conversionService, boolean isDefaultConfig) {
         this.httpMessageConverters = httpMessageConverters;
         this.conversionService = conversionService;
-        this.autoRecognitionClassSupports = autoRecognitionClassSupports;
         if (isDefaultConfig) { //如果使用默认配置
             //配置默认转换服务
             this.configDefaultConversionService();
             //配置默认自动识别支持的类型集合
-            this.configDefaultAutoRecognitionClassSupports();
             //配置默认HTTP消息转换器集合
             this.configDefaultHttpMessageConverters();
-        } else if (CollectionUtils.isEmpty(this.autoRecognitionClassSupports)) { //如果自动识别支持的类型集合是空的
-            //配置默认自动识别支持的类型集合
-            this.configDefaultAutoRecognitionClassSupports();
         }
         //配置其他HTTP消息转换器集合
         this.configOtherHttpMessageConverters(otherHttpMessageConverters);
@@ -117,27 +104,6 @@ public class RestfulConfig implements GatewayConfig {
             //this.conversionService = new DefaultFormattingConversionService();
             //默认使用默认转换服务
             this.conversionService = new DefaultConversionService();
-        }
-    }
-
-    /**
-     * 配置默认自动识别支持的类型集合
-     */
-    protected void configDefaultAutoRecognitionClassSupports() {
-        this.autoRecognitionClassSupports = new HashSet<Class<?>>();
-        this.autoRecognitionClassSupports.add(Byte[].class);
-        this.autoRecognitionClassSupports.add(String.class);
-        this.autoRecognitionClassSupports.add(Collection.class);
-        this.autoRecognitionClassSupports.add(Map.class);
-        this.autoRecognitionClassSupports.add(List.class);
-        this.autoRecognitionClassSupports.add(Set.class);
-        this.autoRecognitionClassSupports.add(MultiValueMap.class);
-        this.autoRecognitionClassSupports.add(Resource.class);
-        this.autoRecognitionClassSupports.add(Source.class);
-        this.autoRecognitionClassSupports.add(BufferedImage.class);
-        if (ROME_PRESENT) {
-            this.autoRecognitionClassSupports.add(Feed.class);
-            this.autoRecognitionClassSupports.add(Channel.class);
         }
     }
 
@@ -221,28 +187,6 @@ public class RestfulConfig implements GatewayConfig {
     @Override
     public RestfulConfig setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
-        return this;
-    }
-
-    /**
-     * 获取自动识别支持的类型集合
-     *
-     * @return 返回自动识别支持的类型集合
-     */
-    @Override
-    public Set<Class<?>> getAutoRecognitionClassSupports() {
-        return autoRecognitionClassSupports;
-    }
-
-    /**
-     * 设置自动识别支持的类型集合
-     *
-     * @param autoRecognitionClassSupports 自动识别支持的类型集合
-     * @return 返回网关配置
-     */
-    @Override
-    public RestfulConfig setAutoRecognitionClassSupports(Set<Class<?>> autoRecognitionClassSupports) {
-        this.autoRecognitionClassSupports = autoRecognitionClassSupports;
         return this;
     }
 

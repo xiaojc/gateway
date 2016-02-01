@@ -12,10 +12,11 @@ import com.ohayoyo.gateway.define.memory.*;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,16 +42,12 @@ public class RestfulClientTest {
 
     @Test
     public void testRestfulClient1() throws GatewayException {
-
         RestfulClient restfulClient = new RestfulClient();
-
         MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();
         requestQueries.set("key", "29e069ec39101eb669121554bf67024f");
         requestQueries.set("num", "10");
-
         GatewayRequest gatewayRequest = new RestfulRequest()
                 .setRequestQueries(requestQueries);
-
         GatewayDefine gatewayDefine = new RestfulDefine(
                 new MemoryInterfaceDefine()
                         .setRequest(new MemoryRequestDefine()
@@ -61,6 +58,9 @@ public class RestfulClientTest {
                                         .setResource("other")
                                 )
                                 .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
+                        )
+                        .setResponse(new MemoryResponseDefine()
+                                .setEntity(new MemoryEntityDefine().setType(MediaType.APPLICATION_JSON_UTF8.toString()))
                         )
         );
 
@@ -72,16 +72,12 @@ public class RestfulClientTest {
 
     @Test
     public void testRestfulClient2() throws GatewayException {
-
         RestfulClient restfulClient = new RestfulClient();
-
         MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();
         requestQueries.set("key", "29e069ec39101eb669121554bf67024f");
         requestQueries.set("num", "10");
-
         GatewayRequest gatewayRequest = new RestfulRequest()
                 .setRequestQueries(requestQueries);
-
         GatewayDefine gatewayDefine = new RestfulDefine(
                 new MemoryInterfaceDefine()
                         .setRequest(new MemoryRequestDefine()
@@ -93,19 +89,17 @@ public class RestfulClientTest {
                                 )
                                 .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
+                        .setResponse(new MemoryResponseDefine()
+                                .setEntity(new MemoryEntityDefine().setType(MediaType.APPLICATION_JSON_UTF8.toString()))
+                        )
         );
-
         GatewayResponse<TestPack> objectGatewayResponse = restfulClient.session(TestPack.class, gatewayDefine, gatewayRequest);
-
         logger.debug("{}", objectGatewayResponse.getResponseEntity());
-
     }
 
     @Test
     public void testRestfulClient3() throws GatewayException {
-
         RestfulClient restfulClient = new RestfulClient();
-
         GatewayRequest gatewayRequest = new RestfulRequest();
         //http://t1.27270.com/uploads/tu/201508/05/slt.jpg
         GatewayDefine gatewayDefine = new RestfulDefine(
@@ -122,7 +116,7 @@ public class RestfulClientTest {
                         )
         );
 
-        GatewayResponse<Object> objectGatewayResponse = restfulClient.session(gatewayDefine, gatewayRequest);
+        GatewayResponse<BufferedImage> objectGatewayResponse = restfulClient.session(BufferedImage.class, gatewayDefine, gatewayRequest);
 
         logger.debug("{}", objectGatewayResponse.getResponseEntity());
 
@@ -140,12 +134,7 @@ public class RestfulClientTest {
                                 .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
         );
-        GatewayResponse<Object> objectGatewayResponse = restfulClient.session(gatewayDefine, gatewayRequest);
-        Object object = objectGatewayResponse.getResponseEntity();
-        ConversionService conversionService = restfulClient.getGatewayConfig().getConversionService();
-        if (conversionService.canConvert(object.getClass(), String.class)) {
-            logger.debug("{}", new String((byte[]) object));
-        }
+        GatewayResponse<String> objectGatewayResponse = restfulClient.session(String.class, gatewayDefine, gatewayRequest);
         logger.debug("{}", objectGatewayResponse.getResponseEntity());
 
     }

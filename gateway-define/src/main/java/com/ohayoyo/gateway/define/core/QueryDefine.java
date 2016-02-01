@@ -1,4 +1,4 @@
 package com.ohayoyo.gateway.define.core;
 
-public interface QueryDefine extends DataDefine {
+public interface QueryDefine extends FieldDefine {
 }

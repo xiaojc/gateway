@@ -1,201 +1,227 @@
 package com.ohayoyo.gateway.client.components;
 
 import com.ohayoyo.gateway.client.core.GatewayConfig;
+import com.ohayoyo.gateway.client.core.GatewayDefine;
 import com.ohayoyo.gateway.client.core.GatewayException;
+import com.ohayoyo.gateway.define.core.EntityDefine;
+import com.ohayoyo.gateway.define.core.ResponseDefine;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.GenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.TypeUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.ResponseExtractor;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
- * 网关响应提取器
+ * 网关响应提取器组件
  *
  * @param <T> 响应实体类型
  */
 public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<ResponseExtractor<T>> implements ResponseExtractor<T> {
 
-    private Class<T> responseType;
+    /**
+     * 响应实体类型
+     */
+    private Class<T> responseClass;
 
+    /**
+     * HTTP响应客户端
+     */
     private ClientHttpResponse clientHttpResponse;
 
-    public GatewayResponseExtractor(Class<T> responseType) {
-        this.responseType = responseType;
+    /**
+     * 构建一个网关响应提取器组件
+     *
+     * @param responseClass 响应实体类型
+     */
+    public GatewayResponseExtractor(Class<T> responseClass) {
+        this.responseClass = responseClass;
     }
 
     @Override
     public T extractData(ClientHttpResponse response) throws IOException {
+        //设置HTTP响应客户端
         this.setClientHttpResponse(response);
+        //提取器执行提取数据
+        return doExtractData();
+    }
+
+    /**
+     * 执行提取数据
+     *
+     * @return 返回响应实体, 如果没有实体则返回null
+     * @throws IOException 抛出IO异常
+     */
+    protected T doExtractData() throws IOException {
         T result = null;
+        //是否不存在HTTP消息转换器支持
         boolean isNotHttpMessageConverterSupport = false;
+        //获取网关配置
         GatewayConfig gatewayConfig = this.getGatewayConfig();
+        //获取HTTP响应客户端
         ClientHttpResponse clientHttpResponse = this.getClientHttpResponse();
-        MessageBodyWrapper messageBodyWrapper = new MessageBodyWrapper(clientHttpResponse);
-        if (messageBodyWrapper.hasMessageBody() && (!messageBodyWrapper.hasEmptyMessageBody())) {
+        //HTTP响应实体包装器
+        HttpResponseEntityWrapper httpResponseEntityWrapper = new HttpResponseEntityWrapper(clientHttpResponse);
+        //判断是否存在响应实体
+        if (httpResponseEntityWrapper.hasResponseEntity() && (!httpResponseEntityWrapper.hasEmptyResponseEntity())) {
+            //获取全部支持的HTTP消息转换器
             List<HttpMessageConverter<?>> httpMessageConverters = gatewayConfig.getHttpMessageConverters();
-            Set<Class<?>> autoRecognitionClassSupports = gatewayConfig.getAutoRecognitionClassSupports();
-            MediaType responseMediaType = getContentType(messageBodyWrapper);
-            Class<?> responseClass = autoRecognitionMediaTypeConvertibleClass(responseType, responseMediaType, httpMessageConverters, autoRecognitionClassSupports);
-            Set<MediaType> contentTypes = autoRecognitionClassConvertibleMediaType(responseClass, httpMessageConverters);
-            List<MediaType> mediaTypeList = new ArrayList<MediaType>(contentTypes);
-            MediaType.sortBySpecificity(mediaTypeList);
-            mediaTypeList.add(0, responseMediaType);
-            for (MediaType contentType : mediaTypeList) {
-                boolean isSucceedRead = false;
-                try {
-                    for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
-                        if (httpMessageConverter instanceof GenericHttpMessageConverter) {
-                            GenericHttpMessageConverter<?> genericHttpMessageConverter = (GenericHttpMessageConverter<?>) httpMessageConverter;
-                            if (genericHttpMessageConverter.canRead(responseClass, responseClass, contentType)) {
-                                result = (T) genericHttpMessageConverter.read(responseClass, responseClass, messageBodyWrapper);
-                                isSucceedRead = true;
-                                isNotHttpMessageConverterSupport = false;
-                                break;
-                            }
-                        }
-                        if (httpMessageConverter.canRead(responseClass, contentType)) {
-                            result = (T) httpMessageConverter.read((Class) responseClass, messageBodyWrapper);
-                            isNotHttpMessageConverterSupport = false;
-                            isSucceedRead = true;
-                            break;
-                        }
-                        isNotHttpMessageConverterSupport = true;
+            //获取响应的媒体类型
+            MediaType responseMediaType = getResponseContentType(httpResponseEntityWrapper);
+            //获取优选的媒体类型
+            MediaType preferenceMediaType = getPreferenceMediaType(responseMediaType);
+            for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
+                //如果是一般类型的HTTP消息转换器
+                if (httpMessageConverter instanceof GenericHttpMessageConverter) {
+                    GenericHttpMessageConverter<?> genericHttpMessageConverter = (GenericHttpMessageConverter<?>) httpMessageConverter;
+                    //如果可读
+                    if (genericHttpMessageConverter.canRead(responseClass, responseClass, preferenceMediaType)) {
+                        //读取数据并进行提取
+                        result = (T) genericHttpMessageConverter.read(responseClass, responseClass, httpResponseEntityWrapper);
+                        isNotHttpMessageConverterSupport = false;
+                        break;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    result = null;
-                    isSucceedRead = false;
                 }
-                if (isSucceedRead) {
+                //如果可读
+                if (httpMessageConverter.canRead(responseClass, preferenceMediaType)) {
+                    //读取数据并进行提取
+                    result = (T) httpMessageConverter.read((Class) responseClass, httpResponseEntityWrapper);
+                    isNotHttpMessageConverterSupport = false;
                     break;
                 }
+                isNotHttpMessageConverterSupport = true;
             }
         }
         if (isNotHttpMessageConverterSupport) {
-            throw new IOException("没有找到合适的HTTP消息转换器");
+            throw new IOException("没有找到合适的HTTP消息转换器读取数据");
         }
         return result;
     }
 
-    private boolean isIncludeMediaType(MediaType mediaType, List<MediaType> mediaTypes) {
-        if (mediaType == null) {
-            return true;
+    /**
+     * 获取优选的媒体类型
+     *
+     * @param responseMediaType 响应结果媒体类型
+     * @return 返回优选的媒体类型
+     */
+    protected MediaType getPreferenceMediaType(MediaType responseMediaType) {
+        if (null == responseMediaType) {
+            return MediaType.ALL;
         }
-        for (MediaType supportedMediaType : mediaTypes) {
-            if (supportedMediaType.includes(mediaType)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Set<MediaType> autoRecognitionClassConvertibleMediaType(Class<?> responseType, List<HttpMessageConverter<?>> httpMessageConverters) {
-        Set<MediaType> autoRecognitionClassConvertibleMediaTypes = new HashSet<MediaType>();
-        for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
-            List<MediaType> mediaTypes = httpMessageConverter.getSupportedMediaTypes();
-            for (MediaType mediaType : mediaTypes) {
-                if (httpMessageConverter instanceof GenericHttpMessageConverter) {
-                    GenericHttpMessageConverter<?> genericHttpMessageConverter = (GenericHttpMessageConverter<?>) httpMessageConverter;
-                    if (genericHttpMessageConverter.canRead(responseType, responseType, mediaType)) {
-                        autoRecognitionClassConvertibleMediaTypes.add(mediaType);
-                        break;
-                    }
-                    continue;
-                }
-                if (httpMessageConverter.canRead(responseType, mediaType)) {
-                    autoRecognitionClassConvertibleMediaTypes.add(mediaType);
-                    break;
-                }
-            }
-        }
-        if (CollectionUtils.isEmpty(autoRecognitionClassConvertibleMediaTypes)) {
-            autoRecognitionClassConvertibleMediaTypes.add(MediaType.ALL);
-        }
-        return autoRecognitionClassConvertibleMediaTypes;
-    }
-
-    private Class<?> autoRecognitionMediaTypeConvertibleClass(Class<?> responseType, MediaType mediaType, List<HttpMessageConverter<?>> httpMessageConverters, Set<Class<?>> autoRecognitionClassSupports) {
-        Class<?> resultAutoRecognitionClassSupport = responseType;
-        for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
-            List<MediaType> mediaTypes = httpMessageConverter.getSupportedMediaTypes();
-            if (isIncludeMediaType(mediaType, mediaTypes)) {
-                boolean isSelect = false;
-                for (Class<?> autoRecognitionClassSupport : autoRecognitionClassSupports) {
-                    if (!TypeUtils.isAssignable(responseType, autoRecognitionClassSupport)) {
-                        continue;
-                    }
-                    if (httpMessageConverter instanceof GenericHttpMessageConverter) {
-                        GenericHttpMessageConverter<?> genericHttpMessageConverter = (GenericHttpMessageConverter<?>) httpMessageConverter;
-                        if (genericHttpMessageConverter.canRead(autoRecognitionClassSupport, autoRecognitionClassSupport, mediaType)) {
-                            resultAutoRecognitionClassSupport = autoRecognitionClassSupport;
-                            isSelect = true;
-                            break;
+        MediaType resultPreferenceMediaType;
+        MediaType resultDefineMediaType = MediaType.ALL;
+        GatewayDefine gatewayDefine = this.getGatewayDefine();
+        if (null != gatewayDefine) {
+            ResponseDefine responseDefine = gatewayDefine.getResponse();
+            if (null != responseDefine) {
+                EntityDefine entityDefine = responseDefine.getEntity();
+                if (null != entityDefine) {
+                    String defineMediaType = entityDefine.getType();
+                    if (!StringUtils.isEmpty(defineMediaType)) {
+                        try {
+                            resultDefineMediaType = MediaType.parseMediaType(defineMediaType);
+                        } catch (Exception ex) {
+                            resultDefineMediaType = MediaType.ALL;
                         }
-                        continue;
                     }
-                    if (httpMessageConverter.canRead(autoRecognitionClassSupport, mediaType)) {
-                        resultAutoRecognitionClassSupport = autoRecognitionClassSupport;
-                        isSelect = true;
-                        break;
-                    }
-                }
-                if (isSelect) {
-                    break;
                 }
             }
         }
-        return resultAutoRecognitionClassSupport;
+        //如果包含响应媒体类型,直接返回响应媒体类型
+        if (resultDefineMediaType.includes(responseMediaType)) {
+            resultPreferenceMediaType = responseMediaType;
+        } else {
+            resultPreferenceMediaType = resultDefineMediaType;
+        }
+        return resultPreferenceMediaType;
     }
 
-    private MediaType getContentType(ClientHttpResponse response) {
-        MediaType contentType = response.getHeaders().getContentType();
+    /**
+     * 获取响应内容类型
+     *
+     * @param clientHttpResponse HTTP响应客户端
+     * @return 返回响应内容类型
+     */
+    private MediaType getResponseContentType(ClientHttpResponse clientHttpResponse) {
+        MediaType contentType = clientHttpResponse.getHeaders().getContentType();
         if (contentType == null) {
             contentType = MediaType.APPLICATION_OCTET_STREAM;
         }
         return contentType;
     }
 
+
+    /**
+     * 获取网关响应提取器组件
+     *
+     * @return 返回网关响应提取器组件
+     * @throws GatewayException 抛出网关异常
+     */
     @Override
     public ResponseExtractor<T> getComponent() throws GatewayException {
         return this;
     }
 
+    /**
+     * 获取HTTP响应客户端
+     *
+     * @return 返回HTTP响应客户端
+     */
     public ClientHttpResponse getClientHttpResponse() {
         return clientHttpResponse;
     }
 
+    /**
+     * 设置HTTP响应客户端
+     *
+     * @param clientHttpResponse HTTP响应客户端
+     * @return 返回网关响应提取器组件
+     */
     public GatewayResponseExtractor setClientHttpResponse(ClientHttpResponse clientHttpResponse) {
         this.clientHttpResponse = clientHttpResponse;
         return this;
     }
 
-    private static class MessageBodyWrapper implements ClientHttpResponse {
+    /**
+     * HTTP响应实体包装器
+     */
+    private static class HttpResponseEntityWrapper implements ClientHttpResponse {
 
-        private final ClientHttpResponse response;
+        /**
+         * 内部HTTP响应客户端
+         */
+        private final ClientHttpResponse internalClientHttpResponse;
 
+        /**
+         * 回推输入流
+         */
         private PushbackInputStream pushbackInputStream;
 
-
-        public MessageBodyWrapper(ClientHttpResponse response) throws IOException {
-            this.response = response;
+        /**
+         * 构建一个HTTP响应实体包装器
+         *
+         * @param internalClientHttpResponse 内部HTTP响应客户端
+         */
+        public HttpResponseEntityWrapper(ClientHttpResponse internalClientHttpResponse) {
+            this.internalClientHttpResponse = internalClientHttpResponse;
         }
 
-        public boolean hasMessageBody() throws IOException {
+        /**
+         * 是否有响应实体
+         *
+         * @return 返回是否有响应实体
+         * @throws IOException 抛出IO异常
+         */
+        public boolean hasResponseEntity() throws IOException {
             HttpStatus responseStatus = this.getStatusCode();
-            if (responseStatus.is1xxInformational() || responseStatus == HttpStatus.NO_CONTENT ||
-                    responseStatus == HttpStatus.NOT_MODIFIED) {
+            if (responseStatus.is1xxInformational() || responseStatus == HttpStatus.NO_CONTENT || responseStatus == HttpStatus.NOT_MODIFIED) {
                 return false;
             } else if (this.getHeaders().getContentLength() == 0) {
                 return false;
@@ -203,8 +229,14 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
             return true;
         }
 
-        public boolean hasEmptyMessageBody() throws IOException {
-            InputStream body = this.response.getBody();
+        /**
+         * 是否空的响应实体
+         *
+         * @return 返回是否空的响应实体
+         * @throws IOException 抛出IO异常
+         */
+        public boolean hasEmptyResponseEntity() throws IOException {
+            InputStream body = this.internalClientHttpResponse.getBody();
             if (body == null) {
                 return true;
             } else if (body.markSupported()) {
@@ -227,36 +259,69 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
             }
         }
 
+        /**
+         * Return the headers of this message.
+         *
+         * @return a corresponding HttpHeaders object (never {@code null})
+         */
         @Override
         public HttpHeaders getHeaders() {
-            return this.response.getHeaders();
+            return this.internalClientHttpResponse.getHeaders();
         }
 
+        /**
+         * Return the body of the message as an input stream.
+         *
+         * @return the input stream body (never {@code null})
+         * @throws IOException in case of I/O Errors
+         */
         @Override
         public InputStream getBody() throws IOException {
-            return (this.pushbackInputStream != null ? this.pushbackInputStream : this.response.getBody());
+            return (this.pushbackInputStream != null ? this.pushbackInputStream : this.internalClientHttpResponse.getBody());
         }
 
+        /**
+         * Return the HTTP status code of the response.
+         *
+         * @return the HTTP status as an HttpStatus enum value
+         * @throws IOException in case of I/O errors
+         */
         @Override
         public HttpStatus getStatusCode() throws IOException {
-            return this.response.getStatusCode();
+            return this.internalClientHttpResponse.getStatusCode();
         }
 
+        /**
+         * Return the HTTP status code of the response as integer
+         *
+         * @return the HTTP status as an integer
+         * @throws IOException in case of I/O errors
+         */
         @Override
         public int getRawStatusCode() throws IOException {
-            return this.response.getRawStatusCode();
+            return this.internalClientHttpResponse.getRawStatusCode();
         }
 
+        /**
+         * Return the HTTP status text of the response.
+         *
+         * @return the HTTP status text
+         * @throws IOException in case of I/O errors
+         */
         @Override
         public String getStatusText() throws IOException {
-            return this.response.getStatusText();
+            return this.internalClientHttpResponse.getStatusText();
         }
 
+        /**
+         * Close this response, freeing any resources created.
+         */
         @Override
         public void close() {
-            this.response.close();
+            this.internalClientHttpResponse.close();
         }
 
     }
+
 
 }

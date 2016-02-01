@@ -4,8 +4,6 @@ import com.ohayoyo.gateway.define.core.StatusDefine;
 
 public class MemoryStatusDefine implements StatusDefine {
 
-    private String type;
-
     private String statusCode;
 
     private String reasonPhrase;
@@ -13,15 +11,6 @@ public class MemoryStatusDefine implements StatusDefine {
     private String errorSolution;
 
     public MemoryStatusDefine() {
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public MemoryStatusDefine setType(String type) {
-        this.type = type;
-        return this;
     }
 
     public String getStatusCode() {
@@ -56,15 +45,12 @@ public class MemoryStatusDefine implements StatusDefine {
         if (this == o) return true;
         if (!(o instanceof MemoryStatusDefine)) return false;
         MemoryStatusDefine that = (MemoryStatusDefine) o;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
         return statusCode != null ? statusCode.equals(that.statusCode) : that.statusCode == null;
     }
 
     @Override
     public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (statusCode != null ? statusCode.hashCode() : 0);
-        return result;
+        return statusCode != null ? statusCode.hashCode() : 0;
     }
 
     @Override

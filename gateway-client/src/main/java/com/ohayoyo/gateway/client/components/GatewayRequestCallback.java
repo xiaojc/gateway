@@ -8,6 +8,7 @@ import com.ohayoyo.gateway.define.core.EntityDefine;
 import com.ohayoyo.gateway.define.core.RequestDefine;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -15,37 +16,64 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.*;
 
 /**
- * 网关请求回调器
+ * 网关请求回调器组件
  */
 public class GatewayRequestCallback extends AbstractGatewayComponent<RequestCallback> implements RequestCallback {
 
+    /**
+     * HTTP请求客户端
+     */
     private ClientHttpRequest clientHttpRequest;
 
+    /**
+     * Gets called by {@link com.ohayoyo.gateway.client.core.GatewayExecutor#execute(URI, HttpMethod, RequestCallback, ResponseExtractor)}  } with an opened {@code ClientHttpRequest}.
+     * Does not need to care about closing the request or about handling errors:
+     * this will all be handled by the {@code RestTemplate}.
+     *
+     * @param request the active HTTP request
+     * @throws IOException in case of I/O errors
+     */
     @Override
     public void doWithRequest(ClientHttpRequest request) throws IOException {
-
         this.setClientHttpRequest(request);
-
-        GatewayConfig gatewayConfig = this.getGatewayConfig();
-        GatewayRequest gatewayRequest = this.getGatewayRequest();
-        GatewayDefine gatewayDefine = this.getGatewayDefine();
-        ClientHttpRequest clientHttpRequest = this.getClientHttpRequest();
-
         try {
-            this.doParameterHeaderRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest);
-            this.autoAcceptHeaderRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest);
-            this.doHttpEntityRequest(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest);
-        } catch (GatewayException e) {
+            //处理请求数据
+            this.doWithRequestData();
+        } catch (Exception e) {
             throw new IOException(e);
         }
     }
 
-    private void doParameterHeaderRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest) throws GatewayException {
+    /**
+     * 处理请求数据
+     *
+     * @throws GatewayException 抛出网关异常
+     */
+    protected void doWithRequestData() throws GatewayException, IOException {
+        GatewayConfig gatewayConfig = this.getGatewayConfig();
+        GatewayRequest gatewayRequest = this.getGatewayRequest();
+        GatewayDefine gatewayDefine = this.getGatewayDefine();
+        ClientHttpRequest clientHttpRequest = this.getClientHttpRequest();
+        this.doWithRequestHeaderData(gatewayRequest, clientHttpRequest);
+        this.doWithRequestAcceptHeaderData(gatewayConfig, clientHttpRequest);
+        this.doWithRequestEntityData(gatewayConfig, gatewayRequest, gatewayDefine, clientHttpRequest);
+    }
+
+    /**
+     * 处理请求头数据
+     *
+     * @param gatewayRequest    网关请求
+     * @param clientHttpRequest HTTP请求客户端
+     * @throws GatewayException 抛出网关异常
+     */
+    private void doWithRequestHeaderData(GatewayRequest gatewayRequest, ClientHttpRequest clientHttpRequest) throws GatewayException {
         MultiValueMap<String, String> requestHeaders = gatewayRequest.getRequestHeaders();
         if (!CollectionUtils.isEmpty(requestHeaders)) {
             HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
@@ -65,7 +93,14 @@ public class GatewayRequestCallback extends AbstractGatewayComponent<RequestCall
         }
     }
 
-    private void autoAcceptHeaderRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest) throws GatewayException {
+    /**
+     * 处理Accept请求数据
+     *
+     * @param gatewayConfig     网关配置
+     * @param clientHttpRequest HTTP请求客户端
+     * @throws GatewayException 抛出网关异常
+     */
+    private void doWithRequestAcceptHeaderData(GatewayConfig gatewayConfig, ClientHttpRequest clientHttpRequest) throws GatewayException {
         List<MediaType> accept = clientHttpRequest.getHeaders().getAccept(); //获取所支持接收的媒体类型
         if (CollectionUtils.isEmpty(accept)) { //如果不存在,自动设置所支持的媒体类型
             Set<MediaType> allSupportedMediaTypeSet = new HashSet<MediaType>();
@@ -87,30 +122,54 @@ public class GatewayRequestCallback extends AbstractGatewayComponent<RequestCall
         }
     }
 
-    private void doHttpEntityRequest(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest) throws GatewayException {
-        HttpEntity<?> httpRequestEntity;
+    /**
+     * 处理实体请求数据
+     *
+     * @param gatewayConfig     网关配置
+     * @param gatewayRequest    网关请求
+     * @param gatewayDefine     网关定义
+     * @param clientHttpRequest HTTP请求客户端
+     * @throws GatewayException 抛出网关异常
+     */
+    private void doWithRequestEntityData(GatewayConfig gatewayConfig, GatewayRequest gatewayRequest, GatewayDefine gatewayDefine, ClientHttpRequest clientHttpRequest) throws GatewayException, IOException {
+        HttpEntity<?> httpRequestEntity = null;
         Object requestEntityData = gatewayRequest.getRequestEntity();
         RequestDefine requestDefine = gatewayDefine.getRequest();
-        EntityDefine entityDefine = requestDefine.getEntity();
-        if (requestEntityData instanceof HttpEntity) {
-            httpRequestEntity = (HttpEntity<?>) requestEntityData;
-        } else if (requestEntityData != null) {
-            httpRequestEntity = new HttpEntity<Object>(requestEntityData);
-            if (null != entityDefine) {
-                String entityDefineType = entityDefine.getType(); //必须不为空,前置检查验证
-                MediaType entityDefineMediaType = MediaType.parseMediaType(entityDefineType); //解析媒体类型
-                HttpHeaders httpHeaders = httpRequestEntity.getHeaders();// 获取实体请求报头
-                httpHeaders.setContentType(entityDefineMediaType);//设置内容类型
+        if (null != requestDefine) {
+            if (requestEntityData instanceof HttpEntity) {
+                httpRequestEntity = (HttpEntity<?>) requestEntityData;
+            } else if (requestEntityData != null) {
+                httpRequestEntity = new HttpEntity<Object>(requestEntityData);
+                EntityDefine entityDefine = requestDefine.getEntity();
+                if (null != entityDefine) {
+                    String entityDefineType = entityDefine.getType();
+                    MediaType entityDefineMediaType = MediaType.ALL;
+                    if (!StringUtils.isEmpty(entityDefineType)) {
+                        //解析媒体类型
+                        entityDefineMediaType = MediaType.parseMediaType(entityDefineType);
+                    }
+                    //获取实体请求报头
+                    HttpHeaders httpHeaders = httpRequestEntity.getHeaders();
+                    //设置内容类型
+                    httpHeaders.setContentType(entityDefineMediaType);
+                }
             }
-        } else {
+        }
+        //如果HTTP请求实体为空
+        if (null == httpRequestEntity) {
             httpRequestEntity = HttpEntity.EMPTY;
         }
-        if (!httpRequestEntity.hasBody()) { //如果没有请求实体
-            HttpHeaders httpHeaders = clientHttpRequest.getHeaders(); //获取原来HTTP请求中的全部请求报头
-            HttpHeaders requestHeaders = httpRequestEntity.getHeaders(); //获取原来请求实体中的全部请求报头
-            if (!requestHeaders.isEmpty()) { //如果存在实体请求报头,进行合并
+        //如果没有请求实体
+        if (!httpRequestEntity.hasBody()) {
+            //获取原来HTTP请求中的全部请求头
+            HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
+            //获取原来请求实体中的全部请求头
+            HttpHeaders requestHeaders = httpRequestEntity.getHeaders();
+            //如果存在实体请求头,进行合并
+            if (!requestHeaders.isEmpty()) {
                 httpHeaders.putAll(requestHeaders);
             }
+            //重置内容长度
             if (httpHeaders.getContentLength() == -1) {
                 httpHeaders.setContentLength(0L);
             }
@@ -119,36 +178,45 @@ public class GatewayRequestCallback extends AbstractGatewayComponent<RequestCall
             Class<?> requestType = requestBodyData.getClass();
             HttpHeaders requestHeaders = httpRequestEntity.getHeaders();
             MediaType requestContentType = requestHeaders.getContentType();
-            for (HttpMessageConverter<?> messageConverter : gatewayConfig.getHttpMessageConverters()) {
-                if (messageConverter.canWrite(requestType, requestContentType)) {
+            for (HttpMessageConverter<?> httpMessageConverter : gatewayConfig.getHttpMessageConverters()) {
+                if (httpMessageConverter.canWrite(requestType, requestContentType)) {
                     if (!requestHeaders.isEmpty()) {
                         this.getClientHttpRequest().getHeaders().putAll(requestHeaders);
                     }
-                    try {
-                        ((HttpMessageConverter<Object>) messageConverter).write(requestEntityData, requestContentType, clientHttpRequest);
-                    } catch (IOException ioe) {
-                        throw new GatewayException(ioe);
-                    }
+                    ((HttpMessageConverter<Object>) httpMessageConverter).write(requestEntityData, requestContentType, clientHttpRequest);
                     return;
                 }
             }
-            String message = "Could not write request: no suitable HttpMessageConverter found for request type [" + requestType.getName() + "]";
-            if (requestContentType != null) {
-                message += " and content type [" + requestContentType + "]";
-            }
-            throw new GatewayException(message);
+            throw new GatewayException("没有找到合适的HTTP消息转换器写入数据");
         }
     }
 
+    /**
+     * 获取网关请求回调器组件
+     *
+     * @return 返回网关请求回调器组件
+     * @throws GatewayException 抛出网关异常
+     */
     @Override
     public RequestCallback getComponent() throws GatewayException {
         return this;
     }
 
+    /**
+     * 获取HTTP请求客户端
+     *
+     * @return 返回HTTP请求客户端
+     */
     public ClientHttpRequest getClientHttpRequest() {
         return clientHttpRequest;
     }
 
+    /**
+     * 设置HTTP请求客户端
+     *
+     * @param clientHttpRequest HTTP请求客户端
+     * @return 返回网关请求回调器组件
+     */
     public GatewayRequestCallback setClientHttpRequest(ClientHttpRequest clientHttpRequest) {
         this.clientHttpRequest = clientHttpRequest;
         return this;

@@ -14,7 +14,7 @@ public interface GatewayResponse<T> {
      *
      * @return 返回HTTP响应状态代码
      */
-    String getStatusCode();
+    Integer getStatusCode();
 
     /**
      * 设置HTTP响应状态代码
@@ -22,7 +22,7 @@ public interface GatewayResponse<T> {
      * @param statusCode HTTP响应状态代码
      * @return 网关响应
      */
-    GatewayResponse<T> setStatusCode(String statusCode);
+    GatewayResponse<T> setStatusCode(Integer statusCode);
 
     /**
      * 获取HTTP响应状态描述

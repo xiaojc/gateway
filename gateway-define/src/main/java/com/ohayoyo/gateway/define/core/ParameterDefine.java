@@ -1,5 +1,5 @@
 package com.ohayoyo.gateway.define.core;
 
 @Deprecated
-public interface ParameterDefine extends DataDefine {
+public interface ParameterDefine extends FieldDefine {
 }

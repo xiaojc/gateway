@@ -4,14 +4,6 @@ import java.io.Serializable;
 
 public interface StatusDefine extends Serializable {
 
-    String STANDARD = "standard";
-
-    String CUSTOM = "custom";
-
-    String getType();
-
-    StatusDefine setType(String type);
-
     String getStatusCode();
 
     StatusDefine setStatusCode(String statusCode);
