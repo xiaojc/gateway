@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.define.core;
 
 import java.io.Serializable;
 
+/**
+ * 主机定义
+ */
 public interface HostDefine extends Serializable {
 
     Integer DEFAULT_HTTP_PORT = 80;

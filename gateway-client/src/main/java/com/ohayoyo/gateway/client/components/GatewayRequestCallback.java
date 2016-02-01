@@ -19,6 +19,9 @@ import org.springframework.web.client.RequestCallback;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * 网关请求回调器
+ */
 public class GatewayRequestCallback extends AbstractGatewayComponent<RequestCallback> implements RequestCallback {
 
     private ClientHttpRequest clientHttpRequest;

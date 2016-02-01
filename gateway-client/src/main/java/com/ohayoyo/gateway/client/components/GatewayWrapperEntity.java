@@ -27,12 +27,17 @@ public class GatewayWrapperEntity<T> extends AbstractGatewayComponent<GatewayWra
     }
 
     @Override
-    public GatewayResponse<T> wrapGatewayResponse() throws IOException {
-        RestfulResponse<T> restfulResponse = new RestfulResponse<T>();
-        restfulResponse.setResponseEntity(this.getResponseResult());
-        restfulResponse.setStatusCode(String.valueOf(clientHttpResponse.getRawStatusCode()));
-        restfulResponse.setReasonPhrase(clientHttpResponse.getStatusText());
-        restfulResponse.setResponseHeaders(clientHttpResponse.getHeaders());
+    public GatewayResponse<T> wrapGatewayResponse() throws GatewayException {
+        RestfulResponse<T> restfulResponse;
+        try {
+            restfulResponse = new RestfulResponse<T>();
+            restfulResponse.setResponseEntity(this.getResponseResult());
+            restfulResponse.setStatusCode(String.valueOf(clientHttpResponse.getRawStatusCode()));
+            restfulResponse.setReasonPhrase(clientHttpResponse.getStatusText());
+            restfulResponse.setResponseHeaders(clientHttpResponse.getHeaders());
+        } catch (IOException e) {
+            throw new GatewayException(e);
+        }
         return restfulResponse;
     }
 

@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.define.core;
 import java.io.Serializable;
 import java.util.Set;
 
+/**
+ * 协议定义
+ */
 public interface ProtocolDefine extends Serializable {
 
     String HTTP = "http";

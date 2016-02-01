@@ -20,6 +20,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 网关响应提取器
+ *
+ * @param <T> 响应实体类型
+ */
 public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<ResponseExtractor<T>> implements ResponseExtractor<T> {
 
     private Class<T> responseType;

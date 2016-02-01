@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.define.core;
 import java.io.Serializable;
 import java.util.Set;
 
+/**
+ * 请求定义
+ */
 //https://www.w3.org/TR/url/
 //http://baike.baidu.com/link?url=ia3S_WOT5YEHwRI2ZQ4d2_HqqKvAeNZHKmTskZBn3GlbNBMr2fAv9ZCjJfH3ZVfWrQnC9XiF4GN4NOG5rjlDca
 //http://golang.org/pkg/net/url/
