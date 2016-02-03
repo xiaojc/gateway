@@ -3,11 +3,11 @@ package com.ohayoyo.gateway.client.components;
 import com.ohayoyo.gateway.client.core.GatewayConfig;
 import com.ohayoyo.gateway.client.core.GatewayDefine;
 import com.ohayoyo.gateway.client.core.GatewayException;
+import com.ohayoyo.gateway.client.wrapper.ClientHttpResponseWrapper;
 import com.ohayoyo.gateway.define.core.EntityDefine;
 import com.ohayoyo.gateway.define.core.ResponseDefine;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.GenericHttpMessageConverter;
@@ -16,8 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.ResponseExtractor;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PushbackInputStream;
 import java.util.List;
 
 /**
@@ -77,14 +75,14 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
         GatewayConfig gatewayConfig = this.getGatewayConfig();
         //获取HTTP响应客户端
         ClientHttpResponse clientHttpResponse = this.getClientHttpResponse();
-        //HTTP响应实体包装器
-        HttpResponseEntityWrapper httpResponseEntityWrapper = new HttpResponseEntityWrapper(clientHttpResponse);
+        //HTTP响应客户端包装器
+        ClientHttpResponseWrapper clientHttpResponseWrapper = new ClientHttpResponseWrapper(clientHttpResponse);
         //判断是否存在响应实体
-        if (httpResponseEntityWrapper.hasResponseEntity() && (!httpResponseEntityWrapper.hasEmptyResponseEntity())) {
+        if (clientHttpResponseWrapper.hasResponseEntity() && (!clientHttpResponseWrapper.hasEmptyResponseEntity())) {
             //获取全部支持的HTTP消息转换器
             List<HttpMessageConverter<?>> httpMessageConverters = gatewayConfig.getHttpMessageConverters();
             //获取响应的媒体类型
-            MediaType responseMediaType = getResponseContentType(httpResponseEntityWrapper);
+            MediaType responseMediaType = getResponseContentType(clientHttpResponseWrapper);
             //获取优选的媒体类型
             MediaType preferenceMediaType = getPreferenceMediaType(responseMediaType);
             for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
@@ -94,7 +92,7 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
                     //如果可读
                     if (genericHttpMessageConverter.canRead(responseClass, responseClass, preferenceMediaType)) {
                         //读取数据并进行提取
-                        result = (T) genericHttpMessageConverter.read(responseClass, responseClass, httpResponseEntityWrapper);
+                        result = (T) genericHttpMessageConverter.read(responseClass, responseClass, clientHttpResponseWrapper);
                         isNotHttpMessageConverterSupport = false;
                         break;
                     }
@@ -102,7 +100,7 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
                 //如果可读
                 if (httpMessageConverter.canRead(responseClass, preferenceMediaType)) {
                     //读取数据并进行提取
-                    result = (T) httpMessageConverter.read((Class) responseClass, httpResponseEntityWrapper);
+                    result = (T) httpMessageConverter.read((Class) responseClass, clientHttpResponseWrapper);
                     isNotHttpMessageConverterSupport = false;
                     break;
                 }
@@ -198,140 +196,5 @@ public class GatewayResponseExtractor<T> extends AbstractGatewayComponent<Respon
         this.clientHttpResponse = clientHttpResponse;
         return this;
     }
-
-    /**
-     * HTTP响应实体包装器
-     */
-    private static class HttpResponseEntityWrapper implements ClientHttpResponse {
-
-        /**
-         * 内部HTTP响应客户端
-         */
-        private final ClientHttpResponse internalClientHttpResponse;
-
-        /**
-         * 回推输入流
-         */
-        private PushbackInputStream pushbackInputStream;
-
-        /**
-         * 构建一个HTTP响应实体包装器
-         *
-         * @param internalClientHttpResponse 内部HTTP响应客户端
-         */
-        public HttpResponseEntityWrapper(ClientHttpResponse internalClientHttpResponse) {
-            this.internalClientHttpResponse = internalClientHttpResponse;
-        }
-
-        /**
-         * 是否有响应实体
-         *
-         * @return 返回是否有响应实体
-         * @throws IOException 抛出IO异常
-         */
-        public boolean hasResponseEntity() throws IOException {
-            HttpStatus responseStatus = this.getStatusCode();
-            if (responseStatus.is1xxInformational() || responseStatus == HttpStatus.NO_CONTENT || responseStatus == HttpStatus.NOT_MODIFIED) {
-                return false;
-            } else if (this.getHeaders().getContentLength() == 0) {
-                return false;
-            }
-            return true;
-        }
-
-        /**
-         * 是否空的响应实体
-         *
-         * @return 返回是否空的响应实体
-         * @throws IOException 抛出IO异常
-         */
-        public boolean hasEmptyResponseEntity() throws IOException {
-            InputStream body = this.internalClientHttpResponse.getBody();
-            if (body == null) {
-                return true;
-            } else if (body.markSupported()) {
-                body.mark(1);
-                if (body.read() == -1) {
-                    return true;
-                } else {
-                    body.reset();
-                    return false;
-                }
-            } else {
-                this.pushbackInputStream = new PushbackInputStream(body);
-                int b = this.pushbackInputStream.read();
-                if (b == -1) {
-                    return true;
-                } else {
-                    this.pushbackInputStream.unread(b);
-                    return false;
-                }
-            }
-        }
-
-        /**
-         * Return the headers of this message.
-         *
-         * @return a corresponding HttpHeaders object (never {@code null})
-         */
-        @Override
-        public HttpHeaders getHeaders() {
-            return this.internalClientHttpResponse.getHeaders();
-        }
-
-        /**
-         * Return the body of the message as an input stream.
-         *
-         * @return the input stream body (never {@code null})
-         * @throws IOException in case of I/O Errors
-         */
-        @Override
-        public InputStream getBody() throws IOException {
-            return (this.pushbackInputStream != null ? this.pushbackInputStream : this.internalClientHttpResponse.getBody());
-        }
-
-        /**
-         * Return the HTTP status code of the response.
-         *
-         * @return the HTTP status as an HttpStatus enum value
-         * @throws IOException in case of I/O errors
-         */
-        @Override
-        public HttpStatus getStatusCode() throws IOException {
-            return this.internalClientHttpResponse.getStatusCode();
-        }
-
-        /**
-         * Return the HTTP status code of the response as integer
-         *
-         * @return the HTTP status as an integer
-         * @throws IOException in case of I/O errors
-         */
-        @Override
-        public int getRawStatusCode() throws IOException {
-            return this.internalClientHttpResponse.getRawStatusCode();
-        }
-
-        /**
-         * Return the HTTP status text of the response.
-         *
-         * @return the HTTP status text
-         * @throws IOException in case of I/O errors
-         */
-        @Override
-        public String getStatusText() throws IOException {
-            return this.internalClientHttpResponse.getStatusText();
-        }
-
-        /**
-         * Close this response, freeing any resources created.
-         */
-        @Override
-        public void close() {
-            this.internalClientHttpResponse.close();
-        }
-
-    }
-
 
 }
