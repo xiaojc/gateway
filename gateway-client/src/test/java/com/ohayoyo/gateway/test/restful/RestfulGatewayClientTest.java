@@ -9,11 +9,17 @@ import com.ohayoyo.gateway.client.restful.RestfulGatewayClient;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayDefine;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayRequest;
 import com.ohayoyo.gateway.define.memory.*;
+import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
+import com.ohayoyo.gateway.http.HttpClientHandler;
 import com.ohayoyo.gateway.test.model.TestPack;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.Netty4ClientHttpRequestFactory;
+import org.springframework.http.client.OkHttpClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -44,6 +50,9 @@ public class RestfulGatewayClientTest {
     @Test
     public void testRestfulClient0() throws GatewayException {
         RestfulGatewayClient restfulGatewayClient = new RestfulGatewayClient();
+        HttpClientHandler httpClientHandler = new DefaultHttpClientHandler();
+        httpClientHandler.setClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        restfulGatewayClient.setHttpClientHandler(httpClientHandler);
         MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();
         requestQueries.set("key", "29e069ec39101eb669121554bf67024f");
         requestQueries.set("num", "10");
@@ -65,8 +74,10 @@ public class RestfulGatewayClientTest {
                         )
         );
 
+        long startTime = System.currentTimeMillis();
         GatewayResponse<String> objectGatewayResponse = restfulGatewayClient.session(gatewayDefine, gatewayRequest);
-
+        long endTime = System.currentTimeMillis();
+        logger.debug("{}",(endTime-startTime));
         logger.debug("{}", objectGatewayResponse.getResponseBody());
 
     }
@@ -105,6 +116,9 @@ public class RestfulGatewayClientTest {
     @Test
     public void testRestfulClient2() throws GatewayException {
         RestfulGatewayClient restfulGatewayClient = new RestfulGatewayClient();
+        HttpClientHandler httpClientHandler = new DefaultHttpClientHandler();
+        httpClientHandler.setClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        restfulGatewayClient.setHttpClientHandler(httpClientHandler);
         MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();
         requestQueries.set("key", "29e069ec39101eb669121554bf67024f");
         requestQueries.set("num", "10");
@@ -125,7 +139,10 @@ public class RestfulGatewayClientTest {
                                         .setEntity(new MemoryEntityDefine().setType(MediaType.APPLICATION_JSON_UTF8.toString()))
                         )
         );
+        long startTime = System.currentTimeMillis();
         GatewayResponse<TestPack> objectGatewayResponse = restfulGatewayClient.session(TestPack.class, gatewayDefine, gatewayRequest);
+        long endTime = System.currentTimeMillis();
+        logger.debug("{}",(endTime-startTime));
         logger.debug("{}", objectGatewayResponse.getResponseBody());
     }
 
