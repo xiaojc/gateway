@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.core.PathDefine;
-import com.ohayoyo.gateway.define.core.PathVariableDefine;
+import com.ohayoyo.gateway.define.PathDefine;
+import com.ohayoyo.gateway.define.PathVariableDefine;
 
 import java.util.Set;
 

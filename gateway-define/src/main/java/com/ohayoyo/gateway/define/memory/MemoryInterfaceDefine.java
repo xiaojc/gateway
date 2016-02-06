@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
-import com.ohayoyo.gateway.define.core.RequestDefine;
-import com.ohayoyo.gateway.define.core.ResponseDefine;
+import com.ohayoyo.gateway.define.InterfaceDefine;
+import com.ohayoyo.gateway.define.RequestDefine;
+import com.ohayoyo.gateway.define.ResponseDefine;
 
 /**
  * 内存接口定义

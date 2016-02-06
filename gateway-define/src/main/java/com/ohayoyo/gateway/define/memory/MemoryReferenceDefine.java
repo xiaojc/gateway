@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.core.ReferenceDefine;
+import com.ohayoyo.gateway.define.ReferenceDefine;
 
 import java.util.Map;
 

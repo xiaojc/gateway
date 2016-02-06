@@ -1,9 +1,9 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.core.EntityDefine;
-import com.ohayoyo.gateway.define.core.HeaderDefine;
-import com.ohayoyo.gateway.define.core.ResponseDefine;
-import com.ohayoyo.gateway.define.core.StatusDefine;
+import com.ohayoyo.gateway.define.EntityDefine;
+import com.ohayoyo.gateway.define.HeaderDefine;
+import com.ohayoyo.gateway.define.ResponseDefine;
+import com.ohayoyo.gateway.define.StatusDefine;
 
 import java.util.Set;
 

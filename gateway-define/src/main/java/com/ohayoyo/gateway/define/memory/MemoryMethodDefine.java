@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.core.MethodDefine;
+import com.ohayoyo.gateway.define.MethodDefine;
 
 import java.util.Set;
 
