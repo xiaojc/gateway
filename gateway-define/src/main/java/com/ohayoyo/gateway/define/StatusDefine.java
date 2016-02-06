@@ -12,6 +12,8 @@ public interface StatusDefine extends Serializable {
 
     StatusDefine setReasonPhrase(String reasonPhrase);
 
+    //扩展
+
     String getErrorSolution();
 
     StatusDefine setErrorSolution(String errorSolution);
@@ -22,6 +24,4 @@ public interface StatusDefine extends Serializable {
     @Override
     int hashCode();
 
-    @Override
-    String toString();
 }

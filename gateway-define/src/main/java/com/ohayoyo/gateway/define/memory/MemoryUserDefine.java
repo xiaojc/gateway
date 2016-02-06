@@ -11,7 +11,7 @@ public class MemoryUserDefine implements UserDefine {
 
     private String password;
 
-    private Set<String> options;
+    private Set<String> scopes;
 
     public String getUsername() {
         return username;
@@ -31,12 +31,12 @@ public class MemoryUserDefine implements UserDefine {
         return this;
     }
 
-    public Set<String> getOptions() {
-        return options;
+    public Set<String> getScopes() {
+        return scopes;
     }
 
-    public MemoryUserDefine setOptions(Set<String> options) {
-        this.options = options;
+    public MemoryUserDefine setScopes(Set<String> scopes) {
+        this.scopes = scopes;
         return this;
     }
 

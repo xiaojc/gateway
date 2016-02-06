@@ -24,7 +24,7 @@ public class MemoryMethodDefine implements MethodDefine {
 
     private String name;
 
-    private Set<String> options;
+    private Set<String> scopes;
 
     public String getName() {
         return name;
@@ -35,12 +35,12 @@ public class MemoryMethodDefine implements MethodDefine {
         return this;
     }
 
-    public Set<String> getOptions() {
-        return options;
+    public Set<String> getScopes() {
+        return scopes;
     }
 
-    public MemoryMethodDefine setOptions(Set<String> options) {
-        this.options = options;
+    public MemoryMethodDefine setScopes(Set<String> scopes) {
+        this.scopes = scopes;
         return this;
     }
 

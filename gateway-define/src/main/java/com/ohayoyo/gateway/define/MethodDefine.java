@@ -28,9 +28,9 @@ public interface MethodDefine extends Serializable {
 
     MethodDefine setName(String name);
 
-    Set<String> getOptions();
+    Set<String> getScopes();
 
-    MethodDefine setOptions(Set<String> options);
+    MethodDefine setScopes(Set<String> scopes);
 
     @Override
     boolean equals(Object o);

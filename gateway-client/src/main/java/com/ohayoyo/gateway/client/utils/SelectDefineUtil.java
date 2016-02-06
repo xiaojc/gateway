@@ -60,7 +60,7 @@ public class SelectDefineUtil {
         ProtocolDefine selectProtocolDefine = null;
         if (!StringUtils.isEmpty(select) && (!CollectionUtils.isEmpty(protocolDefines))) {
             for (ProtocolDefine protocolDefine : protocolDefines) {
-                Set<String> options = protocolDefine.getOptions();
+                Set<String> options = protocolDefine.getScopes();
                 if (hasSelectOptions(select, options)) {
                     selectProtocolDefine = protocolDefine;
                     break;
@@ -92,7 +92,7 @@ public class SelectDefineUtil {
         UserDefine selectUserDefine = null;
         if (!StringUtils.isEmpty(select) && (!CollectionUtils.isEmpty(userDefines))) {
             for (UserDefine userDefine : userDefines) {
-                Set<String> options = userDefine.getOptions();
+                Set<String> options = userDefine.getScopes();
                 if (hasSelectOptions(select, options)) {
                     selectUserDefine = userDefine;
                     break;
@@ -119,7 +119,7 @@ public class SelectDefineUtil {
         MethodDefine selectMethodDefine = null;
         if (!StringUtils.isEmpty(select) && (!CollectionUtils.isEmpty(methodDefines))) {
             for (MethodDefine methodDefine : methodDefines) {
-                Set<String> options = methodDefine.getOptions();
+                Set<String> options = methodDefine.getScopes();
                 if (hasSelectOptions(select, options)) {
                     selectMethodDefine = methodDefine;
                     break;
@@ -146,7 +146,7 @@ public class SelectDefineUtil {
         HostDefine selectHostDefine = null;
         if (!StringUtils.isEmpty(select) && (!CollectionUtils.isEmpty(hostDefines))) {
             for (HostDefine hostDefine : hostDefines) {
-                String option = hostDefine.getOption();
+                String option = hostDefine.getScope();
                 if (selectCompareRule(select, option)) {
                     selectHostDefine = hostDefine;
                     break;

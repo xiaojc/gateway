@@ -8,7 +8,7 @@ public class MemoryHostDefine implements HostDefine {
 
     private Integer port;
 
-    private String option;
+    private String scope;
 
     public String getHostname() {
         return hostname;
@@ -28,12 +28,12 @@ public class MemoryHostDefine implements HostDefine {
         return this;
     }
 
-    public String getOption() {
-        return option;
+    public String getScope() {
+        return scope;
     }
 
-    public MemoryHostDefine setOption(String option) {
-        this.option = option;
+    public MemoryHostDefine setScope(String scope) {
+        this.scope = scope;
         return this;
     }
 

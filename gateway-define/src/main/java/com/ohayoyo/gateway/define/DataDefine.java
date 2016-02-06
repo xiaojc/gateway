@@ -2,12 +2,7 @@ package com.ohayoyo.gateway.define;
 
 import java.io.Serializable;
 
-/**
- * 字段定义
- */
-public interface FieldDefine extends Serializable {
-
-    //基本数据类型
+public interface DataDefine extends Serializable {
 
     String BYTE = "byte";
 
@@ -46,31 +41,31 @@ public interface FieldDefine extends Serializable {
 
     String getName();
 
-    FieldDefine setName(String name);
+    DataDefine setName(String name);
 
     String getType();
 
-    FieldDefine setType(String type);
+    DataDefine setType(String type);
 
     Boolean getRequired();
 
-    FieldDefine setRequired(Boolean required);
+    DataDefine setRequired(Boolean required);
 
     Integer getLength();
 
-    FieldDefine setLength(Integer length);
+    DataDefine setLength(Integer length);
 
     Object getDefaultValue();
 
-    FieldDefine setDefaultValue(Object defaultValue);
+    DataDefine setDefaultValue(Object defaultValue);
 
     String getDescription();
 
-    FieldDefine setDescription(String description);
+    DataDefine setDescription(String description);
 
     ReferenceDefine getReference();
 
-    FieldDefine setReference(ReferenceDefine reference);
+    DataDefine setReference(ReferenceDefine reference);
 
     @Override
     boolean equals(Object o);

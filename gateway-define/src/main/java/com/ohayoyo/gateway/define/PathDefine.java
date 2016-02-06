@@ -4,9 +4,6 @@ package com.ohayoyo.gateway.define;
 import java.io.Serializable;
 import java.util.Set;
 
-/**
- * 路径值定义
- */
 public interface PathDefine extends Serializable {
 
     String getProject();

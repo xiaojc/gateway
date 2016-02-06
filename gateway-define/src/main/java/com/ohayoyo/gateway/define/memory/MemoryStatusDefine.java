@@ -50,9 +50,4 @@ public class MemoryStatusDefine implements StatusDefine {
         return statusCode != null ? statusCode.hashCode() : 0;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder().append(statusCode).append(" ").append(reasonPhrase).toString();
-    }
-
 }
