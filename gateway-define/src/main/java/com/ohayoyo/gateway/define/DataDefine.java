@@ -24,7 +24,6 @@ public interface DataDefine extends Serializable {
 
     String FILE = "file";
 
-    //暂不支持
     String OBJECT = "object";
 
     //暂不支持

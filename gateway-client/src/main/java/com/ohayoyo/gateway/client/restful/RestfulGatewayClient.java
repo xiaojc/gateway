@@ -115,40 +115,37 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
         return httpMethod;
     }
 
-    protected MediaType resolveCustomRequestContentType(GatewayDefine gatewayDefine) {
-        MediaType customRequestContentType = null;
-        RequestDefine requestDefine = gatewayDefine.getRequest();
-        if (null != requestDefine) {
-            EntityDefine entityDefine = requestDefine.getEntity();
-            if (null != entityDefine) {
-                String contentType = entityDefine.getType();
-                if (!StringUtils.isEmpty(contentType)) {
-                    try {
-                        customRequestContentType = MediaType.parseMediaType(contentType);
-                    } catch (Exception ex) {
-                        customRequestContentType = null;
-                    }
+    protected MediaType resolveEntityDefineContentType(EntityDefine entityDefine) {
+        MediaType customContentType = null;
+        if (null != entityDefine) {
+            String contentType = entityDefine.getType();
+            if (!StringUtils.isEmpty(contentType)) {
+                try {
+                    customContentType = MediaType.parseMediaType(contentType);
+                } catch (Exception ex) {
+                    customContentType = null;
                 }
             }
+        }
+        return customContentType;
+    }
+
+    protected MediaType resolveCustomRequestContentType(GatewayDefine gatewayDefine) {
+        RequestDefine requestDefine = gatewayDefine.getRequest();
+        MediaType customRequestContentType = null;
+        if (null != requestDefine) {
+            EntityDefine entityDefine = requestDefine.getEntity();
+            customRequestContentType = resolveEntityDefineContentType(entityDefine);
         }
         return customRequestContentType;
     }
 
     protected MediaType resolveCustomResponseContentType(GatewayDefine gatewayDefine) {
-        MediaType customResponseContentType = null;
         ResponseDefine responseDefine = gatewayDefine.getResponse();
+        MediaType customResponseContentType = null;
         if (null != responseDefine) {
             EntityDefine entityDefine = responseDefine.getEntity();
-            if (null != entityDefine) {
-                String contentType = entityDefine.getType();
-                if (!StringUtils.isEmpty(contentType)) {
-                    try {
-                        customResponseContentType = MediaType.parseMediaType(contentType);
-                    } catch (Exception ex) {
-                        customResponseContentType = null;
-                    }
-                }
-            }
+            customResponseContentType = resolveEntityDefineContentType(entityDefine);
         }
         return customResponseContentType;
     }

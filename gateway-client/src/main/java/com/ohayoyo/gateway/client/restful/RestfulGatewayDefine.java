@@ -7,59 +7,59 @@ import com.ohayoyo.gateway.define.ResponseDefine;
 
 public class RestfulGatewayDefine implements InterfaceDefine, GatewayDefine {
 
-    private InterfaceDefine delegate;
+    private InterfaceDefine delegateInterfaceDefine;
 
-    public RestfulGatewayDefine(InterfaceDefine delegate) {
-        this.delegate = delegate;
+    public RestfulGatewayDefine(InterfaceDefine delegateInterfaceDefine) {
+        this.delegateInterfaceDefine = delegateInterfaceDefine;
     }
 
     @Override
     public String getKey() {
-        return delegate.getKey();
+        return delegateInterfaceDefine.getKey();
     }
 
     @Override
     public InterfaceDefine setKey(String key) {
-        return delegate.setKey(key);
+        return delegateInterfaceDefine.setKey(key);
     }
 
     @Override
     public String getDescription() {
-        return delegate.getDescription();
+        return delegateInterfaceDefine.getDescription();
     }
 
     @Override
     public InterfaceDefine setDescription(String description) {
-        return delegate.setDescription(description);
+        return delegateInterfaceDefine.setDescription(description);
     }
 
     @Override
     public RequestDefine getRequest() {
-        return delegate.getRequest();
+        return delegateInterfaceDefine.getRequest();
     }
 
     @Override
     public InterfaceDefine setRequest(RequestDefine request) {
-        return delegate.setRequest(request);
+        return delegateInterfaceDefine.setRequest(request);
     }
 
     @Override
     public ResponseDefine getResponse() {
-        return delegate.getResponse();
+        return delegateInterfaceDefine.getResponse();
     }
 
     @Override
     public InterfaceDefine setResponse(ResponseDefine response) {
-        return delegate.setResponse(response);
+        return delegateInterfaceDefine.setResponse(response);
     }
 
     @Override
     public boolean equals(Object o) {
-        return delegate.equals(o);
+        return delegateInterfaceDefine.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return delegate.hashCode();
+        return delegateInterfaceDefine.hashCode();
     }
 }

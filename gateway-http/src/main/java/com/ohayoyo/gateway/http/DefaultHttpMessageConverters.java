@@ -1,6 +1,5 @@
 package com.ohayoyo.gateway.http;
 
-import org.springframework.core.convert.ConversionService;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.feed.AtomFeedHttpMessageConverter;
@@ -33,14 +32,7 @@ public class DefaultHttpMessageConverters extends ArrayList<HttpMessageConverter
 
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
-    private ConversionService conversionService;
-
     public DefaultHttpMessageConverters() {
-        this(new DefaultFormattingConversionService());
-    }
-
-    public DefaultHttpMessageConverters(ConversionService conversionService) {
-        this.conversionService = conversionService;
         this.configDefaultHttpMessageConverters();
     }
 
@@ -49,12 +41,10 @@ public class DefaultHttpMessageConverters extends ArrayList<HttpMessageConverter
         this.add(new StringHttpMessageConverter(DEFAULT_CHARSET));
         this.add(new ResourceHttpMessageConverter());
         this.add(new SourceHttpMessageConverter<Source>());
+        this.add(new FormHttpMessageConverter());
         this.add(new AllEncompassingFormHttpMessageConverter());
         this.add(new BufferedImageHttpMessageConverter());
-        ConversionService conversionService = this.getConversionService();
-        if (null != conversionService) {
-            this.add(new ObjectToStringHttpMessageConverter(conversionService, DEFAULT_CHARSET));
-        }
+        this.add(new ObjectToStringHttpMessageConverter(new DefaultFormattingConversionService(), DEFAULT_CHARSET));
         //MarshallingHttpMessageConverter : 暂时不支持
         //ProtobufHttpMessageConverter : 暂时不支持
         if (ROME_PRESENT) {
@@ -72,10 +62,6 @@ public class DefaultHttpMessageConverters extends ArrayList<HttpMessageConverter
         } else if (GSON_PRESENT) {
             this.add(new GsonHttpMessageConverter());
         }
-    }
-
-    public ConversionService getConversionService() {
-        return conversionService;
     }
 
 }
