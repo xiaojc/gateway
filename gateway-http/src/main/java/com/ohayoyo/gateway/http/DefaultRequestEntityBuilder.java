@@ -10,13 +10,17 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultRequestEntityBuilder<RequestBody> extends AbstractHttpEntityBuilder<RequestBody, RequestEntity<RequestBody>> implements HttpRequestEntityBuilder<RequestBody> {
+public class DefaultRequestEntityBuilder<RequestBody> extends AbstractHttpEntityBuilder<RequestBody, RequestEntity<RequestBody>> {
 
     private URI uri;
 
     private HttpMethod httpMethod;
 
     public DefaultRequestEntityBuilder() {
+    }
+
+    public static <RequestBody> DefaultRequestEntityBuilder<RequestBody> newInstance() {
+        return new DefaultRequestEntityBuilder<RequestBody>();
     }
 
     public DefaultRequestEntityBuilder(URI uri, HttpMethod httpMethod) {
@@ -50,22 +54,19 @@ public class DefaultRequestEntityBuilder<RequestBody> extends AbstractHttpEntity
         this.httpMethod = httpMethod;
     }
 
-    @Override
-    public HttpRequestEntityBuilder<RequestBody> url(URI uri) {
+    public DefaultRequestEntityBuilder<RequestBody> url(URI uri) {
         Assert.notNull(uri);
         this.uri = uri;
         return this;
     }
 
-    @Override
-    public HttpRequestEntityBuilder<RequestBody> httpMethod(HttpMethod httpMethod) {
+    public DefaultRequestEntityBuilder<RequestBody> httpMethod(HttpMethod httpMethod) {
         Assert.notNull(httpMethod);
         this.httpMethod = httpMethod;
         return this;
     }
 
-    @Override
-    public HttpRequestEntityBuilder<RequestBody> httpMethod(String httpMethod) {
+    public DefaultRequestEntityBuilder<RequestBody> httpMethod(String httpMethod) {
         Assert.notNull(httpMethod);
         this.httpMethod = HttpMethod.resolve(httpMethod);
         return this;

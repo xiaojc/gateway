@@ -7,6 +7,7 @@ import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.utils.PathDefineUtil;
 import com.ohayoyo.gateway.client.utils.SelectDefineUtil;
 import com.ohayoyo.gateway.define.*;
+import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
 import com.ohayoyo.gateway.http.DefaultRequestEntityBuilder;
 import com.ohayoyo.gateway.http.HttpClientException;
 import com.ohayoyo.gateway.http.HttpClientHandler;
@@ -27,6 +28,32 @@ import java.util.Set;
 
 public class RestfulGatewayClient extends AbstractGatewayClient {
 
+    private static RestfulGatewayClient RESTFUL_GATEWAY_CLIENT = null;
+
+    private static final Object LOCKED = new Object();
+
+    public RestfulGatewayClient() {
+        super(DefaultHttpClientHandler.getDefaultHttpClientHandler());
+    }
+
+    public static final RestfulGatewayClient getRestfulGatewayClient() {
+        if (ObjectUtils.isEmpty(RESTFUL_GATEWAY_CLIENT)) {
+            synchronized (LOCKED) {
+                if (ObjectUtils.isEmpty(RESTFUL_GATEWAY_CLIENT)) {
+                    RESTFUL_GATEWAY_CLIENT = new RestfulGatewayClient();
+                }
+            }
+        }
+        return RESTFUL_GATEWAY_CLIENT;
+    }
+
+    public RestfulGatewayRequestBuilder newRestfulGatewayRequestBuilder() {
+        return RestfulGatewayRequestBuilder.newInstance().conversionService(this.getHttpClientHandler().getConversionService());
+    }
+
+    public RestfulGatewayResponseBuilder newRestfulGatewayResponseBuilder() {
+        return RestfulGatewayResponseBuilder.newInstance().conversionService(this.getHttpClientHandler().getConversionService());
+    }
 
     @Override
     protected void defineVerify(GatewayDefine gatewayDefine) throws GatewayException {
@@ -44,16 +71,16 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
     }
 
     @Override
-    protected <ResponseBody, RequestBody> void doSession(HttpClientHandler httpClientHandler, GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
+    protected <ResponseBody, RequestBody> void doSession(HttpClientHandler httpClientHandler, RestfulGatewayResponseBuilder restfulGatewayResponseBuilder, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
         RequestEntity<RequestBody> requestEntity = this.resolveRequestEntity(gatewayDefine, gatewayRequest);
         MediaType customRequestContentType = this.resolveCustomRequestContentType(gatewayDefine);
         MediaType customResponseContentType = this.resolveCustomResponseContentType(gatewayDefine);
         try {
             ResponseEntity<ResponseBody> responseEntity = httpClientHandler.handler(customRequestContentType, customResponseContentType, responseBodyClass, requestEntity);
-            gatewayResponse.setStatusCode(responseEntity.getStatusCode().value());
-            gatewayResponse.setReasonPhrase(responseEntity.getStatusCode().getReasonPhrase());
-            gatewayResponse.setResponseHeaders(responseEntity.getHeaders());
-            gatewayResponse.setResponseBody(responseEntity.getBody());
+            restfulGatewayResponseBuilder.statusCode(responseEntity.getStatusCode().value());
+            restfulGatewayResponseBuilder.reasonPhrase(responseEntity.getStatusCode().getReasonPhrase());
+            restfulGatewayResponseBuilder.responseHeaders(responseEntity.getHeaders());
+            restfulGatewayResponseBuilder.responseBody(responseEntity.getBody());
         } catch (HttpClientException hce) {
             throw new GatewayException(hce);
         }
@@ -64,7 +91,7 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
         HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayDefine, gatewayRequest);
         MultiValueMap<String, String> requestHeaders = gatewayRequest.getRequestHeaders();
         RequestBody requestEntity = gatewayRequest.getRequestBody();
-        return new DefaultRequestEntityBuilder<RequestBody>().url(uri).headers(requestHeaders).httpMethod(httpMethod).body(requestEntity).build();
+        return (RequestEntity<RequestBody>) DefaultRequestEntityBuilder.newInstance().url(uri).headers(requestHeaders).httpMethod(httpMethod).body(requestEntity).build();
     }
 
     protected <RequestBody> URI resolveRequestUri(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {

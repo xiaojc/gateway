@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.http;
 
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -8,7 +9,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractHttpEntityBuilder<Body, HttpEntity> implements HttpEntityBuilder<Body, HttpEntity> {
+public abstract class AbstractHttpEntityBuilder<Body, SubHttpEntity extends HttpEntity<Body>> {
 
     private HttpHeaders headers;
 
@@ -31,8 +32,7 @@ public abstract class AbstractHttpEntityBuilder<Body, HttpEntity> implements Htt
         this.body = body;
     }
 
-    @Override
-    public HttpEntityBuilder<Body, HttpEntity> headers(Map<String, List<String>> headers) {
+    public AbstractHttpEntityBuilder<Body, SubHttpEntity> headers(Map<String, List<String>> headers) {
         if (!CollectionUtils.isEmpty(headers)) {
             MultiValueMap<String, String> thisHeaders = new LinkedMultiValueMap<String, String>(headers);
             this.headers(thisHeaders);
@@ -40,8 +40,7 @@ public abstract class AbstractHttpEntityBuilder<Body, HttpEntity> implements Htt
         return this;
     }
 
-    @Override
-    public HttpEntityBuilder<Body, HttpEntity> headers(MultiValueMap<String, String> headers) {
+    public AbstractHttpEntityBuilder<Body, SubHttpEntity> headers(MultiValueMap<String, String> headers) {
         if (!CollectionUtils.isEmpty(headers)) {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.putAll(headers);
@@ -50,8 +49,7 @@ public abstract class AbstractHttpEntityBuilder<Body, HttpEntity> implements Htt
         return this;
     }
 
-    @Override
-    public HttpEntityBuilder<Body, HttpEntity> headers(HttpHeaders headers) {
+    public AbstractHttpEntityBuilder<Body, SubHttpEntity> headers(HttpHeaders headers) {
         if (null == this.headers) {
             this.headers = headers;
         } else if (null != headers) {
@@ -60,8 +58,7 @@ public abstract class AbstractHttpEntityBuilder<Body, HttpEntity> implements Htt
         return this;
     }
 
-    @Override
-    public HttpEntityBuilder<Body, HttpEntity> body(Body body) {
+    public AbstractHttpEntityBuilder<Body, SubHttpEntity> body(Body body) {
         this.body = body;
         return this;
     }
@@ -73,5 +70,7 @@ public abstract class AbstractHttpEntityBuilder<Body, HttpEntity> implements Htt
     protected Body getBody() {
         return body;
     }
+
+    public abstract SubHttpEntity build();
 
 }

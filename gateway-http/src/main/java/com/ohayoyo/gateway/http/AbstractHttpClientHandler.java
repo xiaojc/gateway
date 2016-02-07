@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.http;
 
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ public abstract class AbstractHttpClientHandler implements HttpClientHandler {
     private ClientHttpRequestFactory clientHttpRequestFactory;
 
     private List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors;
+
+    private ConversionService conversionService;
 
     @Override
     public HttpRequestHandler getHttpRequestHandler() {
@@ -79,6 +82,17 @@ public abstract class AbstractHttpClientHandler implements HttpClientHandler {
     @Override
     public AbstractHttpClientHandler setClientHttpRequestInterceptors(List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors) {
         this.clientHttpRequestInterceptors = clientHttpRequestInterceptors;
+        return this;
+    }
+
+    @Override
+    public ConversionService getConversionService() {
+        return conversionService;
+    }
+
+    @Override
+    public AbstractHttpClientHandler setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
         return this;
     }
 

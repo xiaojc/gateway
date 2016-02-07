@@ -7,7 +7,12 @@ import org.springframework.util.Assert;
 
 public abstract class AbstractGatewayClient implements GatewayClient {
 
-    private HttpClientHandler httpClientHandler = new DefaultHttpClientHandler();
+    private HttpClientHandler httpClientHandler ;
+
+    public AbstractGatewayClient(HttpClientHandler httpClientHandler) {
+        Assert.notNull(httpClientHandler);
+        this.httpClientHandler = httpClientHandler;
+    }
 
     @Override
     public HttpClientHandler getHttpClientHandler() {
@@ -30,11 +35,12 @@ public abstract class AbstractGatewayClient implements GatewayClient {
     public <ResponseBody, RequestBody> GatewayResponse<ResponseBody> session(Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
         Assert.notNull(responseBodyClass);
         HttpClientHandler httpClientHandler = this.getHttpClientHandler();
-        GatewayResponse<ResponseBody> gatewayResponse = new RestfulGatewayResponse<ResponseBody>();
         this.defineVerify(gatewayDefine);
         this.requestVerify(gatewayDefine, gatewayRequest);
         this.requestFill(gatewayDefine, gatewayRequest);
-        this.doSession(httpClientHandler, gatewayResponse, responseBodyClass, gatewayDefine, gatewayRequest);
+        RestfulGatewayResponseBuilder restfulGatewayResponseBuilder = RestfulGatewayResponseBuilder.newInstance();
+        this.doSession(httpClientHandler, restfulGatewayResponseBuilder, responseBodyClass, gatewayDefine, gatewayRequest);
+        GatewayResponse<ResponseBody> gatewayResponse = restfulGatewayResponseBuilder.build();
         this.resultVerify(gatewayResponse, responseBodyClass, gatewayDefine);
         return gatewayResponse;
     }
@@ -45,7 +51,7 @@ public abstract class AbstractGatewayClient implements GatewayClient {
 
     protected abstract <RequestBody> void requestFill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException;
 
-    protected abstract <ResponseBody, RequestBody> void doSession(HttpClientHandler httpClientHandler, GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException;
+    protected abstract <ResponseBody, RequestBody> void doSession(HttpClientHandler httpClientHandler, RestfulGatewayResponseBuilder restfulGatewayResponseBuilder, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException;
 
     protected abstract <ResponseBody> void resultVerify(GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine) throws GatewayException;
 

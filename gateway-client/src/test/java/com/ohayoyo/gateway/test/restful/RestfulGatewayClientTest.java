@@ -8,6 +8,7 @@ import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayClient;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayDefine;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayRequest;
+import com.ohayoyo.gateway.client.restful.RestfulGatewayRequestBuilder;
 import com.ohayoyo.gateway.define.memory.*;
 import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
 import com.ohayoyo.gateway.http.HttpClientHandler;
@@ -53,11 +54,10 @@ public class RestfulGatewayClientTest {
         HttpClientHandler httpClientHandler = new DefaultHttpClientHandler();
         httpClientHandler.setClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory());
         restfulGatewayClient.setHttpClientHandler(httpClientHandler);
-        MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();
-        requestQueries.set("key", "29e069ec39101eb669121554bf67024f");
-        requestQueries.set("num", "10");
-        GatewayRequest gatewayRequest = new RestfulGatewayRequest()
-                .setRequestQueries(requestQueries);
+        GatewayRequest gatewayRequest = restfulGatewayClient.newRestfulGatewayRequestBuilder()
+                .requestQueries("key","29e069ec39101eb669121554bf67024f")
+                .requestQueries("num",10)
+                .build();
         GatewayDefine gatewayDefine = new RestfulGatewayDefine(
                 new MemoryInterfaceDefine()
                         .setRequest(new MemoryRequestDefine()

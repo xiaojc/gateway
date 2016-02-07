@@ -9,32 +9,31 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultResponseEntityBuilder<ResponseBody> extends AbstractHttpEntityBuilder<ResponseBody, ResponseEntity<ResponseBody>> implements HttpResponseEntityBuilder<ResponseBody> {
+public class DefaultResponseEntityBuilder<ResponseBody> extends AbstractHttpEntityBuilder<ResponseBody, ResponseEntity<ResponseBody>> {
 
     private HttpStatus httpStatus;
 
-    @Override
+    public static <ResponseBody> DefaultResponseEntityBuilder<ResponseBody> newInstance() {
+        return new DefaultResponseEntityBuilder<ResponseBody>();
+    }
+
     public DefaultResponseEntityBuilder<ResponseBody> headers(Map<String, List<String>> headers) {
         return (DefaultResponseEntityBuilder<ResponseBody>) super.headers(headers);
     }
 
-    @Override
     public DefaultResponseEntityBuilder<ResponseBody> headers(MultiValueMap<String, String> headers) {
         return (DefaultResponseEntityBuilder<ResponseBody>) super.headers(headers);
     }
 
-    @Override
     public DefaultResponseEntityBuilder<ResponseBody> headers(HttpHeaders headers) {
         return (DefaultResponseEntityBuilder<ResponseBody>) super.headers(headers);
     }
 
-    @Override
     public DefaultResponseEntityBuilder<ResponseBody> body(ResponseBody responseBody) {
         return (DefaultResponseEntityBuilder<ResponseBody>) super.body(responseBody);
     }
 
-    @Override
-    public HttpResponseEntityBuilder<ResponseBody> httpStatus(HttpStatus httpStatus) {
+    public DefaultResponseEntityBuilder<ResponseBody> httpStatus(HttpStatus httpStatus) {
         Assert.notNull(httpStatus);
         this.httpStatus = httpStatus;
         return this;

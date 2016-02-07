@@ -65,9 +65,7 @@ public class DefaultHttpResponseHandler extends AbstractHttpResponseHandler {
 
     @Override
     protected <ResponseBody> ResponseEntity<ResponseBody> doResponseEntityHandler(HttpStatus httpStatus, HttpHeaders httpHeaders, ResponseBody responseBody) throws HttpClientException, IOException {
-        HttpResponseEntityBuilder<ResponseBody> responseEntityBuilder = new DefaultResponseEntityBuilder<ResponseBody>();
-        ResponseEntity<ResponseBody> responseEntity = responseEntityBuilder.httpStatus(httpStatus).headers(httpHeaders).body(responseBody).build();
-        return responseEntity;
+        return (ResponseEntity<ResponseBody>) DefaultResponseEntityBuilder.newInstance().httpStatus(httpStatus).headers(httpHeaders).body(responseBody).build();
     }
 
 }

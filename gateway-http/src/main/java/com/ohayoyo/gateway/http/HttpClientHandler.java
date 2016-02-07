@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.http;
 
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,15 @@ public interface HttpClientHandler extends HttpClientAccessor, HttpClientInterce
 
     List<HttpMessageConverter<?>> getHttpMessageConverters();
 
+    ConversionService getConversionService();
+
     HttpClientHandler setHttpRequestHandler(HttpRequestHandler httpRequestHandler);
 
     HttpClientHandler setHttpResponseHandler(HttpResponseHandler httpResponseHandler);
 
     HttpClientHandler setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters);
+
+    HttpClientHandler setConversionService(ConversionService conversionService);
 
     <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpClientException;
 

@@ -1,5 +1,7 @@
 package com.ohayoyo.gateway.http;
 
+import org.springframework.core.convert.ConversionService;
+import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,11 +17,28 @@ import java.util.List;
 
 public class DefaultHttpClientHandler extends AbstractHttpClientHandler {
 
+    private static DefaultHttpClientHandler DEFAULT_HTTP_CLIENT_HANDLER = null;
+
+    private static final Object LOCKED = new Object();
+
     public DefaultHttpClientHandler() {
+        ConversionService conversionService = new DefaultFormattingConversionService();
         this.setHttpRequestHandler(new DefaultHttpRequestHandler());
         this.setHttpResponseHandler(new DefaultHttpResponseHandler());
-        this.setHttpMessageConverters(new DefaultHttpMessageConverters());
+        this.setHttpMessageConverters(new DefaultHttpMessageConverters(conversionService));
+        this.setConversionService(conversionService);
         this.setClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+    }
+
+    public static final DefaultHttpClientHandler getDefaultHttpClientHandler() {
+        if (ObjectUtils.isEmpty(DEFAULT_HTTP_CLIENT_HANDLER)) {
+            synchronized (LOCKED) {
+                if (ObjectUtils.isEmpty(DEFAULT_HTTP_CLIENT_HANDLER)) {
+                    DEFAULT_HTTP_CLIENT_HANDLER = new DefaultHttpClientHandler();
+                }
+            }
+        }
+        return DEFAULT_HTTP_CLIENT_HANDLER;
     }
 
     @Override
