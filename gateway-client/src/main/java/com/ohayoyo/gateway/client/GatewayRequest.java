@@ -14,12 +14,6 @@ public interface GatewayRequest<RequestBody> {
 
     GatewayRequest<RequestBody> setRequestPathVariables(Map<String, String> requestPathVariables);
 
-    @Deprecated
-    MultiValueMap<String, String> getRequestParameters();
-
-    @Deprecated
-    GatewayRequest<RequestBody> setRequestParameters(MultiValueMap<String, String> requestParameters);
-
     MultiValueMap<String, String> getRequestQueries();
 
     GatewayRequest<RequestBody> setRequestQueries(MultiValueMap<String, String> requestQueries);

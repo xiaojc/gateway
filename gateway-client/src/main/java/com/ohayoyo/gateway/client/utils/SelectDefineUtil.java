@@ -3,7 +3,6 @@ package com.ohayoyo.gateway.client.utils;
 import com.ohayoyo.gateway.define.HostDefine;
 import com.ohayoyo.gateway.define.MethodDefine;
 import com.ohayoyo.gateway.define.ProtocolDefine;
-import com.ohayoyo.gateway.define.UserDefine;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -50,27 +49,6 @@ public class SelectDefineUtil {
             }
         }
         return selectProtocolDefine;
-    }
-
-    @Deprecated
-    public static UserDefine selectUserDefine(String select, Set<UserDefine> userDefines) {
-        UserDefine selectUserDefine = null;
-        if (!StringUtils.isEmpty(select) && (!CollectionUtils.isEmpty(userDefines))) {
-            for (UserDefine userDefine : userDefines) {
-                Set<String> scopes = userDefine.getScopes();
-                if (hasSelectScopes(select, scopes)) {
-                    selectUserDefine = userDefine;
-                    break;
-                }
-            }
-        }
-        if (null == selectUserDefine && (!CollectionUtils.isEmpty(userDefines))) {
-            Iterator<UserDefine> userDefineIterator = userDefines.iterator();
-            if (userDefineIterator.hasNext()) {
-                selectUserDefine = userDefineIterator.next();
-            }
-        }
-        return selectUserDefine;
     }
 
     public static MethodDefine selectMethodDefine(String select, Set<MethodDefine> methodDefines) {

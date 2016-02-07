@@ -11,9 +11,6 @@ public class RestfulGatewayRequest<RequestBody> implements GatewayRequest<Reques
 
     private Map<String, String> requestPathVariables;
 
-    @Deprecated
-    private MultiValueMap<String, String> requestParameters;
-
     private MultiValueMap<String, String> requestQueries;
 
     private MultiValueMap<String, String> requestHeaders;
@@ -39,19 +36,6 @@ public class RestfulGatewayRequest<RequestBody> implements GatewayRequest<Reques
     @Override
     public RestfulGatewayRequest<RequestBody> setRequestPathVariables(Map<String, String> requestPathVariables) {
         this.requestPathVariables = requestPathVariables;
-        return this;
-    }
-
-    @Override
-    @Deprecated
-    public MultiValueMap<String, String> getRequestParameters() {
-        return requestParameters;
-    }
-
-    @Override
-    @Deprecated
-    public RestfulGatewayRequest<RequestBody> setRequestParameters(MultiValueMap<String, String> requestParameters) {
-        this.requestParameters = requestParameters;
         return this;
     }
 

@@ -181,6 +181,7 @@ public class RestfulGatewayRequestBuilder {
         }
         Class<?> sourceType = requestHeaderValueObject.getClass();
         Class<String> targetType = String.class;
+        checkConversionService();
         if (this.conversionService.canConvert(sourceType, targetType)) {
             String requestHeaderValueString = this.conversionService.convert(requestHeaderValueObject, targetType);
             this.requestHeaders.add(requestHeaderKey, requestHeaderValueString);

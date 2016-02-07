@@ -8,15 +8,9 @@ public class MemoryRequestDefine implements RequestDefine {
 
     private Set<ProtocolDefine> protocols;
 
-    @Deprecated
-    private Set<UserDefine> userDefines;
-
     private Set<HostDefine> hosts;
 
     private PathDefine path;
-
-    @Deprecated
-    private Set<ParameterDefine> parameters;
 
     private Set<QueryDefine> queries;
 
@@ -40,19 +34,6 @@ public class MemoryRequestDefine implements RequestDefine {
     }
 
     @Override
-    @Deprecated
-    public Set<UserDefine> getUserDefines() {
-        return userDefines;
-    }
-
-    @Override
-    @Deprecated
-    public MemoryRequestDefine setUserDefines(Set<UserDefine> userDefines) {
-        this.userDefines = userDefines;
-        return this;
-    }
-
-    @Override
     public Set<HostDefine> getHosts() {
         return hosts;
     }
@@ -71,19 +52,6 @@ public class MemoryRequestDefine implements RequestDefine {
     @Override
     public MemoryRequestDefine setPath(PathDefine path) {
         this.path = path;
-        return this;
-    }
-
-    @Override
-    @Deprecated
-    public Set<ParameterDefine> getParameters() {
-        return parameters;
-    }
-
-    @Override
-    @Deprecated
-    public MemoryRequestDefine setParameters(Set<ParameterDefine> parameters) {
-        this.parameters = parameters;
         return this;
     }
 

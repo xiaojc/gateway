@@ -19,12 +19,6 @@ public interface RequestDefine extends Serializable {
 
     RequestDefine setProtocols(Set<ProtocolDefine> protocols);
 
-    @Deprecated
-    Set<UserDefine> getUserDefines();
-
-    @Deprecated
-    RequestDefine setUserDefines(Set<UserDefine> userDefines);
-
     Set<HostDefine> getHosts();
 
     RequestDefine setHosts(Set<HostDefine> hosts);
@@ -32,12 +26,6 @@ public interface RequestDefine extends Serializable {
     PathDefine getPath();
 
     RequestDefine setPath(PathDefine path);
-
-    @Deprecated
-    Set<ParameterDefine> getParameters();
-
-    @Deprecated
-    RequestDefine setParameters(Set<ParameterDefine> parameters);
 
     Set<QueryDefine> getQueries();
 
