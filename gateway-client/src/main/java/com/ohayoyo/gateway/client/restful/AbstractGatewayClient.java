@@ -36,8 +36,8 @@ public abstract class AbstractGatewayClient implements GatewayClient {
         Assert.notNull(responseBodyClass);
         HttpClientHandler httpClientHandler = this.getHttpClientHandler();
         this.defineVerify(gatewayDefine);
-        this.requestVerify(gatewayDefine, gatewayRequest);
         this.requestFill(gatewayDefine, gatewayRequest);
+        this.requestVerify(gatewayDefine, gatewayRequest);
         RestfulGatewayResponseBuilder restfulGatewayResponseBuilder = RestfulGatewayResponseBuilder.newInstance();
         this.doSession(httpClientHandler, restfulGatewayResponseBuilder, responseBodyClass, gatewayDefine, gatewayRequest);
         GatewayResponse<ResponseBody> gatewayResponse = restfulGatewayResponseBuilder.build();

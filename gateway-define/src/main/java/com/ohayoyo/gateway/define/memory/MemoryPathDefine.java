@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.define.memory;
 
 import com.ohayoyo.gateway.define.PathDefine;
-import com.ohayoyo.gateway.define.PathVariableDefine;
+import com.ohayoyo.gateway.define.VariableDefine;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ public class MemoryPathDefine implements PathDefine {
 
     private String resource;
 
-    private Set<PathVariableDefine> variables;
+    private Set<VariableDefine> variables;
 
     public String getProject() {
         return project;
@@ -53,12 +53,12 @@ public class MemoryPathDefine implements PathDefine {
         return this;
     }
 
-    public Set<PathVariableDefine> getVariables() {
+    public Set<VariableDefine> getVariables() {
         return variables;
     }
 
     @Override
-    public MemoryPathDefine setVariables(Set<PathVariableDefine> variables) {
+    public MemoryPathDefine setVariables(Set<VariableDefine> variables) {
         this.variables = variables;
         return this;
     }

@@ -1,0 +1,118 @@
+{
+  "key": "string",
+  "description": "string",
+  "request": {
+    "protocols": [
+      {
+        "name": "string",
+        "scopes": [
+          "string"
+        ]
+      }
+    ],
+    "hosts": [
+      {
+        "hostname": "string",
+        "port": -1,
+        "scope": "string"
+      }
+    ],
+    "path": {
+      "project": "string",
+      "module": "string",
+      "operate": "string",
+      "resource": "string",
+      "variables": [
+        {
+          "name": "string",
+          "overview": "string",
+          "comment": "string",
+          "description": "string",
+          "dataType": "string",
+          "dataLength": -1,
+          "nullable": true,
+          "defaultValue": null
+        }
+      ]
+    },
+    "queries": [
+      {
+        "name": "string",
+        "overview": "string",
+        "comment": "string",
+        "description": "string",
+        "dataType": "string",
+        "dataLength": -1,
+        "nullable": true,
+        "defaultValue": null
+      }
+    ],
+    "fragment": "string",
+    "methods": [
+      {
+        "name": "string",
+        "scopes": [
+          "string"
+        ]
+      }
+    ],
+    "headers": [
+      {
+        "name": "string",
+        "overview": "string",
+        "comment": "string",
+        "description": "string",
+        "dataType": "string",
+        "dataLength": -1,
+        "nullable": true,
+        "defaultValue": null
+      }
+    ],
+    "entity": {
+      "type": "string",
+      "data": {
+        "defineType": "string",
+        "dataScopes": [
+          "request",
+          "response"
+        ],
+        "fields": [
+          {
+            "name": "string",
+            "overview": "string",
+            "comment": "string",
+            "description": "string",
+            "dataType": "string",
+            "dataLength": -1,
+            "nullable": true,
+            "defaultValue": null
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "statuses": [
+      {
+        "statusCode": "string",
+        "reasonPhrase": "string",
+        "errorSolution": "string"
+      }
+    ],
+    "headers": [
+      {
+        "name": "string",
+        "overview": "string",
+        "comment": "string",
+        "description": "string",
+        "dataType": "string",
+        "dataLength": -1,
+        "nullable": true,
+        "defaultValue": null
+      }
+    ],
+    "entity": {
+      "type": ""
+    }
+  }
+}

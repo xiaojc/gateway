@@ -6,7 +6,7 @@ public class MemoryHostDefine implements HostDefine {
 
     private String hostname;
 
-    private Integer port;
+    private Integer port = -1;
 
     private String scope;
 

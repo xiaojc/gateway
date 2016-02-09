@@ -3,9 +3,6 @@ package com.ohayoyo.gateway.define;
 import java.io.Serializable;
 import java.util.Set;
 
-/**
- * 方法定义
- */
 public interface MethodDefine extends Serializable {
 
     String GET_NAME = "GET";

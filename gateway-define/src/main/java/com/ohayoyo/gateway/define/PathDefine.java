@@ -22,9 +22,9 @@ public interface PathDefine extends Serializable {
 
     PathDefine setResource(String resource);
 
-    Set<PathVariableDefine> getVariables();
+    Set<VariableDefine> getVariables();
 
-    PathDefine setVariables(Set<PathVariableDefine> variables);
+    PathDefine setVariables(Set<VariableDefine> variables);
 
     @Override
     boolean equals(Object o);
