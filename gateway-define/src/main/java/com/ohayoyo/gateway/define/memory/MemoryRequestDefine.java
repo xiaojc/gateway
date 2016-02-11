@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.*;
+import com.ohayoyo.gateway.define.http.*;
 
 import java.util.Set;
 
@@ -12,13 +12,13 @@ public class MemoryRequestDefine implements RequestDefine {
 
     private PathDefine path;
 
-    private Set<QueryDefine> queries;
+    private QueriesDefine queries;
 
     private String fragment;
 
     private Set<MethodDefine> methods;
 
-    private Set<HeaderDefine> headers;
+    private HeadersDefine headers;
 
     private EntityDefine entity;
 
@@ -56,12 +56,12 @@ public class MemoryRequestDefine implements RequestDefine {
     }
 
     @Override
-    public Set<QueryDefine> getQueries() {
+    public QueriesDefine getQueries() {
         return queries;
     }
 
     @Override
-    public MemoryRequestDefine setQueries(Set<QueryDefine> queries) {
+    public MemoryRequestDefine setQueries(QueriesDefine queries) {
         this.queries = queries;
         return this;
     }
@@ -89,12 +89,12 @@ public class MemoryRequestDefine implements RequestDefine {
     }
 
     @Override
-    public Set<HeaderDefine> getHeaders() {
+    public HeadersDefine getHeaders() {
         return headers;
     }
 
     @Override
-    public MemoryRequestDefine setHeaders(Set<HeaderDefine> headers) {
+    public MemoryRequestDefine setHeaders(HeadersDefine headers) {
         this.headers = headers;
         return this;
     }

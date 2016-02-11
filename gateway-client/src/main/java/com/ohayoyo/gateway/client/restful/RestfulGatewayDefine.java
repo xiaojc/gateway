@@ -1,9 +1,9 @@
 package com.ohayoyo.gateway.client.restful;
 
 import com.ohayoyo.gateway.client.GatewayDefine;
-import com.ohayoyo.gateway.define.InterfaceDefine;
-import com.ohayoyo.gateway.define.RequestDefine;
-import com.ohayoyo.gateway.define.ResponseDefine;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.RequestDefine;
+import com.ohayoyo.gateway.define.http.ResponseDefine;
 
 public class RestfulGatewayDefine implements InterfaceDefine, GatewayDefine {
 

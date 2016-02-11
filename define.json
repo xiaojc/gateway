@@ -22,31 +22,9 @@
       "module": "string",
       "operate": "string",
       "resource": "string",
-      "variables": [
-        {
-          "name": "string",
-          "overview": "string",
-          "comment": "string",
-          "description": "string",
-          "dataType": "string",
-          "dataLength": -1,
-          "nullable": true,
-          "defaultValue": null
-        }
-      ]
+      "variables": {}
     },
-    "queries": [
-      {
-        "name": "string",
-        "overview": "string",
-        "comment": "string",
-        "description": "string",
-        "dataType": "string",
-        "dataLength": -1,
-        "nullable": true,
-        "defaultValue": null
-      }
-    ],
+    "queries": {},
     "fragment": "string",
     "methods": [
       {
@@ -56,40 +34,8 @@
         ]
       }
     ],
-    "headers": [
-      {
-        "name": "string",
-        "overview": "string",
-        "comment": "string",
-        "description": "string",
-        "dataType": "string",
-        "dataLength": -1,
-        "nullable": true,
-        "defaultValue": null
-      }
-    ],
-    "entity": {
-      "type": "string",
-      "data": {
-        "defineType": "string",
-        "dataScopes": [
-          "request",
-          "response"
-        ],
-        "fields": [
-          {
-            "name": "string",
-            "overview": "string",
-            "comment": "string",
-            "description": "string",
-            "dataType": "string",
-            "dataLength": -1,
-            "nullable": true,
-            "defaultValue": null
-          }
-        ]
-      }
-    }
+    "headers": {},
+    "entity": {}
   },
   "response": {
     "statuses": [
@@ -99,20 +45,7 @@
         "errorSolution": "string"
       }
     ],
-    "headers": [
-      {
-        "name": "string",
-        "overview": "string",
-        "comment": "string",
-        "description": "string",
-        "dataType": "string",
-        "dataLength": -1,
-        "nullable": true,
-        "defaultValue": null
-      }
-    ],
-    "entity": {
-      "type": ""
-    }
+    "headers": {},
+    "entity": {}
   }
 }

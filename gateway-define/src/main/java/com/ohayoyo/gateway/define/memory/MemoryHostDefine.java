@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.HostDefine;
+import com.ohayoyo.gateway.define.http.HostDefine;
 
 public class MemoryHostDefine implements HostDefine {
 

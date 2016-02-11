@@ -6,7 +6,7 @@ import com.ohayoyo.gateway.client.GatewayRequest;
 import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.utils.PathDefineUtil;
 import com.ohayoyo.gateway.client.utils.SelectDefineUtil;
-import com.ohayoyo.gateway.define.*;
+import com.ohayoyo.gateway.define.http.*;
 import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
 import com.ohayoyo.gateway.http.DefaultRequestEntityBuilder;
 import com.ohayoyo.gateway.http.HttpClientException;
@@ -145,7 +145,7 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
     protected MediaType resolveEntityDefineContentType(EntityDefine entityDefine) {
         MediaType customContentType = null;
         if (null != entityDefine) {
-            String contentType = entityDefine.getType();
+            String contentType = entityDefine.getContentType();
             if (!StringUtils.isEmpty(contentType)) {
                 try {
                     customContentType = MediaType.parseMediaType(contentType);

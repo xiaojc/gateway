@@ -1,29 +1,33 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.DataDefine;
-import com.ohayoyo.gateway.define.EntityDefine;
+import com.ohayoyo.gateway.define.http.EntityDefine;
+import com.ohayoyo.gateway.define.data.DataDefine;
 
 public class MemoryEntityDefine implements EntityDefine {
 
-    private String type;
+    private String contentType;
 
-    private DataDefine data;
+    private DataDefine entityData;
 
-    public String getType() {
-        return type;
+    @Override
+    public String getContentType() {
+        return contentType;
     }
 
-    public MemoryEntityDefine setType(String type) {
-        this.type = type;
+    @Override
+    public MemoryEntityDefine setContentType(String contentType) {
+        this.contentType = contentType;
         return this;
     }
 
-    public DataDefine getData() {
-        return data;
+    @Override
+    public DataDefine getEntityData() {
+        return entityData;
     }
 
-    public MemoryEntityDefine setData(DataDefine data) {
-        this.data = data;
+    @Override
+    public MemoryEntityDefine setEntityData(DataDefine entityData) {
+        this.entityData = entityData;
         return this;
     }
 

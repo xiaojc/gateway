@@ -8,7 +8,6 @@ import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayClient;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayDefine;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayRequest;
-import com.ohayoyo.gateway.client.restful.RestfulGatewayRequestBuilder;
 import com.ohayoyo.gateway.define.memory.*;
 import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
 import com.ohayoyo.gateway.http.HttpClientHandler;
@@ -17,10 +16,7 @@ import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.client.Netty4ClientHttpRequestFactory;
-import org.springframework.http.client.OkHttpClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -70,7 +66,7 @@ public class RestfulGatewayClientTest {
                                         .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
                         .setResponse(new MemoryResponseDefine()
-                                        .setEntity(new MemoryEntityDefine().setType(MediaType.APPLICATION_JSON_UTF8.toString()))
+                                        .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
                         )
         );
 
@@ -103,7 +99,7 @@ public class RestfulGatewayClientTest {
                                         .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
                         .setResponse(new MemoryResponseDefine()
-                                        .setEntity(new MemoryEntityDefine().setType(MediaType.APPLICATION_JSON_UTF8.toString()))
+                                        .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
                         )
         );
 
@@ -136,7 +132,7 @@ public class RestfulGatewayClientTest {
                                         .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
                         .setResponse(new MemoryResponseDefine()
-                                        .setEntity(new MemoryEntityDefine().setType(MediaType.APPLICATION_JSON_UTF8.toString()))
+                                        .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
                         )
         );
         long startTime = System.currentTimeMillis();

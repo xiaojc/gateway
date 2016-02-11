@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.StatusDefine;
+import com.ohayoyo.gateway.define.http.StatusDefine;
 
 public class MemoryStatusDefine implements StatusDefine {
 

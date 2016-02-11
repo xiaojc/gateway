@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.client.utils;
 
-import com.ohayoyo.gateway.define.PathDefine;
+import com.ohayoyo.gateway.define.http.PathDefine;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;

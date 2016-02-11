@@ -1,9 +1,9 @@
 package com.ohayoyo.gateway.define.memory;
 
-import com.ohayoyo.gateway.define.EntityDefine;
-import com.ohayoyo.gateway.define.HeaderDefine;
-import com.ohayoyo.gateway.define.ResponseDefine;
-import com.ohayoyo.gateway.define.StatusDefine;
+import com.ohayoyo.gateway.define.http.EntityDefine;
+import com.ohayoyo.gateway.define.http.HeadersDefine;
+import com.ohayoyo.gateway.define.http.ResponseDefine;
+import com.ohayoyo.gateway.define.http.StatusDefine;
 
 import java.util.Set;
 
@@ -11,7 +11,7 @@ public class MemoryResponseDefine implements ResponseDefine {
 
     private Set<StatusDefine> statuses;
 
-    private Set<HeaderDefine> headers;
+    private HeadersDefine headers;
 
     private EntityDefine entity;
 
@@ -24,11 +24,11 @@ public class MemoryResponseDefine implements ResponseDefine {
         return this;
     }
 
-    public Set<HeaderDefine> getHeaders() {
+    public HeadersDefine getHeaders() {
         return headers;
     }
 
-    public MemoryResponseDefine setHeaders(Set<HeaderDefine> headers) {
+    public MemoryResponseDefine setHeaders(HeadersDefine headers) {
         this.headers = headers;
         return this;
     }
