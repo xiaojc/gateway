@@ -1,7 +1,7 @@
-package com.ohayoyo.gateway.define.memory;
+package com.ohayoyo.gateway.define.http.memory;
 
 import com.ohayoyo.gateway.define.http.EntityDefine;
-import com.ohayoyo.gateway.define.data.DataDefine;
+import com.ohayoyo.gateway.define.DataDefine;
 
 public class MemoryEntityDefine implements EntityDefine {
 

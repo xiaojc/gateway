@@ -1,13 +1,15 @@
 package com.ohayoyo.gateway.define.data;
 
-import com.ohayoyo.gateway.define.TypeDefine;
+import com.ohayoyo.gateway.define.AbstractDataDefine;
+import com.ohayoyo.gateway.define.DataDefine;
+import com.ohayoyo.gateway.define.DataTypeDefine;
 
 public class ArrayDataDefine extends AbstractDataDefine {
 
     private DataDefine[] arrays;
 
     public ArrayDataDefine() {
-        super(TypeDefine.ARRAYS);
+        super(DataTypeDefine.DATA_TYPE_ARRAYS);
     }
 
     public DataDefine[] getArrays() {

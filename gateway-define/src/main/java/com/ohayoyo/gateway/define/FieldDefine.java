@@ -1,8 +1,6 @@
-package com.ohayoyo.gateway.define.pojo;
+package com.ohayoyo.gateway.define;
 
-import com.ohayoyo.gateway.define.TypeDefine;
-
-public class DefaultFieldDefine implements FieldDefine {
+public class FieldDefine implements NameDefine {
 
     private String name;
 
@@ -12,21 +10,19 @@ public class DefaultFieldDefine implements FieldDefine {
 
     private String description;
 
-    private TypeDefine dataType;
+    private String dataType;
 
-    private Integer dataLength;
+    private Integer dataLength = -1 ;
 
     private Boolean nullable;
 
     private Object defaultValue;
 
-    @Override
     public String getComment() {
         return comment;
     }
 
-    @Override
-    public DefaultFieldDefine setComment(String comment) {
+    public FieldDefine setComment(String comment) {
         this.comment = comment;
         return this;
     }
@@ -37,73 +33,61 @@ public class DefaultFieldDefine implements FieldDefine {
     }
 
     @Override
-    public DefaultFieldDefine setName(String name) {
+    public FieldDefine setName(String name) {
         this.name = name;
         return this;
     }
 
-    @Override
     public String getOverview() {
         return overview;
     }
 
-    @Override
-    public DefaultFieldDefine setOverview(String overview) {
+    public FieldDefine setOverview(String overview) {
         this.overview = overview;
         return this;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
-    public DefaultFieldDefine setDescription(String description) {
+    public FieldDefine setDescription(String description) {
         this.description = description;
         return this;
     }
 
-    @Override
-    public TypeDefine getDataType() {
+    public String getDataType() {
         return dataType;
     }
 
-    @Override
-    public DefaultFieldDefine setDataType(TypeDefine dataType) {
+    public FieldDefine setDataType(String dataType) {
         this.dataType = dataType;
         return this;
     }
 
-    @Override
     public Integer getDataLength() {
         return dataLength;
     }
 
-    @Override
-    public DefaultFieldDefine setDataLength(Integer dataLength) {
+    public FieldDefine setDataLength(Integer dataLength) {
         this.dataLength = dataLength;
         return this;
     }
 
-    @Override
     public Boolean getNullable() {
         return nullable;
     }
 
-    @Override
-    public DefaultFieldDefine setNullable(Boolean nullable) {
+    public FieldDefine setNullable(Boolean nullable) {
         this.nullable = nullable;
         return this;
     }
 
-    @Override
     public Object getDefaultValue() {
         return defaultValue;
     }
 
-    @Override
-    public DefaultFieldDefine setDefaultValue(Object defaultValue) {
+    public FieldDefine setDefaultValue(Object defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
@@ -111,8 +95,8 @@ public class DefaultFieldDefine implements FieldDefine {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DefaultFieldDefine)) return false;
-        DefaultFieldDefine that = (DefaultFieldDefine) o;
+        if (!(o instanceof FieldDefine)) return false;
+        FieldDefine that = (FieldDefine) o;
         return name != null ? name.equals(that.name) : that.name == null;
     }
 

@@ -8,7 +8,7 @@ import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayClient;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayDefine;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayRequest;
-import com.ohayoyo.gateway.define.memory.*;
+import com.ohayoyo.gateway.define.http.memory.*;
 import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
 import com.ohayoyo.gateway.http.HttpClientHandler;
 import com.ohayoyo.gateway.test.model.TestPack;

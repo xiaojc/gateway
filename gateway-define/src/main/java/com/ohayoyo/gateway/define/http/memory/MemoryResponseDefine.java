@@ -1,4 +1,4 @@
-package com.ohayoyo.gateway.define.memory;
+package com.ohayoyo.gateway.define.http.memory;
 
 import com.ohayoyo.gateway.define.http.EntityDefine;
 import com.ohayoyo.gateway.define.http.HeadersDefine;

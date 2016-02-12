@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.http;
 
-import com.ohayoyo.gateway.define.pojo.PojoDefine;
+import com.ohayoyo.gateway.define.ParametersDefine;
 
-public interface VariablesDefine extends PojoDefine {
+public interface VariablesDefine extends ParametersDefine {
 }
