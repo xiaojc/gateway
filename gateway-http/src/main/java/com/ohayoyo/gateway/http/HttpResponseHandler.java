@@ -13,6 +13,8 @@ public interface HttpResponseHandler {
 
     String CUSTOM_RESPONSE_CONTENT_TYPE = "Custom-Response-Content-Type";
 
+    String DEFAULT_RESPONSE_CONTENT_TYPE = "Default-Response-Content-Type";
+
     ResponseErrorHandler getResponseErrorHandler();
 
     HttpResponseHandler setResponseErrorHandler(ResponseErrorHandler responseErrorHandler);

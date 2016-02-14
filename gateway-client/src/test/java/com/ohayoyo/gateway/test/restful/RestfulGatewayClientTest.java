@@ -9,7 +9,7 @@ import com.ohayoyo.gateway.client.restful.RestfulGatewayClient;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayDefine;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayRequest;
 import com.ohayoyo.gateway.define.http.memory.*;
-import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
+import com.ohayoyo.gateway.http.GatewayHttpClientHandler;
 import com.ohayoyo.gateway.http.HttpClientHandler;
 import com.ohayoyo.gateway.test.model.TestPack;
 import org.junit.*;
@@ -47,7 +47,7 @@ public class RestfulGatewayClientTest {
     @Test
     public void testRestfulClient0() throws GatewayException {
         RestfulGatewayClient restfulGatewayClient = new RestfulGatewayClient();
-        HttpClientHandler httpClientHandler = new DefaultHttpClientHandler();
+        HttpClientHandler httpClientHandler = new GatewayHttpClientHandler();
         httpClientHandler.setClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory());
         restfulGatewayClient.setHttpClientHandler(httpClientHandler);
         GatewayRequest gatewayRequest = restfulGatewayClient.newRestfulGatewayRequestBuilder()
@@ -112,7 +112,7 @@ public class RestfulGatewayClientTest {
     @Test
     public void testRestfulClient2() throws GatewayException {
         RestfulGatewayClient restfulGatewayClient = new RestfulGatewayClient();
-        HttpClientHandler httpClientHandler = new DefaultHttpClientHandler();
+        HttpClientHandler httpClientHandler = new GatewayHttpClientHandler();
         httpClientHandler.setClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory());
         restfulGatewayClient.setHttpClientHandler(httpClientHandler);
         MultiValueMap<String, String> requestQueries = new LinkedMultiValueMap<String, String>();

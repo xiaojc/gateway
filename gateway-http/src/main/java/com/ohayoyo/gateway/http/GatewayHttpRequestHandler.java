@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DefaultHttpRequestHandler extends AbstractHttpRequestHandler {
+public class GatewayHttpRequestHandler extends AbstractHttpRequestHandler {
 
     @Override
     protected <RequestBody> void doRequestHeadersHandler(MediaType customRequestContentType, RequestEntity<RequestBody> requestEntity, ClientHttpRequest clientHttpRequest) {

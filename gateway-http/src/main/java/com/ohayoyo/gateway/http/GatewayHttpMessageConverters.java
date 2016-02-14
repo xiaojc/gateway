@@ -19,23 +19,23 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefaultHttpMessageConverters extends ArrayList<HttpMessageConverter<?>> implements List<HttpMessageConverter<?>> {
+public class GatewayHttpMessageConverters extends ArrayList<HttpMessageConverter<?>> implements List<HttpMessageConverter<?>> {
 
-    public static final boolean ROME_PRESENT = ClassUtils.isPresent("com.rometools.rome.feed.WireFeed", DefaultHttpMessageConverters.class.getClassLoader());
+    public static final boolean ROME_PRESENT = ClassUtils.isPresent("com.rometools.rome.feed.WireFeed", GatewayHttpMessageConverters.class.getClassLoader());
 
-    public static final boolean JAXB_2_PRESENT = ClassUtils.isPresent("javax.xml.bind.Binder", DefaultHttpMessageConverters.class.getClassLoader());
+    public static final boolean JAXB_2_PRESENT = ClassUtils.isPresent("javax.xml.bind.Binder", GatewayHttpMessageConverters.class.getClassLoader());
 
-    public static final boolean JACKSON_2_PRESENT = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", DefaultHttpMessageConverters.class.getClassLoader()) && ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", DefaultHttpMessageConverters.class.getClassLoader());
+    public static final boolean JACKSON_2_PRESENT = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", GatewayHttpMessageConverters.class.getClassLoader()) && ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", GatewayHttpMessageConverters.class.getClassLoader());
 
-    public static final boolean JACKSON_2_XML_PRESENT = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.xml.XmlMapper", DefaultHttpMessageConverters.class.getClassLoader());
+    public static final boolean JACKSON_2_XML_PRESENT = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.xml.XmlMapper", GatewayHttpMessageConverters.class.getClassLoader());
 
-    public static final boolean GSON_PRESENT = ClassUtils.isPresent("com.google.gson.Gson", DefaultHttpMessageConverters.class.getClassLoader());
+    public static final boolean GSON_PRESENT = ClassUtils.isPresent("com.google.gson.Gson", GatewayHttpMessageConverters.class.getClassLoader());
 
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
     private ConversionService conversionService;
 
-    public DefaultHttpMessageConverters(ConversionService conversionService) {
+    public GatewayHttpMessageConverters(ConversionService conversionService) {
         Assert.notNull(conversionService);
         this.conversionService = conversionService;
         this.configDefaultHttpMessageConverters();

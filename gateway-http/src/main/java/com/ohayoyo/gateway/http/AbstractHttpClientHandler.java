@@ -14,87 +14,17 @@ import java.util.List;
 
 public abstract class AbstractHttpClientHandler implements HttpClientHandler {
 
-    private HttpRequestHandler httpRequestHandler;
-
-    private HttpResponseHandler httpResponseHandler;
+    private ConversionService conversionService;
 
     private List<HttpMessageConverter<?>> httpMessageConverters;
 
-    private ClientHttpRequestFactory clientHttpRequestFactory;
-
     private List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors;
 
-    private ConversionService conversionService;
+    private ClientHttpRequestFactory clientHttpRequestFactory;
 
-    @Override
-    public HttpRequestHandler getHttpRequestHandler() {
-        return httpRequestHandler;
-    }
+    private HttpRequestHandler httpRequestHandler;
 
-    @Override
-    public AbstractHttpClientHandler setHttpRequestHandler(HttpRequestHandler httpRequestHandler) {
-        Assert.notNull(httpRequestHandler);
-        this.httpRequestHandler = httpRequestHandler;
-        return this;
-    }
-
-    @Override
-    public HttpResponseHandler getHttpResponseHandler() {
-        return httpResponseHandler;
-    }
-
-    @Override
-    public AbstractHttpClientHandler setHttpResponseHandler(HttpResponseHandler httpResponseHandler) {
-        Assert.notNull(httpResponseHandler);
-        this.httpResponseHandler = httpResponseHandler;
-        return this;
-    }
-
-    @Override
-    public List<HttpMessageConverter<?>> getHttpMessageConverters() {
-        return httpMessageConverters;
-    }
-
-    @Override
-    public AbstractHttpClientHandler setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters) {
-        Assert.notNull(httpMessageConverters);
-        this.httpMessageConverters = httpMessageConverters;
-        return this;
-    }
-
-    @Override
-    public ClientHttpRequestFactory getClientHttpRequestFactory() {
-        return clientHttpRequestFactory;
-    }
-
-    @Override
-    public AbstractHttpClientHandler setClientHttpRequestFactory(ClientHttpRequestFactory clientHttpRequestFactory) {
-        Assert.notNull(clientHttpRequestFactory);
-        this.clientHttpRequestFactory = clientHttpRequestFactory;
-        return this;
-    }
-
-    @Override
-    public List<ClientHttpRequestInterceptor> getClientHttpRequestInterceptors() {
-        return clientHttpRequestInterceptors;
-    }
-
-    @Override
-    public AbstractHttpClientHandler setClientHttpRequestInterceptors(List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors) {
-        this.clientHttpRequestInterceptors = clientHttpRequestInterceptors;
-        return this;
-    }
-
-    @Override
-    public ConversionService getConversionService() {
-        return conversionService;
-    }
-
-    @Override
-    public AbstractHttpClientHandler setConversionService(ConversionService conversionService) {
-        this.conversionService = conversionService;
-        return this;
-    }
+    private HttpResponseHandler httpResponseHandler;
 
     @Override
     public final <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpClientException {
@@ -120,5 +50,77 @@ public abstract class AbstractHttpClientHandler implements HttpClientHandler {
     }
 
     protected abstract <ResponseBody, RequestBody> ResponseEntity<ResponseBody> doHandler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpClientException, IOException;
+
+    @Override
+    public ConversionService getConversionService() {
+        return conversionService;
+    }
+
+    @Override
+    public AbstractHttpClientHandler setConversionService(ConversionService conversionService) {
+        Assert.notNull(conversionService);
+        this.conversionService = conversionService;
+        return this;
+    }
+
+    @Override
+    public List<HttpMessageConverter<?>> getHttpMessageConverters() {
+        return httpMessageConverters;
+    }
+
+    @Override
+    public AbstractHttpClientHandler setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters) {
+        Assert.notEmpty(httpMessageConverters);
+        this.httpMessageConverters = httpMessageConverters;
+        return this;
+    }
+
+    @Override
+    public List<ClientHttpRequestInterceptor> getClientHttpRequestInterceptors() {
+        return clientHttpRequestInterceptors;
+    }
+
+    @Override
+    public AbstractHttpClientHandler setClientHttpRequestInterceptors(List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors) {
+        Assert.notEmpty(clientHttpRequestInterceptors);
+        this.clientHttpRequestInterceptors = clientHttpRequestInterceptors;
+        return this;
+    }
+
+    @Override
+    public ClientHttpRequestFactory getClientHttpRequestFactory() {
+        return clientHttpRequestFactory;
+    }
+
+    @Override
+    public AbstractHttpClientHandler setClientHttpRequestFactory(ClientHttpRequestFactory clientHttpRequestFactory) {
+        Assert.notNull(clientHttpRequestFactory);
+        this.clientHttpRequestFactory = clientHttpRequestFactory;
+        return this;
+    }
+
+    @Override
+    public HttpRequestHandler getHttpRequestHandler() {
+        return httpRequestHandler;
+    }
+
+    @Override
+    public AbstractHttpClientHandler setHttpRequestHandler(HttpRequestHandler httpRequestHandler) {
+        Assert.notNull(httpRequestHandler);
+        this.httpRequestHandler = httpRequestHandler;
+        return this;
+    }
+
+    @Override
+    public HttpResponseHandler getHttpResponseHandler() {
+        return httpResponseHandler;
+    }
+
+    @Override
+    public AbstractHttpClientHandler setHttpResponseHandler(HttpResponseHandler httpResponseHandler) {
+        Assert.notNull(httpResponseHandler);
+        this.httpResponseHandler = httpResponseHandler;
+        return this;
+    }
 
 }

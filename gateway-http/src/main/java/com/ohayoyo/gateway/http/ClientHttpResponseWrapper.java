@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 
-public class ClientHttpResponseMessageBodyWrapper implements ClientHttpResponse {
+public class ClientHttpResponseWrapper implements ClientHttpResponse {
 
     private final ClientHttpResponse clientHttpResponse;
 
     private PushbackInputStream pushbackInputStream;
 
-    public ClientHttpResponseMessageBodyWrapper(ClientHttpResponse clientHttpResponse) throws IOException {
+    public ClientHttpResponseWrapper(ClientHttpResponse clientHttpResponse) throws IOException {
         this.clientHttpResponse = clientHttpResponse;
     }
 

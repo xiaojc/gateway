@@ -7,8 +7,8 @@ import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.utils.PathDefineUtil;
 import com.ohayoyo.gateway.client.utils.SelectDefineUtil;
 import com.ohayoyo.gateway.define.http.*;
-import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
-import com.ohayoyo.gateway.http.DefaultRequestEntityBuilder;
+import com.ohayoyo.gateway.http.GatewayHttpClientHandler;
+import com.ohayoyo.gateway.http.GatewayRequestEntityBuilder;
 import com.ohayoyo.gateway.http.HttpClientException;
 import com.ohayoyo.gateway.http.HttpClientHandler;
 import org.springframework.http.HttpMethod;
@@ -28,23 +28,23 @@ import java.util.Set;
 
 public class RestfulGatewayClient extends AbstractGatewayClient {
 
-    private static RestfulGatewayClient RESTFUL_GATEWAY_CLIENT = null;
+    private static RestfulGatewayClient DEFAULT_GATEWAY_CLIENT = null;
 
     private static final Object LOCKED = new Object();
 
     public RestfulGatewayClient() {
-        super(DefaultHttpClientHandler.getDefaultHttpClientHandler());
+        super(GatewayHttpClientHandler.getDefaultHttpClientHandler());
     }
 
-    public static final RestfulGatewayClient getRestfulGatewayClient() {
-        if (ObjectUtils.isEmpty(RESTFUL_GATEWAY_CLIENT)) {
+    public static final RestfulGatewayClient getDefaultGatewayClient() {
+        if (ObjectUtils.isEmpty(DEFAULT_GATEWAY_CLIENT)) {
             synchronized (LOCKED) {
-                if (ObjectUtils.isEmpty(RESTFUL_GATEWAY_CLIENT)) {
-                    RESTFUL_GATEWAY_CLIENT = new RestfulGatewayClient();
+                if (ObjectUtils.isEmpty(DEFAULT_GATEWAY_CLIENT)) {
+                    DEFAULT_GATEWAY_CLIENT = new RestfulGatewayClient();
                 }
             }
         }
-        return RESTFUL_GATEWAY_CLIENT;
+        return DEFAULT_GATEWAY_CLIENT;
     }
 
     public RestfulGatewayRequestBuilder newRestfulGatewayRequestBuilder() {
@@ -57,17 +57,14 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
 
     @Override
     protected void defineVerify(GatewayDefine gatewayDefine) throws GatewayException {
-
     }
 
     @Override
     protected <RequestBody> void requestVerify(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
-
     }
 
     @Override
     protected <RequestBody> void requestFill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
-
     }
 
     @Override
@@ -91,7 +88,7 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
         HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayDefine, gatewayRequest);
         MultiValueMap<String, String> requestHeaders = gatewayRequest.getRequestHeaders();
         RequestBody requestEntity = gatewayRequest.getRequestBody();
-        return (RequestEntity<RequestBody>) DefaultRequestEntityBuilder.newInstance().url(uri).headers(requestHeaders).httpMethod(httpMethod).body(requestEntity).build();
+        return (RequestEntity<RequestBody>) GatewayRequestEntityBuilder.newInstance().url(uri).headers(requestHeaders).httpMethod(httpMethod).body(requestEntity).build();
     }
 
     protected <RequestBody> URI resolveRequestUri(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {

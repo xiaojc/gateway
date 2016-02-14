@@ -68,40 +68,43 @@
     "entity": {
       "contentType": "application/json",
       "entityData": {
-        "name": "CLASS",
-        "fields": [
-          {
-            "name": "userId",
-            "comment": "",
-            "overview": "",
-            "description": "",
-            "dataType": "STRING",
-            "dataLength": -1,
-            "nullable": false,
-            "defaultValue": null
-          },
-          {
-            "name": "username",
-            "comment": "",
-            "overview": "",
-            "description": "",
-            "dataType": "STRING",
-            "dataLength": -1,
-            "nullable": false,
-            "defaultValue": null
-          },
-          {
-            "name": "password",
-            "comment": "",
-            "overview": "",
-            "description": "",
-            "dataType": "STRING",
-            "dataLength": -1,
-            "nullable": false,
-            "defaultValue": null
-          }
-        ],
-        "references": null
+        "name": "LIST",
+        "parameterType": {
+          "name": "CLASS",
+          "fields": [
+            {
+              "name": "userId",
+              "comment": "",
+              "overview": "",
+              "description": "",
+              "dataType": "STRING",
+              "dataLength": -1,
+              "nullable": false,
+              "defaultValue": null
+            },
+            {
+              "name": "username",
+              "comment": "",
+              "overview": "",
+              "description": "",
+              "dataType": "STRING",
+              "dataLength": -1,
+              "nullable": false,
+              "defaultValue": null
+            },
+            {
+              "name": "password",
+              "comment": "",
+              "overview": "",
+              "description": "",
+              "dataType": "STRING",
+              "dataLength": -1,
+              "nullable": false,
+              "defaultValue": null
+            }
+          ],
+          "references": null
+        }
       }
     }
   }

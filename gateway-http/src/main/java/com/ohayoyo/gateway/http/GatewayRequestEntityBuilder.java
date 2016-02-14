@@ -10,27 +10,27 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultRequestEntityBuilder<RequestBody> extends AbstractHttpEntityBuilder<RequestBody, RequestEntity<RequestBody>> {
+public class GatewayRequestEntityBuilder<RequestBody> extends AbstractHttpEntityBuilder<RequestBody, RequestEntity<RequestBody>> {
 
     private URI uri;
 
     private HttpMethod httpMethod;
 
-    public DefaultRequestEntityBuilder() {
+    public GatewayRequestEntityBuilder() {
     }
 
-    public static <RequestBody> DefaultRequestEntityBuilder<RequestBody> newInstance() {
-        return new DefaultRequestEntityBuilder<RequestBody>();
+    public static <RequestBody> GatewayRequestEntityBuilder<RequestBody> newInstance() {
+        return new GatewayRequestEntityBuilder<RequestBody>();
     }
 
-    public DefaultRequestEntityBuilder(URI uri, HttpMethod httpMethod) {
+    public GatewayRequestEntityBuilder(URI uri, HttpMethod httpMethod) {
         Assert.notNull(uri);
         Assert.notNull(httpMethod);
         this.uri = uri;
         this.httpMethod = httpMethod;
     }
 
-    public DefaultRequestEntityBuilder(HttpHeaders headers, URI uri, HttpMethod httpMethod) {
+    public GatewayRequestEntityBuilder(HttpHeaders headers, URI uri, HttpMethod httpMethod) {
         super(headers);
         Assert.notNull(uri);
         Assert.notNull(httpMethod);
@@ -38,7 +38,7 @@ public class DefaultRequestEntityBuilder<RequestBody> extends AbstractHttpEntity
         this.httpMethod = httpMethod;
     }
 
-    public DefaultRequestEntityBuilder(RequestBody requestBody, URI uri, HttpMethod httpMethod) {
+    public GatewayRequestEntityBuilder(RequestBody requestBody, URI uri, HttpMethod httpMethod) {
         super(requestBody);
         Assert.notNull(uri);
         Assert.notNull(httpMethod);
@@ -46,7 +46,7 @@ public class DefaultRequestEntityBuilder<RequestBody> extends AbstractHttpEntity
         this.httpMethod = httpMethod;
     }
 
-    public DefaultRequestEntityBuilder(HttpHeaders headers, RequestBody requestBody, URI uri, HttpMethod httpMethod) {
+    public GatewayRequestEntityBuilder(HttpHeaders headers, RequestBody requestBody, URI uri, HttpMethod httpMethod) {
         super(headers, requestBody);
         Assert.notNull(uri);
         Assert.notNull(httpMethod);
@@ -54,42 +54,42 @@ public class DefaultRequestEntityBuilder<RequestBody> extends AbstractHttpEntity
         this.httpMethod = httpMethod;
     }
 
-    public DefaultRequestEntityBuilder<RequestBody> url(URI uri) {
+    public GatewayRequestEntityBuilder<RequestBody> url(URI uri) {
         Assert.notNull(uri);
         this.uri = uri;
         return this;
     }
 
-    public DefaultRequestEntityBuilder<RequestBody> httpMethod(HttpMethod httpMethod) {
+    public GatewayRequestEntityBuilder<RequestBody> httpMethod(HttpMethod httpMethod) {
         Assert.notNull(httpMethod);
         this.httpMethod = httpMethod;
         return this;
     }
 
-    public DefaultRequestEntityBuilder<RequestBody> httpMethod(String httpMethod) {
+    public GatewayRequestEntityBuilder<RequestBody> httpMethod(String httpMethod) {
         Assert.notNull(httpMethod);
         this.httpMethod = HttpMethod.resolve(httpMethod);
         return this;
     }
 
     @Override
-    public DefaultRequestEntityBuilder<RequestBody> body(RequestBody requestBody) {
-        return (DefaultRequestEntityBuilder<RequestBody>) super.body(requestBody);
+    public GatewayRequestEntityBuilder<RequestBody> body(RequestBody requestBody) {
+        return (GatewayRequestEntityBuilder<RequestBody>) super.body(requestBody);
     }
 
     @Override
-    public DefaultRequestEntityBuilder<RequestBody> headers(HttpHeaders headers) {
-        return (DefaultRequestEntityBuilder<RequestBody>) super.headers(headers);
+    public GatewayRequestEntityBuilder<RequestBody> headers(HttpHeaders headers) {
+        return (GatewayRequestEntityBuilder<RequestBody>) super.headers(headers);
     }
 
     @Override
-    public DefaultRequestEntityBuilder<RequestBody> headers(MultiValueMap<String, String> headers) {
-        return (DefaultRequestEntityBuilder<RequestBody>) super.headers(headers);
+    public GatewayRequestEntityBuilder<RequestBody> headers(MultiValueMap<String, String> headers) {
+        return (GatewayRequestEntityBuilder<RequestBody>) super.headers(headers);
     }
 
     @Override
-    public DefaultRequestEntityBuilder<RequestBody> headers(Map<String, List<String>> headers) {
-        return (DefaultRequestEntityBuilder<RequestBody>) super.headers(headers);
+    public GatewayRequestEntityBuilder<RequestBody> headers(Map<String, List<String>> headers) {
+        return (GatewayRequestEntityBuilder<RequestBody>) super.headers(headers);
     }
 
     protected URI getUri() {

@@ -10,21 +10,21 @@ import java.util.List;
 
 public interface HttpClientHandler extends HttpClientAccessor, HttpClientIntercepting {
 
-    HttpRequestHandler getHttpRequestHandler();
-
-    HttpResponseHandler getHttpResponseHandler();
-
     List<HttpMessageConverter<?>> getHttpMessageConverters();
-
-    ConversionService getConversionService();
-
-    HttpClientHandler setHttpRequestHandler(HttpRequestHandler httpRequestHandler);
-
-    HttpClientHandler setHttpResponseHandler(HttpResponseHandler httpResponseHandler);
 
     HttpClientHandler setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters);
 
+    ConversionService getConversionService();
+
     HttpClientHandler setConversionService(ConversionService conversionService);
+
+    HttpRequestHandler getHttpRequestHandler();
+
+    HttpClientHandler setHttpRequestHandler(HttpRequestHandler httpRequestHandler);
+
+    HttpResponseHandler getHttpResponseHandler();
+
+    HttpClientHandler setHttpResponseHandler(HttpResponseHandler httpResponseHandler);
 
     <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpClientException;
 

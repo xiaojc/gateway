@@ -1,13 +1,12 @@
 package com.ohayoyo.gateway.client.restful;
 
 import com.ohayoyo.gateway.client.*;
-import com.ohayoyo.gateway.http.DefaultHttpClientHandler;
 import com.ohayoyo.gateway.http.HttpClientHandler;
 import org.springframework.util.Assert;
 
 public abstract class AbstractGatewayClient implements GatewayClient {
 
-    private HttpClientHandler httpClientHandler ;
+    private HttpClientHandler httpClientHandler;
 
     public AbstractGatewayClient(HttpClientHandler httpClientHandler) {
         Assert.notNull(httpClientHandler);

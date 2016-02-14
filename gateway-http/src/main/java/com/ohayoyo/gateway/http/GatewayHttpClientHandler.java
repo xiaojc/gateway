@@ -15,26 +15,26 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
-public class DefaultHttpClientHandler extends AbstractHttpClientHandler {
+public class GatewayHttpClientHandler extends AbstractHttpClientHandler {
 
-    private static DefaultHttpClientHandler DEFAULT_HTTP_CLIENT_HANDLER = null;
+    private static GatewayHttpClientHandler DEFAULT_HTTP_CLIENT_HANDLER = null;
 
     private static final Object LOCKED = new Object();
 
-    public DefaultHttpClientHandler() {
+    public GatewayHttpClientHandler() {
         ConversionService conversionService = new DefaultFormattingConversionService();
-        this.setHttpRequestHandler(new DefaultHttpRequestHandler());
-        this.setHttpResponseHandler(new DefaultHttpResponseHandler());
-        this.setHttpMessageConverters(new DefaultHttpMessageConverters(conversionService));
         this.setConversionService(conversionService);
+        this.setHttpMessageConverters(new GatewayHttpMessageConverters(conversionService));
         this.setClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+        this.setHttpRequestHandler(new GatewayHttpRequestHandler());
+        this.setHttpResponseHandler(new GatewayHttpResponseHandler());
     }
 
-    public static final DefaultHttpClientHandler getDefaultHttpClientHandler() {
+    public static final GatewayHttpClientHandler getDefaultHttpClientHandler() {
         if (ObjectUtils.isEmpty(DEFAULT_HTTP_CLIENT_HANDLER)) {
             synchronized (LOCKED) {
                 if (ObjectUtils.isEmpty(DEFAULT_HTTP_CLIENT_HANDLER)) {
-                    DEFAULT_HTTP_CLIENT_HANDLER = new DefaultHttpClientHandler();
+                    DEFAULT_HTTP_CLIENT_HANDLER = new GatewayHttpClientHandler();
                 }
             }
         }

@@ -3,22 +3,20 @@ package com.ohayoyo.gateway.define.data;
 import com.ohayoyo.gateway.define.AbstractDataDefine;
 import com.ohayoyo.gateway.define.DataDefine;
 
-import java.util.Collection;
+public abstract class AbstractCollectionDataDefine extends AbstractDataDefine {
 
-public abstract class AbstractCollectionDataDefine<Define extends Collection<DataDefine>> extends AbstractDataDefine {
-
-    private Define collection;
+    private DataDefine parameterType;
 
     protected AbstractCollectionDataDefine(String name) {
         super(name);
     }
 
-    public Define getCollection() {
-        return collection;
+    public DataDefine getParameterType() {
+        return parameterType;
     }
 
-    public AbstractCollectionDataDefine setCollection(Define collection) {
-        this.collection = collection;
+    public AbstractCollectionDataDefine setParameterType(DataDefine parameterType) {
+        this.parameterType = parameterType;
         return this;
     }
 
@@ -27,14 +25,14 @@ public abstract class AbstractCollectionDataDefine<Define extends Collection<Dat
         if (this == o) return true;
         if (!(o instanceof AbstractCollectionDataDefine)) return false;
         if (!super.equals(o)) return false;
-        AbstractCollectionDataDefine<?> that = (AbstractCollectionDataDefine<?>) o;
-        return collection != null ? collection.equals(that.collection) : that.collection == null;
+        AbstractCollectionDataDefine that = (AbstractCollectionDataDefine) o;
+        return parameterType != null ? parameterType.equals(that.parameterType) : that.parameterType == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (collection != null ? collection.hashCode() : 0);
+        result = 31 * result + (parameterType != null ? parameterType.hashCode() : 0);
         return result;
     }
 

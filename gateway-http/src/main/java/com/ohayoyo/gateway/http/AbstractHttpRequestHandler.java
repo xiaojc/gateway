@@ -29,5 +29,4 @@ public abstract class AbstractHttpRequestHandler implements HttpRequestHandler {
     public <RequestBody> void requestCallback(MediaType customRequestContentType, RequestEntity<RequestBody> requestEntity, ClientHttpRequest clientHttpRequest) throws HttpClientException, IOException {
     }
 
-
 }

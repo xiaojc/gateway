@@ -4,17 +4,15 @@ import com.ohayoyo.gateway.define.http.StatusDefine;
 
 public class MemoryStatusDefine implements StatusDefine {
 
-    private String statusCode;
+    private Integer statusCode;
 
     private String reasonPhrase;
 
-    private String errorSolution;
-
-    public String getStatusCode() {
+    public Integer getStatusCode() {
         return statusCode;
     }
 
-    public MemoryStatusDefine setStatusCode(String statusCode) {
+    public MemoryStatusDefine setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
         return this;
     }
@@ -25,15 +23,6 @@ public class MemoryStatusDefine implements StatusDefine {
 
     public MemoryStatusDefine setReasonPhrase(String reasonPhrase) {
         this.reasonPhrase = reasonPhrase;
-        return this;
-    }
-
-    public String getErrorSolution() {
-        return errorSolution;
-    }
-
-    public MemoryStatusDefine setErrorSolution(String errorSolution) {
-        this.errorSolution = errorSolution;
         return this;
     }
 

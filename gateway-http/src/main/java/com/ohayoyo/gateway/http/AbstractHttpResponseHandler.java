@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.util.Assert;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.ResponseErrorHandler;
 
@@ -14,7 +15,11 @@ import java.util.List;
 
 public abstract class AbstractHttpResponseHandler implements HttpResponseHandler {
 
-    private ResponseErrorHandler responseErrorHandler = new DefaultResponseErrorHandler();
+    private ResponseErrorHandler responseErrorHandler;
+
+    public AbstractHttpResponseHandler() {
+        this.responseErrorHandler = new DefaultResponseErrorHandler();
+    }
 
     @Override
     public void responseErrorHandler(ClientHttpResponse clientHttpResponse) throws HttpClientException, IOException {
@@ -30,9 +35,9 @@ public abstract class AbstractHttpResponseHandler implements HttpResponseHandler
 
     @Override
     public <ResponseBody> ResponseEntity<ResponseBody> responseHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpClientException, IOException {
+        ResponseBody responseBody = this.doResponseBodyHandler(customResponseContentType, responseBodyClass, httpMessageConverters, clientHttpResponse);
         HttpStatus httpStatus = this.doResponseHttpStatusHandler(clientHttpResponse);
         HttpHeaders httpHeaders = this.doResponseHttpHeadersHandler(customResponseContentType, clientHttpResponse);
-        ResponseBody responseBody = this.doResponseBodyHandler(customResponseContentType, responseBodyClass, httpMessageConverters, clientHttpResponse);
         ResponseEntity<ResponseBody> responseEntity = this.doResponseEntityHandler(httpStatus, httpHeaders, responseBody);
         return responseEntity;
     }
@@ -56,6 +61,7 @@ public abstract class AbstractHttpResponseHandler implements HttpResponseHandler
 
     @Override
     public AbstractHttpResponseHandler setResponseErrorHandler(ResponseErrorHandler responseErrorHandler) {
+        Assert.notNull(responseErrorHandler);
         this.responseErrorHandler = responseErrorHandler;
         return this;
     }
