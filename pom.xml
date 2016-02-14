@@ -121,8 +121,11 @@
     </dependencyManagement>
     <modules>
         <module>gateway-define</module>
-        <module>gateway-client</module>
         <module>gateway-http</module>
+        <module>gateway-container</module>
+        <module>gateway-jackson</module>
+        <module>gateway-client</module>
+        <module>gateway-channel</module>
     </modules>
     <profiles>
         <profile>
