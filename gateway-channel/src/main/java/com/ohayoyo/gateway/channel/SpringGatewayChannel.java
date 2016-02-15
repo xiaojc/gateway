@@ -24,6 +24,13 @@ public class SpringGatewayChannel implements GatewayChannel, InitializingBean, A
 
     private GatewayClient gatewayClient;
 
+    public SpringGatewayChannel() {
+    }
+
+    public SpringGatewayChannel(GatewayContainer gatewayContainer) {
+        this.gatewayContainer = gatewayContainer;
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         if (null == this.gatewayContainer) {
