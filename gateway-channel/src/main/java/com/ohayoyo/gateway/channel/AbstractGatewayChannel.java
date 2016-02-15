@@ -4,16 +4,27 @@ import com.ohayoyo.gateway.client.GatewayClient;
 import com.ohayoyo.gateway.client.GatewayDefine;
 import com.ohayoyo.gateway.client.GatewayRequest;
 import com.ohayoyo.gateway.client.GatewayResponse;
-import com.ohayoyo.gateway.container.GatewayAction;
+import com.ohayoyo.gateway.client.restful.RestfulGatewayClient;
+import com.ohayoyo.gateway.client.restful.RestfulGatewayDefine;
+import com.ohayoyo.gateway.client.restful.RestfulGatewayRequestBuilder;
 import com.ohayoyo.gateway.container.GatewayContainer;
-import com.ohayoyo.gateway.container.GatewayQuery;
 import com.ohayoyo.gateway.define.http.InterfaceDefine;
+import org.springframework.util.Assert;
 
 public abstract class AbstractGatewayChannel implements GatewayChannel {
 
     private GatewayContainer gatewayContainer;
 
     private GatewayClient gatewayClient;
+
+    public AbstractGatewayChannel(GatewayContainer gatewayContainer) {
+        this(gatewayContainer, RestfulGatewayClient.getDefaultGatewayClient());
+    }
+
+    public AbstractGatewayChannel(GatewayContainer gatewayContainer, GatewayClient gatewayClient) {
+        this.gatewayContainer = gatewayContainer;
+        this.gatewayClient = gatewayClient;
+    }
 
     @Override
     public GatewayContainer getGatewayContainer() {
@@ -37,27 +48,37 @@ public abstract class AbstractGatewayChannel implements GatewayChannel {
         return this;
     }
 
+    public RestfulGatewayRequestBuilder newRestfulGatewayRequestBuilder() {
+        if (this.gatewayClient instanceof RestfulGatewayClient) {
+            return ((RestfulGatewayClient) this.gatewayClient).newRestfulGatewayRequestBuilder();
+        }
+        return null;
+    }
+
+
     @Override
-    public <Result> Result channel(Class<Result> resultClass, String key, GatewayWrapper gatewayWrapper) throws Exception {
-        GatewayQuery gatewayQuery = gatewayContainer.createGatewayQuery();
-        GatewayAction<String> gatewayAction = this.createGatewayAction(key, gatewayWrapper);
-        InterfaceDefine interfaceDefine = gatewayQuery.query(gatewayAction);
-        Class<?> responseBodyClass = this.resolveResponseBodyClass(resultClass, interfaceDefine);
-        GatewayDefine gatewayDefine = this.resolveGatewayDefine(interfaceDefine);
-        GatewayRequest<?> gatewayRequest = this.resolveGatewayRequest(gatewayAction, interfaceDefine);
-        GatewayResponse<?> gatewayResponse = gatewayClient.session(responseBodyClass, gatewayDefine, gatewayRequest);
-        Result result = this.resolveResult(interfaceDefine, gatewayResponse);
+    public <Result> Result channel(Class<Result> gatewayResultClass, String interfaceDefineKey, GatewayRequest<Object> gatewayRequest) throws Exception {
+        Assert.notNull(gatewayResultClass);
+        Assert.notNull(interfaceDefineKey);
+        Result result = null;
+        InterfaceDefine interfaceDefine = this.gatewayContainer.query(interfaceDefineKey);
+        if (null != interfaceDefine) {
+            Class<?> responseBodyClass = this.resolveResponseBodyClass(gatewayResultClass, interfaceDefine);
+            GatewayDefine gatewayDefine = this.resolveGatewayDefine(interfaceDefine);
+            GatewayResponse<?> gatewayResponse = this.gatewayClient.session(responseBodyClass, gatewayDefine, gatewayRequest);
+            result = this.resolveResult(gatewayResultClass, interfaceDefine, gatewayResponse);
+        }
         return result;
     }
 
-    protected abstract GatewayAction<String> createGatewayAction(String key, GatewayWrapper gatewayWrapper);
+    protected <ResponseBody, Result> Class<ResponseBody> resolveResponseBodyClass(Class<Result> gatewayResultClass, InterfaceDefine interfaceDefine) {
+        return (Class<ResponseBody>) gatewayResultClass;
+    }
 
-    protected abstract <ResponseBody, Result> Class<ResponseBody> resolveResponseBodyClass(Class<Result> resultClass, InterfaceDefine interfaceDefine);
+    protected GatewayDefine resolveGatewayDefine(InterfaceDefine interfaceDefine) {
+        return new RestfulGatewayDefine(interfaceDefine);
+    }
 
-    protected abstract GatewayDefine resolveGatewayDefine(InterfaceDefine interfaceDefine);
-
-    protected abstract GatewayRequest<?> resolveGatewayRequest(GatewayAction<String> gatewayAction, InterfaceDefine interfaceDefine);
-
-    protected abstract <Result> Result resolveResult(InterfaceDefine interfaceDefine, GatewayResponse<?> gatewayResponse);
+    protected abstract <Result> Result resolveResult(Class<Result> gatewayResultClass, InterfaceDefine interfaceDefine, GatewayResponse<?> gatewayResponse);
 
 }

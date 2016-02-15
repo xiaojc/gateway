@@ -19,7 +19,6 @@ public abstract class AbstractDataDefine implements DataDefine {
         return this;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

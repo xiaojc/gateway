@@ -1,11 +1,11 @@
 package com.ohayoyo.gateway.container;
 
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
+
 public interface GatewayContainer {
 
-    GatewayContainer initialize();
+    InterfaceDefine query(String interfaceDefineKey);
 
-    GatewayContainer destroy();
-
-    GatewayQuery createGatewayQuery();
+    GatewayContainer add(InterfaceDefine interfaceDefine);
 
 }

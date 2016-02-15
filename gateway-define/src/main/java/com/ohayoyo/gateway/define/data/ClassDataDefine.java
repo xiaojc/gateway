@@ -5,13 +5,13 @@ import com.ohayoyo.gateway.define.*;
 import java.util.Map;
 import java.util.Set;
 
-public class ClassDataDefine extends AbstractDataDefine implements DataDefine, ReferenceDefine<ClassDataDefine> {
+public class ClassDataDefine extends AbstractDataDefine implements DataDefine, ReferenceFieldsDefine {
 
     private String name;
 
     private Set<FieldDefine> fields;
 
-    private Map<String, ClassDataDefine> references;
+    private Map<String, ReferenceDefine> references;
 
     public ClassDataDefine() {
         super(DataTypeDefine.DATA_TYPE_CLASS);
@@ -40,12 +40,12 @@ public class ClassDataDefine extends AbstractDataDefine implements DataDefine, R
     }
 
     @Override
-    public Map<String, ClassDataDefine> getReferences() {
+    public Map<String, ReferenceDefine> getReferences() {
         return references;
     }
 
     @Override
-    public ClassDataDefine setReferences(Map<String, ClassDataDefine> references) {
+    public ClassDataDefine setReferences(Map<String, ReferenceDefine> references) {
         this.references = references;
         return this;
     }

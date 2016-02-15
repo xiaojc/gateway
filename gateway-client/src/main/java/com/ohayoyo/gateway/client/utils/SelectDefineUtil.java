@@ -92,7 +92,7 @@ public class SelectDefineUtil {
     }
 
     public static Integer selectHostDefinePort(ProtocolDefine protocolDefine, HostDefine hostDefine) {
-        return (!(hostDefine.getPort() != null && hostDefine.getPort() <= 0)) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
+        return (!(null != hostDefine.getPort() && hostDefine.getPort() >= 0)) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
     }
 
 }

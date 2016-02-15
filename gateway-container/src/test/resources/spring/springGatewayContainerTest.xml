@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="gatewayContainer" class="com.ohayoyo.gateway.container.GatewayContainerBean" >
+        <property name="interfaceDefineMap">
+            <map>
+                <entry key="api.huceo.com/meinv/other">
+                    <bean class="com.ohayoyo.gateway.define.http.memory.MemoryInterfaceDefine">
+                        <property name="key" value="api.huceo.com/meinv/other"/>
+                        <property name="description" value="美女写真"/>
+                        <property name="request">
+                            <bean class="com.ohayoyo.gateway.define.http.memory.MemoryRequestDefine">
+                                <property name="protocols">
+                                    <set>
+                                        <bean class="com.ohayoyo.gateway.define.http.memory.MemoryProtocolDefine">
+                                            <property name="name" value="http"/>
+                                            <!--
+                                            <property name="scopes">
+                                                <list>
+                                                    <value>dev</value>
+                                                </list>
+                                            </property>
+                                            -->
+                                        </bean>
+                                    </set>
+                                </property>
+                                <property name="hosts">
+                                    <set>
+                                        <bean class="com.ohayoyo.gateway.define.http.memory.MemoryHostDefine">
+                                            <property name="hostname" value="api.huceo.com"/>
+                                            <!--<property name="port" value="80"/>-->
+                                            <!--<property name="scope" value="dev" />-->
+                                        </bean>
+                                    </set>
+                                </property>
+                                <property name="path">
+                                    <bean class="com.ohayoyo.gateway.define.http.memory.MemoryPathDefine">
+                                        <property name="project" value="meinv/other"/>
+                                        <!--<property name="module" value=""/>-->
+                                        <!--<property name="operate" value=""/>-->
+                                        <!--<property name="resource" value=""/>-->
+                                        <!--
+                                        <property name="variables">
+                                            <bean class="com.ohayoyo.gateway.define.http.memory.MemoryVariablesDefine">
+                                                <property name="fields">
+                                                    <set>
+                                                        <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                            <property name="name" value=""/>
+                                                            <property name="comment" value=""/>
+                                                            <property name="overview" value=""/>
+                                                            <property name="description" value=""/>
+                                                            <property name="dataType" value=""/>
+                                                            <property name="dataLength" value="-1"/>
+                                                            <property name="nullable" value="false"/>
+                                                            <property name="defaultValue">
+                                                                <null/>
+                                                            </property>
+                                                        </bean>
+                                                    </set>
+                                                </property>
+                                                <property name="references">
+                                                    <map>
+                                                        <entry key="name">
+                                                            <bean class="com.ohayoyo.gateway.define.data.ClassDataDefine"/>
+                                                        </entry>
+                                                    </map>
+                                                </property>
+                                            </bean>
+                                        </property>
+                                        -->
+                                    </bean>
+                                </property>
+                                <property name="queries">
+                                    <bean class="com.ohayoyo.gateway.define.http.memory.MemoryQueriesDefine">
+                                        <property name="fields">
+                                            <set>
+                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                    <property name="name" value="key"/>
+                                                    <property name="overview" value="用户API KEY"/>
+                                                    <property name="comment" value=""/>
+                                                    <property name="description" value=""/>
+                                                    <property name="dataType" value="STRING"/>
+                                                    <property name="dataLength" value="-1"/>
+                                                    <property name="nullable" value="false"/>
+                                                    <property name="defaultValue" value="29e069ec39101eb669121554bf67024f"/>
+                                                </bean>
+                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                    <property name="name" value="num"/>
+                                                    <property name="overview" value="查询的结果数"/>
+                                                    <property name="comment" value=""/>
+                                                    <property name="description" value=""/>
+                                                    <property name="dataType" value="INT"/>
+                                                    <property name="dataLength" value="-1"/>
+                                                    <property name="nullable" value="false"/>
+                                                    <property name="defaultValue" value="10"/>
+                                                </bean>
+                                            </set>
+                                        </property>
+                                        <property name="references">
+                                            <map>
+                                                <entry key="name">
+                                                    <bean class="com.ohayoyo.gateway.define.data.ClassDataDefine"/>
+                                                </entry>
+                                            </map>
+                                        </property>
+                                    </bean>
+                                </property>
+                                <!--<property name="fragment" ><null/></property>-->
+                                <property name="methods">
+                                    <set>
+                                        <bean class="com.ohayoyo.gateway.define.http.memory.MemoryMethodDefine">
+                                            <property name="name" value="GET"/>
+                                            <!--
+                                            <property name="scopes">
+                                                <list>
+                                                    <value>dev</value>
+                                                </list>
+                                            </property>
+                                            -->
+                                        </bean>
+                                    </set>
+                                </property>
+                                <!--
+                                <property name="headers">
+                                    <bean class="com.ohayoyo.gateway.define.http.memory.MemoryHeadersDefine">
+                                        <property name="fields">
+                                            <set>
+                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                    <property name="name" value=""/>
+                                                    <property name="comment" value=""/>
+                                                    <property name="overview" value=""/>
+                                                    <property name="description" value=""/>
+                                                    <property name="dataType" value=""/>
+                                                    <property name="dataLength" value="-1"/>
+                                                    <property name="nullable" value="false"/>
+                                                    <property name="defaultValue">
+                                                        <null/>
+                                                    </property>
+                                                </bean>
+                                            </set>
+                                        </property>
+                                        <property name="references">
+                                            <map>
+                                                <entry key="name">
+                                                    <bean class="com.ohayoyo.gateway.define.data.ClassDataDefine"/>
+                                                </entry>
+                                            </map>
+                                        </property>
+                                    </bean>
+                                </property>
+                                -->
+                                <!--
+                                <property name="entity">
+                                    <bean class="com.ohayoyo.gateway.define.http.memory.MemoryEntityDefine">
+                                        <property name="contentType" value="application/x-www-form-urlencoded"/>
+                                        <property name="entityData" >
+                                            <bean class="com.ohayoyo.gateway.define.data.StringDataDefine" />
+                                        </property>
+                                    </bean>
+                                </property>
+                                -->
+                            </bean>
+                        </property>
+                        <property name="response">
+                            <bean class="com.ohayoyo.gateway.define.http.memory.MemoryResponseDefine">
+                                <property name="statuses">
+                                    <set>
+                                        <bean class="com.ohayoyo.gateway.define.http.memory.MemoryStatusDefine">
+                                            <property name="statusCode" value="200"/>
+                                            <property name="reasonPhrase" value="OK"/>
+                                        </bean>
+                                    </set>
+                                </property>
+                                <!--
+                                <property name="headers">
+                                    <bean class="com.ohayoyo.gateway.define.http.memory.MemoryHeadersDefine">
+                                        <property name="fields">
+                                            <set>
+                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                    <property name="name" value=""/>
+                                                    <property name="comment" value=""/>
+                                                    <property name="overview" value=""/>
+                                                    <property name="description" value=""/>
+                                                    <property name="dataType" value=""/>
+                                                    <property name="dataLength" value="-1"/>
+                                                    <property name="nullable" value="false"/>
+                                                    <property name="defaultValue">
+                                                        <null/>
+                                                    </property>
+                                                </bean>
+                                            </set>
+                                        </property>
+                                        <property name="references">
+                                            <map>
+                                                <entry key="name">
+                                                    <bean class="com.ohayoyo.gateway.define.data.ClassDataDefine"/>
+                                                </entry>
+                                            </map>
+                                        </property>
+                                    </bean>
+                                </property>
+                                -->
+                                <property name="entity">
+                                    <bean class="com.ohayoyo.gateway.define.http.memory.MemoryEntityDefine">
+                                        <property name="contentType" value="application/json;charset=UTF-8"/>
+                                        <property name="entityData">
+                                            <bean class="com.ohayoyo.gateway.define.data.ClassDataDefine">
+                                                <property name="fields">
+                                                    <set>
+                                                        <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                            <property name="name" value="code"/>
+                                                            <property name="comment" value=""/>
+                                                            <property name="overview" value=""/>
+                                                            <property name="description" value=""/>
+                                                            <property name="dataType" value="STRING"/>
+                                                            <property name="dataLength" value="-1"/>
+                                                            <property name="nullable" value="true"/>
+                                                            <property name="defaultValue">
+                                                                <null/>
+                                                            </property>
+                                                        </bean>
+                                                        <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                            <property name="name" value="msg"/>
+                                                            <property name="comment" value=""/>
+                                                            <property name="overview" value=""/>
+                                                            <property name="description" value=""/>
+                                                            <property name="dataType" value="INT"/>
+                                                            <property name="dataLength" value="-1"/>
+                                                            <property name="nullable" value="true"/>
+                                                            <property name="defaultValue">
+                                                                <null/>
+                                                            </property>
+                                                        </bean>
+                                                        <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                            <property name="name" value="newslist"/>
+                                                            <property name="comment" value=""/>
+                                                            <property name="overview" value=""/>
+                                                            <property name="description" value=""/>
+                                                            <property name="dataType" value="LIST"/>
+                                                            <property name="dataLength" value="-1"/>
+                                                            <property name="nullable" value="true"/>
+                                                            <property name="defaultValue">
+                                                                <null/>
+                                                            </property>
+                                                        </bean>
+                                                    </set>
+                                                </property>
+                                                <property name="references">
+                                                    <map>
+                                                        <entry key="newslist">
+                                                            <bean class="com.ohayoyo.gateway.define.data.ListDataDefine">
+                                                                <property name="parameterType">
+                                                                    <bean class="com.ohayoyo.gateway.define.data.ClassDataDefine">
+                                                                        <property name="fields">
+                                                                            <set>
+                                                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                                                    <property name="name" value="hottime"/>
+                                                                                    <property name="comment" value=""/>
+                                                                                    <property name="overview" value=""/>
+                                                                                    <property name="description" value=""/>
+                                                                                    <property name="dataType" value="STRING"/>
+                                                                                    <property name="dataLength" value="-1"/>
+                                                                                    <property name="nullable" value="true"/>
+                                                                                    <property name="defaultValue">
+                                                                                        <null/>
+                                                                                    </property>
+                                                                                </bean>
+                                                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                                                    <property name="name" value="title"/>
+                                                                                    <property name="comment" value=""/>
+                                                                                    <property name="overview" value=""/>
+                                                                                    <property name="description" value=""/>
+                                                                                    <property name="dataType" value="STRING"/>
+                                                                                    <property name="dataLength" value="-1"/>
+                                                                                    <property name="nullable" value="true"/>
+                                                                                    <property name="defaultValue">
+                                                                                        <null/>
+                                                                                    </property>
+                                                                                </bean>
+                                                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                                                    <property name="name" value="description"/>
+                                                                                    <property name="comment" value=""/>
+                                                                                    <property name="overview" value=""/>
+                                                                                    <property name="description" value=""/>
+                                                                                    <property name="dataType" value="STRING"/>
+                                                                                    <property name="dataLength" value="-1"/>
+                                                                                    <property name="nullable" value="true"/>
+                                                                                    <property name="defaultValue">
+                                                                                        <null/>
+                                                                                    </property>
+                                                                                </bean>
+                                                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                                                    <property name="name" value="picUrl"/>
+                                                                                    <property name="comment" value=""/>
+                                                                                    <property name="overview" value=""/>
+                                                                                    <property name="description" value=""/>
+                                                                                    <property name="dataType" value="STRING"/>
+                                                                                    <property name="dataLength" value="-1"/>
+                                                                                    <property name="nullable" value="true"/>
+                                                                                    <property name="defaultValue">
+                                                                                        <null/>
+                                                                                    </property>
+                                                                                </bean>
+                                                                                <bean class="com.ohayoyo.gateway.define.FieldDefine">
+                                                                                    <property name="name" value="url"/>
+                                                                                    <property name="comment" value=""/>
+                                                                                    <property name="overview" value=""/>
+                                                                                    <property name="description" value=""/>
+                                                                                    <property name="dataType" value="STRING"/>
+                                                                                    <property name="dataLength" value="-1"/>
+                                                                                    <property name="nullable" value="true"/>
+                                                                                    <property name="defaultValue">
+                                                                                        <null/>
+                                                                                    </property>
+                                                                                </bean>
+                                                                            </set>
+                                                                        </property>
+                                                                    </bean>
+                                                                </property>
+                                                            </bean>
+                                                        </entry>
+                                                    </map>
+                                                </property>
+                                            </bean>
+                                        </property>
+                                    </bean>
+                                </property>
+                            </bean>
+                        </property>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

@@ -9,7 +9,7 @@ public abstract class AbstractParametersDefine implements ParametersDefine {
 
     private Set<FieldDefine> fields;
 
-    private Map<String, ParametersDefine> references;
+    private Map<String, ReferenceDefine> references;
 
     protected AbstractParametersDefine(String name) {
         this.name = name;
@@ -38,12 +38,12 @@ public abstract class AbstractParametersDefine implements ParametersDefine {
     }
 
     @Override
-    public Map<String, ParametersDefine> getReferences() {
+    public Map<String, ReferenceDefine> getReferences() {
         return references;
     }
 
     @Override
-    public AbstractParametersDefine setReferences(Map<String, ParametersDefine> references) {
+    public AbstractParametersDefine setReferences(Map<String, ReferenceDefine> references) {
         this.references = references;
         return this;
     }

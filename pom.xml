@@ -123,7 +123,6 @@
         <module>gateway-define</module>
         <module>gateway-http</module>
         <module>gateway-container</module>
-        <module>gateway-jackson</module>
         <module>gateway-client</module>
         <module>gateway-channel</module>
     </modules>

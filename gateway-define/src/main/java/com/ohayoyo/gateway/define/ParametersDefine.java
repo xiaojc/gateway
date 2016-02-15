@@ -3,7 +3,7 @@ package com.ohayoyo.gateway.define;
 import java.util.Map;
 import java.util.Set;
 
-public interface ParametersDefine extends ReferenceDefine<ParametersDefine> {
+public interface ParametersDefine extends ReferenceFieldsDefine {
 
     String PARAMETER_NAME_VARIABLES = "VARIABLES";
 
@@ -24,9 +24,9 @@ public interface ParametersDefine extends ReferenceDefine<ParametersDefine> {
     ParametersDefine setFields(Set<FieldDefine> fields);
 
     @Override
-    Map<String, ParametersDefine> getReferences();
+    Map<String, ReferenceDefine> getReferences();
 
     @Override
-    ParametersDefine setReferences(Map<String, ParametersDefine> references);
+    ParametersDefine setReferences(Map<String, ReferenceDefine> references);
 
 }

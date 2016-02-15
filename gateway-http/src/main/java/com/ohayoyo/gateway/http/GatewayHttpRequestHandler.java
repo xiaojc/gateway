@@ -19,21 +19,25 @@ public class GatewayHttpRequestHandler extends AbstractHttpRequestHandler {
     protected <RequestBody> void doRequestHeadersHandler(MediaType customRequestContentType, RequestEntity<RequestBody> requestEntity, ClientHttpRequest clientHttpRequest) {
         HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
         HttpHeaders requestHeaders = requestEntity.getHeaders();
+        HttpHeaders newHttpHeaders = new HttpHeaders();
         if (null == requestHeaders) {
             requestHeaders = new HttpHeaders();
         }
         MediaType contentType = requestHeaders.getContentType();
         if (null != contentType) {
             String defaultHeaderValues = contentType.toString();
-            requestHeaders.set(DEFAULT_REQUEST_CONTENT_TYPE, defaultHeaderValues);
+            newHttpHeaders.set(DEFAULT_REQUEST_CONTENT_TYPE, defaultHeaderValues);
         }
         if (null != customRequestContentType) {
             String headerValues = customRequestContentType.toString();
-            requestHeaders.set(CUSTOM_REQUEST_CONTENT_TYPE, headerValues);
-            requestHeaders.setContentType(customRequestContentType);
+            newHttpHeaders.set(CUSTOM_REQUEST_CONTENT_TYPE, headerValues);
+            newHttpHeaders.setContentType(customRequestContentType);
         }
         if (!requestHeaders.isEmpty()) {
             httpHeaders.putAll(requestHeaders);
+        }
+        if (!newHttpHeaders.isEmpty()) {
+            httpHeaders.putAll(newHttpHeaders);
         }
         if (httpHeaders.getContentLength() == -1) {
             httpHeaders.setContentLength(0L);
@@ -66,7 +70,7 @@ public class GatewayHttpRequestHandler extends AbstractHttpRequestHandler {
     protected <RequestBody> void doRequestBodyHandler(RequestEntity<RequestBody> requestEntity, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpClientException, IOException {
         RequestBody requestBody = requestEntity.getBody();
         Class<RequestBody> requestBodyClass = (Class<RequestBody>) requestBody.getClass();
-        HttpHeaders requestHeaders = requestEntity.getHeaders();
+        HttpHeaders requestHeaders = clientHttpRequest.getHeaders();
         MediaType contentType = requestHeaders.getContentType();
         for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
             if (httpMessageConverter.canWrite(requestBodyClass, contentType)) {

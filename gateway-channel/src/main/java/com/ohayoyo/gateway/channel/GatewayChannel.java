@@ -1,6 +1,8 @@
 package com.ohayoyo.gateway.channel;
 
 import com.ohayoyo.gateway.client.GatewayClient;
+import com.ohayoyo.gateway.client.GatewayRequest;
+import com.ohayoyo.gateway.client.restful.RestfulGatewayRequestBuilder;
 import com.ohayoyo.gateway.container.GatewayContainer;
 
 public interface GatewayChannel {
@@ -13,6 +15,9 @@ public interface GatewayChannel {
 
     GatewayChannel setGatewayClient(GatewayClient gatewayClient);
 
-    <Result> Result channel(Class<Result> resultClass, String key, GatewayWrapper gatewayWrapper) throws Exception;
+    RestfulGatewayRequestBuilder newRestfulGatewayRequestBuilder();
+
+    <Result> Result channel(Class<Result> gatewayResultClass, String interfaceDefineKey, GatewayRequest<Object> gatewayRequest) throws Exception;
 
 }
+

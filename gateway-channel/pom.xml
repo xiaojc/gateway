@@ -141,13 +141,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
+            <groupId>com.ohayoyo.spring</groupId>
+            <artifactId>spring-test-junit4</artifactId>
+            <version>1.0.0.BUILD-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

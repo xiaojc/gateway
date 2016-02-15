@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define;
 
-public interface DataDefine extends NameDefine {
+public interface DataDefine extends NameDefine, ReferenceDefine {
 
     @Override
     String getName();
