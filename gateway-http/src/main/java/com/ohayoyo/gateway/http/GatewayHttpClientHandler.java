@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayHttpClientHandler extends AbstractHttpClientHandler {
 
     private static GatewayHttpClientHandler DEFAULT_HTTP_CLIENT_HANDLER = null;

@@ -5,6 +5,9 @@ import com.ohayoyo.gateway.client.GatewayRequest;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayRequestBuilder;
 import com.ohayoyo.gateway.container.GatewayContainer;
 
+/**
+ * @author 蓝明乐
+ */
 public interface GatewayChannel {
 
     GatewayContainer getGatewayContainer();

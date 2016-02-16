@@ -19,6 +19,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayHttpMessageConverters extends ArrayList<HttpMessageConverter<?>> implements List<HttpMessageConverter<?>> {
 
     public static final boolean ROME_PRESENT = ClassUtils.isPresent("com.rometools.rome.feed.WireFeed", GatewayHttpMessageConverters.class.getClassLoader());

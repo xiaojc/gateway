@@ -5,6 +5,9 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Map;
 
+/**
+ * @author 蓝明乐
+ */
 public class RestfulGatewayRequest<RequestBody> implements GatewayRequest<RequestBody> {
 
     private String select;

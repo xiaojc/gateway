@@ -4,6 +4,9 @@ import com.ohayoyo.gateway.define.http.*;
 
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class MemoryRequestDefine implements RequestDefine {
 
     private Set<ProtocolDefine> protocols;

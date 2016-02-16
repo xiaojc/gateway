@@ -4,6 +4,9 @@ import com.ohayoyo.gateway.define.http.ProtocolDefine;
 
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class MemoryProtocolDefine implements ProtocolDefine {
 
     public static final MemoryProtocolDefine HTTP = new MemoryProtocolDefine().setName(HTTP_NAME);

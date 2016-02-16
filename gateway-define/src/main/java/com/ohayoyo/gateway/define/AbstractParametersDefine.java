@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.define;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractParametersDefine implements ParametersDefine {
 
     private String name;

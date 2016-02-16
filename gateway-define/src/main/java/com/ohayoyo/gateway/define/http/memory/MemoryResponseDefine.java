@@ -7,6 +7,9 @@ import com.ohayoyo.gateway.define.http.StatusDefine;
 
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class MemoryResponseDefine implements ResponseDefine {
 
     private Set<StatusDefine> statuses;

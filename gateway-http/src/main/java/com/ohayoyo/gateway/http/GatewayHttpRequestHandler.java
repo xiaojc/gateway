@@ -13,6 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayHttpRequestHandler extends AbstractHttpRequestHandler {
 
     @Override

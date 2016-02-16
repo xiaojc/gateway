@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 
+/**
+ * @author 蓝明乐
+ */
 public class ClientHttpResponseWrapper implements ClientHttpResponse {
 
     private final ClientHttpResponse clientHttpResponse;

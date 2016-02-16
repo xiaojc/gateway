@@ -1,5 +1,8 @@
 package com.ohayoyo.gateway.http;
 
+/**
+ * @author 蓝明乐
+ */
 public class HttpClientException extends Exception {
 
     public HttpClientException() {

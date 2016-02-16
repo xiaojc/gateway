@@ -26,6 +26,9 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class RestfulGatewayClient extends AbstractGatewayClient {
 
     private static RestfulGatewayClient DEFAULT_GATEWAY_CLIENT = null;

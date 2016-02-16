@@ -5,6 +5,9 @@ import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import com.ohayoyo.gateway.define.http.RequestDefine;
 import com.ohayoyo.gateway.define.http.ResponseDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public class RestfulGatewayDefine implements InterfaceDefine, GatewayDefine {
 
     private InterfaceDefine delegateInterfaceDefine;

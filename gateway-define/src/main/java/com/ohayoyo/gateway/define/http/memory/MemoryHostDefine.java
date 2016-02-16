@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.define.http.memory;
 
 import com.ohayoyo.gateway.define.http.HostDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public class MemoryHostDefine implements HostDefine {
 
     private String hostname;

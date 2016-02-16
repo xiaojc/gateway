@@ -9,6 +9,9 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayResponseEntityBuilder<ResponseBody> extends AbstractHttpEntityBuilder<ResponseBody, ResponseEntity<ResponseBody>> {
 
     private HttpStatus httpStatus;

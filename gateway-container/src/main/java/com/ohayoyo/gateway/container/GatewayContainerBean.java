@@ -5,6 +5,9 @@ import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayContainerBean implements GatewayContainer {
 
     private Map<String, InterfaceDefine> interfaceDefineMap;

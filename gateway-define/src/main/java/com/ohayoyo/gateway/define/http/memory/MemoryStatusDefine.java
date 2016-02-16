@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.define.http.memory;
 
 import com.ohayoyo.gateway.define.http.StatusDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public class MemoryStatusDefine implements StatusDefine {
 
     private Integer statusCode;

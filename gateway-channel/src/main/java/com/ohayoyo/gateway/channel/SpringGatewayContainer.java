@@ -13,6 +13,9 @@ import org.springframework.util.CollectionUtils;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class SpringGatewayContainer implements GatewayContainer, InitializingBean, ApplicationContextAware {
 
     public static final String OVERRIDE_DELEGATE_GATEWAY_CONTAINER_NAME = "overrideDelegateGatewayContainer";

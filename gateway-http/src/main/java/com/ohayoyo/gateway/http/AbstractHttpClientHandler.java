@@ -12,6 +12,9 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractHttpClientHandler implements HttpClientHandler {
 
     private ConversionService conversionService;

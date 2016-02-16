@@ -10,6 +10,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayRequestEntityBuilder<RequestBody> extends AbstractHttpEntityBuilder<RequestBody, RequestEntity<RequestBody>> {
 
     private URI uri;

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public class PathDefineUtil {
 
     private static final String PATH_DELIMITER = "/";

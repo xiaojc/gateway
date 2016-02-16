@@ -5,6 +5,9 @@ import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.container.GatewayContainer;
 import com.ohayoyo.gateway.define.http.InterfaceDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public class DefaultGatewayChannel extends AbstractGatewayChannel {
 
     public DefaultGatewayChannel(GatewayContainer gatewayContainer) {

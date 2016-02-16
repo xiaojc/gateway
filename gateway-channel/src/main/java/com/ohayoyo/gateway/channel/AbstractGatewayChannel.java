@@ -11,6 +11,9 @@ import com.ohayoyo.gateway.container.GatewayContainer;
 import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import org.springframework.util.Assert;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractGatewayChannel implements GatewayChannel {
 
     private GatewayContainer gatewayContainer;

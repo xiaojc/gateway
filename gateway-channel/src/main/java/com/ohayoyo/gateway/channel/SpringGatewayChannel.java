@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+/**
+ * @author 蓝明乐
+ */
 public class SpringGatewayChannel implements GatewayChannel, InitializingBean, ApplicationContextAware {
 
     public static final String OVERRIDE_DELEGATE_GATEWAY_CHANNEL_NAME = "overrideDelegateGatewayChannel";

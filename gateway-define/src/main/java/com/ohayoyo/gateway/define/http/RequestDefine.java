@@ -9,6 +9,8 @@ import java.util.Set;
  * <li><a href="https://www.w3.org/TR/url/">标准</a></li>
  * <li><a href="http://baike.baidu.com/link?url=ia3S_WOT5YEHwRI2ZQ4d2_HqqKvAeNZHKmTskZBn3GlbNBMr2fAv9ZCjJfH3ZVfWrQnC9XiF4GN4NOG5rjlDca">百度</a></li>
  * </ul>
+ *
+ * @author 蓝明乐
  */
 public interface RequestDefine extends ObjectDefine {
 

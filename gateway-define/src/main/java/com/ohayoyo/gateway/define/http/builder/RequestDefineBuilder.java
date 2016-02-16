@@ -1,27 +1,135 @@
 package com.ohayoyo.gateway.define.http.builder;
 
 import com.ohayoyo.gateway.define.http.*;
+import com.ohayoyo.gateway.define.utils.ObjectUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class RequestDefineBuilder implements DefineBuilder<RequestDefine> {
+/**
+ * @author 蓝明乐
+ */
+public abstract class RequestDefineBuilder extends AbstractParentBuilder<RequestDefine, InterfaceDefineBuilder> {
 
-    protected Set<ProtocolDefine> protocols;
+    private Set<ProtocolDefine> protocols;
 
-    protected Set<HostDefine> hosts;
+    private Set<HostDefine> hosts;
 
-    protected PathDefine path;
+    private PathDefine path;
 
-    protected QueriesDefine queries;
+    private QueriesDefine queries;
 
-    protected String fragment;
+    private String fragment;
 
-    protected Set<MethodDefine> methods;
+    private Set<MethodDefine> methods;
 
-    protected HeadersDefine headers;
+    private HeadersDefine headers;
 
-    protected EntityDefine entity;
+    private EntityDefine entity;
+
+    private EntityDefineBuilder<RequestDefineBuilder> entityDefineBuilder;
+
+    private HeadersDefineBuilder<RequestDefineBuilder> headersDefineBuilder;
+
+    private Set<MethodDefineBuilder> methodDefineBuilders = new HashSet<MethodDefineBuilder>();
+
+    private QueriesDefineBuilder queriesDefineBuilder;
+
+    private PathDefineBuilder pathDefineBuilder;
+
+    private Set<HostDefineBuilder> hostDefineBuilders = new HashSet<HostDefineBuilder>();
+
+    private Set<ProtocolDefineBuilder> protocolDefineBuilders = new HashSet<ProtocolDefineBuilder>();
+
+    @Override
+    public final RequestDefine build() {
+        if (null != entityDefineBuilder) {
+            entity(entityDefineBuilder.build());
+        }
+        if (null != headersDefineBuilder) {
+            headers(headersDefineBuilder.build());
+        }
+        if (ObjectUtils.isNotEmpty(methodDefineBuilders)) {
+            for (MethodDefineBuilder methodDefineBuilder : methodDefineBuilders) {
+                method(methodDefineBuilder.build());
+            }
+        }
+        if (null != queriesDefineBuilder) {
+            queries(queriesDefineBuilder.build());
+        }
+        if (null != pathDefineBuilder) {
+            path(pathDefineBuilder.build());
+        }
+        if (ObjectUtils.isNotEmpty(hostDefineBuilders)) {
+            for (HostDefineBuilder hostDefineBuilder : hostDefineBuilders) {
+                host(hostDefineBuilder.build());
+            }
+        }
+        if (ObjectUtils.isNotEmpty(protocolDefineBuilders)) {
+            for (ProtocolDefineBuilder protocolDefineBuilder : protocolDefineBuilders) {
+                protocol(protocolDefineBuilder.build());
+            }
+        }
+        return this.buildDetails(protocols, hosts, path, queries, fragment, methods, headers, entity);
+    }
+
+    protected abstract RequestDefine buildDetails(Set<ProtocolDefine> protocols, Set<HostDefine> hosts, PathDefine path, QueriesDefine queries, String fragment, Set<MethodDefine> methods, HeadersDefine headers, EntityDefine entity);
+
+    protected RequestDefineBuilder(InterfaceDefineBuilder interfaceDefineBuilder) {
+        super(interfaceDefineBuilder);
+    }
+
+    public EntityDefineBuilder<RequestDefineBuilder> entity() {
+        entityDefineBuilder = this.entityBuilder();
+        return entityDefineBuilder;
+    }
+
+    protected abstract EntityDefineBuilder<RequestDefineBuilder> entityBuilder();
+
+    public HeadersDefineBuilder<RequestDefineBuilder> headers() {
+        headersDefineBuilder = this.headersBuilder();
+        return headersDefineBuilder;
+    }
+
+    protected abstract HeadersDefineBuilder<RequestDefineBuilder> headersBuilder();
+
+    public MethodDefineBuilder method() {
+        MethodDefineBuilder methodDefineBuilder = this.methodBuilder();
+        methodDefineBuilders.add(methodDefineBuilder);
+        return methodDefineBuilder;
+    }
+
+    protected abstract MethodDefineBuilder methodBuilder();
+
+    public QueriesDefineBuilder queries() {
+        queriesDefineBuilder = this.queriesBuilder();
+        return queriesDefineBuilder;
+    }
+
+    protected abstract QueriesDefineBuilder queriesBuilder();
+
+    public PathDefineBuilder path() {
+        pathDefineBuilder = this.pathBuilder();
+        return pathDefineBuilder;
+    }
+
+    protected abstract PathDefineBuilder pathBuilder();
+
+    public HostDefineBuilder host() {
+        HostDefineBuilder hostDefineBuilder = this.hostBuilder();
+        hostDefineBuilders.add(hostDefineBuilder);
+        return hostDefineBuilder;
+    }
+
+    protected abstract HostDefineBuilder hostBuilder();
+
+    public ProtocolDefineBuilder protocol() {
+        ProtocolDefineBuilder protocolDefineBuilder = this.protocolBuilder();
+        this.protocolDefineBuilders.add(protocolDefineBuilder);
+        return protocolDefineBuilder;
+    }
+
+    protected abstract ProtocolDefineBuilder protocolBuilder();
 
     public RequestDefineBuilder entity(EntityDefine entity) {
         this.entity = entity;
@@ -34,17 +142,17 @@ public abstract class RequestDefineBuilder implements DefineBuilder<RequestDefin
     }
 
     public RequestDefineBuilder methods(Set<MethodDefine> methods) {
-        if (BuilderUtil.isEmpty(this.methods)) {
+        if (ObjectUtils.isEmpty(this.methods)) {
             this.methods = new HashSet<MethodDefine>();
         }
-        if (BuilderUtil.isNotEmpty(methods)) {
+        if (ObjectUtils.isNotEmpty(methods)) {
             this.methods.addAll(methods);
         }
         return this;
     }
 
     public RequestDefineBuilder method(MethodDefine method) {
-        if (BuilderUtil.isEmpty(this.methods)) {
+        if (ObjectUtils.isEmpty(this.methods)) {
             this.methods = new HashSet<MethodDefine>();
         }
         this.methods.add(method);
@@ -67,17 +175,17 @@ public abstract class RequestDefineBuilder implements DefineBuilder<RequestDefin
     }
 
     public RequestDefineBuilder hosts(Set<HostDefine> hosts) {
-        if (BuilderUtil.isEmpty(this.hosts)) {
+        if (ObjectUtils.isEmpty(this.hosts)) {
             this.hosts = new HashSet<HostDefine>();
         }
-        if (BuilderUtil.isNotEmpty(hosts)) {
+        if (ObjectUtils.isNotEmpty(hosts)) {
             this.hosts.addAll(hosts);
         }
         return this;
     }
 
     public RequestDefineBuilder host(HostDefine host) {
-        if (BuilderUtil.isEmpty(this.hosts)) {
+        if (ObjectUtils.isEmpty(this.hosts)) {
             this.hosts = new HashSet<HostDefine>();
         }
         this.hosts.add(host);
@@ -85,17 +193,17 @@ public abstract class RequestDefineBuilder implements DefineBuilder<RequestDefin
     }
 
     public RequestDefineBuilder protocols(Set<ProtocolDefine> protocols) {
-        if (BuilderUtil.isEmpty(this.protocols)) {
+        if (ObjectUtils.isEmpty(this.protocols)) {
             this.protocols = new HashSet<ProtocolDefine>();
         }
-        if (BuilderUtil.isNotEmpty(protocols)) {
+        if (ObjectUtils.isNotEmpty(protocols)) {
             this.protocols.addAll(protocols);
         }
         return this;
     }
 
     public RequestDefineBuilder protocol(ProtocolDefine protocol) {
-        if (BuilderUtil.isEmpty(this.protocols)) {
+        if (ObjectUtils.isEmpty(this.protocols)) {
             this.protocols = new HashSet<ProtocolDefine>();
         }
         this.protocols.add(protocol);

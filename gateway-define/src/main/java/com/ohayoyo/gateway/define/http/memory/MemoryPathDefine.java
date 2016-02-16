@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.define.http.memory;
 import com.ohayoyo.gateway.define.http.PathDefine;
 import com.ohayoyo.gateway.define.http.VariablesDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public class MemoryPathDefine implements PathDefine {
 
     private String project;

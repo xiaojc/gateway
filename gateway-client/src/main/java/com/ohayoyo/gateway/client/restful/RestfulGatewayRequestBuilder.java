@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class RestfulGatewayRequestBuilder {
 
     private ConversionService conversionService;

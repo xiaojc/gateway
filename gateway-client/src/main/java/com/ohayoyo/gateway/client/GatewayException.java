@@ -1,5 +1,8 @@
 package com.ohayoyo.gateway.client;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayException extends Exception {
     public GatewayException() {
     }

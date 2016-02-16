@@ -5,6 +5,9 @@ import com.ohayoyo.gateway.define.*;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class ClassDataDefine extends AbstractDataDefine implements DataDefine, ReferenceFieldsDefine {
 
     private String name;

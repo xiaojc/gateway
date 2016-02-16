@@ -8,6 +8,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public interface HttpClientHandler extends HttpClientAccessor, HttpClientIntercepting {
 
     List<HttpMessageConverter<?>> getHttpMessageConverters();

@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.define.http;
 
 import com.ohayoyo.gateway.define.ObjectDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public interface HostDefine extends ObjectDefine {
 
     Integer DEFAULT_HTTP_PORT = 80;

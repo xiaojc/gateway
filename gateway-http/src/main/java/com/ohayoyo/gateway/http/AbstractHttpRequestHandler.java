@@ -8,6 +8,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractHttpRequestHandler implements HttpRequestHandler {
 
     @Override

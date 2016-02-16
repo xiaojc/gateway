@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.test.model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public class TestPack implements Serializable {
 
     private Integer code ;

@@ -7,6 +7,9 @@ import org.springframework.util.*;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class RestfulGatewayResponseBuilder {
 
     private ConversionService conversionService;

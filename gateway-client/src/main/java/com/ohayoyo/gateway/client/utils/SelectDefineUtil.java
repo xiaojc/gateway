@@ -9,6 +9,9 @@ import org.springframework.util.StringUtils;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class SelectDefineUtil {
 
     private static boolean selectCompareRule(String select, String scope) {
@@ -92,7 +95,7 @@ public class SelectDefineUtil {
     }
 
     public static Integer selectHostDefinePort(ProtocolDefine protocolDefine, HostDefine hostDefine) {
-        return (!(null != hostDefine.getPort() && hostDefine.getPort() >= 0)) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
+        return (!(null != hostDefine.getPort() && (hostDefine.getPort() >= 0 || hostDefine.getPort() <= 65535))) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
     }
 
 }

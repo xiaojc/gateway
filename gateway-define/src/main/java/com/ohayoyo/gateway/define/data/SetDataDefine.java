@@ -1,7 +1,10 @@
 package com.ohayoyo.gateway.define.data;
 
-        import com.ohayoyo.gateway.define.DataTypeDefine;
+import com.ohayoyo.gateway.define.DataTypeDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public class SetDataDefine extends AbstractCollectionDataDefine {
 
     public SetDataDefine() {

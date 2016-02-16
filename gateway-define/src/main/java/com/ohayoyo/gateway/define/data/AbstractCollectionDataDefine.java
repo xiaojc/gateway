@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.define.data;
 import com.ohayoyo.gateway.define.AbstractDataDefine;
 import com.ohayoyo.gateway.define.DataDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractCollectionDataDefine extends AbstractDataDefine {
 
     private DataDefine parameterType;

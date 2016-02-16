@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.test.model;
 
 import java.io.Serializable;
 
+/**
+ * @author 蓝明乐
+ */
 public class TestImage implements Serializable {
 
     private String hottime ;

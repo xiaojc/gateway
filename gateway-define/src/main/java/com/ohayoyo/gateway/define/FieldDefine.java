@@ -1,108 +1,42 @@
 package com.ohayoyo.gateway.define;
 
-public class FieldDefine implements NameDefine {
+/**
+ * @author 蓝明乐
+ */
+public interface FieldDefine extends NameDefine {
 
-    private String name;
+    String getComment();
 
-    private String comment;
-
-    private String overview;
-
-    private String description;
-
-    private String dataType;
-
-    private Integer dataLength = -1 ;
-
-    private Boolean nullable;
-
-    private Object defaultValue;
-
-    public String getComment() {
-        return comment;
-    }
-
-    public FieldDefine setComment(String comment) {
-        this.comment = comment;
-        return this;
-    }
+    FieldDefine setComment(String comment);
 
     @Override
-    public String getName() {
-        return name;
-    }
+    String getName();
 
     @Override
-    public FieldDefine setName(String name) {
-        this.name = name;
-        return this;
-    }
+    FieldDefine setName(String name);
 
-    public String getOverview() {
-        return overview;
-    }
+    String getOverview();
 
-    public FieldDefine setOverview(String overview) {
-        this.overview = overview;
-        return this;
-    }
+    FieldDefine setOverview(String overview);
 
-    public String getDescription() {
-        return description;
-    }
+    String getDescription();
 
-    public FieldDefine setDescription(String description) {
-        this.description = description;
-        return this;
-    }
+    FieldDefine setDescription(String description);
 
-    public String getDataType() {
-        return dataType;
-    }
+    String getDataType();
 
-    public FieldDefine setDataType(String dataType) {
-        this.dataType = dataType;
-        return this;
-    }
+    FieldDefine setDataType(String dataType);
 
-    public Integer getDataLength() {
-        return dataLength;
-    }
+    Integer getDataLength();
 
-    public FieldDefine setDataLength(Integer dataLength) {
-        this.dataLength = dataLength;
-        return this;
-    }
+    FieldDefine setDataLength(Integer dataLength);
 
-    public Boolean getNullable() {
-        return nullable;
-    }
+    Boolean getNullable();
 
-    public FieldDefine setNullable(Boolean nullable) {
-        this.nullable = nullable;
-        return this;
-    }
+    FieldDefine setNullable(Boolean nullable);
 
-    public Object getDefaultValue() {
-        return defaultValue;
-    }
+    Object getDefaultValue();
 
-    public FieldDefine setDefaultValue(Object defaultValue) {
-        this.defaultValue = defaultValue;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FieldDefine)) return false;
-        FieldDefine that = (FieldDefine) o;
-        return name != null ? name.equals(that.name) : that.name == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
-    }
+    FieldDefine setDefaultValue(Object defaultValue);
 
 }

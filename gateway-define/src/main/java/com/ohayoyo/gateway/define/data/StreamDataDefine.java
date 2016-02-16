@@ -4,6 +4,9 @@ import com.ohayoyo.gateway.define.AbstractDataDefine;
 import com.ohayoyo.gateway.define.DataDefine;
 import com.ohayoyo.gateway.define.DataTypeDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public class StreamDataDefine extends AbstractDataDefine implements DataDefine {
 
     public StreamDataDefine() {

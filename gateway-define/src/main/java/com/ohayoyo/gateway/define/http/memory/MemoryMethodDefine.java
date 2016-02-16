@@ -4,6 +4,9 @@ import com.ohayoyo.gateway.define.http.MethodDefine;
 
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class MemoryMethodDefine implements MethodDefine {
 
     public static final MethodDefine GET = new MemoryMethodDefine().setName(GET_NAME);

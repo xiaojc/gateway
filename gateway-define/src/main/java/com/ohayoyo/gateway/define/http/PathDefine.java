@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.define.http;
 
 import com.ohayoyo.gateway.define.ObjectDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public interface PathDefine extends ObjectDefine {
 
     String getProject();

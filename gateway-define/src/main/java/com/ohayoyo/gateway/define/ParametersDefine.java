@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.define;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public interface ParametersDefine extends ReferenceFieldsDefine {
 
     String PARAMETER_NAME_VARIABLES = "VARIABLES";

@@ -8,6 +8,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public interface HttpRequestHandler {
 
     String CUSTOM_REQUEST_CONTENT_TYPE = "Custom-Request-Content-Type";

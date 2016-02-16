@@ -1,5 +1,8 @@
 package com.ohayoyo.gateway.define;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractDataDefine implements DataDefine {
 
     private String name;

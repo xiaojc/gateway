@@ -5,15 +5,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author 蓝明乐
+ */
 @Configuration
 public class SpringGatewayConfig {
 
-    @Bean
+    @Bean(name = "springGatewayChannel")
     public GatewayChannel springGatewayChannel(@Qualifier("springGatewayContainer") GatewayContainer gatewayContainer) {
         return new SpringGatewayChannel(gatewayContainer);
     }
 
-    @Bean
+    @Bean(name = "springGatewayContainer")
     public GatewayContainer springGatewayContainer() {
         return new SpringGatewayContainer();
     }

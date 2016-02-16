@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.client;
 
 import com.ohayoyo.gateway.http.HttpClientHandler;
 
+/**
+ * @author 蓝明乐
+ */
 public interface GatewayClient {
 
     HttpClientHandler getHttpClientHandler();

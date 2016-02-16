@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public class GatewayHttpResponseHandler extends AbstractHttpResponseHandler {
 
     @Override

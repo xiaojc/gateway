@@ -8,6 +8,8 @@ import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayClient;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayDefine;
 import com.ohayoyo.gateway.client.restful.RestfulGatewayRequest;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.builder.Builders;
 import com.ohayoyo.gateway.define.http.memory.*;
 import com.ohayoyo.gateway.http.GatewayHttpClientHandler;
 import com.ohayoyo.gateway.http.HttpClientHandler;
@@ -24,6 +26,9 @@ import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class RestfulGatewayClientTest {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -51,29 +56,31 @@ public class RestfulGatewayClientTest {
         httpClientHandler.setClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory());
         restfulGatewayClient.setHttpClientHandler(httpClientHandler);
         GatewayRequest gatewayRequest = restfulGatewayClient.newRestfulGatewayRequestBuilder()
-                .requestQueries("key","29e069ec39101eb669121554bf67024f")
-                .requestQueries("num",10)
+                .requestQueries("key", "29e069ec39101eb669121554bf67024f")
+                .requestQueries("num", 10)
                 .build();
-        GatewayDefine gatewayDefine = new RestfulGatewayDefine(
-                new MemoryInterfaceDefine()
-                        .setRequest(new MemoryRequestDefine()
-                                        .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
-                                        .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("api.huceo.com")))
-                                        .setPath(new MemoryPathDefine()
-                                                        .setModule("meinv")
-                                                        .setResource("other")
-                                        )
-                                        .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
-                        )
-                        .setResponse(new MemoryResponseDefine()
-                                        .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
-                        )
-        );
-
+        //@formatter:off
+        InterfaceDefine interfaceDefine = Builders
+                .memory()
+                    .request()
+                        .protocol()
+                            .name("http").parent()
+                        .host()
+                            .hostname("api.huceo.com").parent()
+                        .path()
+                            .project("meinv/other").parent()
+                        .method()
+                            .name("GET").parent().parent()
+                    .response()
+                    .entity()
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).parent().parent()
+                .build() ;
+        //@formatter:on
+        GatewayDefine gatewayDefine = new RestfulGatewayDefine(interfaceDefine);
         long startTime = System.currentTimeMillis();
         GatewayResponse<String> objectGatewayResponse = restfulGatewayClient.session(gatewayDefine, gatewayRequest);
         long endTime = System.currentTimeMillis();
-        logger.debug("{}",(endTime-startTime));
+        logger.debug("{}", (endTime - startTime));
         logger.debug("{}", objectGatewayResponse.getResponseBody());
 
     }
@@ -90,16 +97,16 @@ public class RestfulGatewayClientTest {
         GatewayDefine gatewayDefine = new RestfulGatewayDefine(
                 new MemoryInterfaceDefine()
                         .setRequest(new MemoryRequestDefine()
-                                        .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
-                                        .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("api.huceo.com")))
-                                        .setPath(new MemoryPathDefine()
-                                                        .setModule("meinv")
-                                                        .setResource("other")
-                                        )
-                                        .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
+                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("api.huceo.com")))
+                                .setPath(new MemoryPathDefine()
+                                        .setModule("meinv")
+                                        .setResource("other")
+                                )
+                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
                         .setResponse(new MemoryResponseDefine()
-                                        .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
+                                .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
                         )
         );
 
@@ -123,22 +130,22 @@ public class RestfulGatewayClientTest {
         GatewayDefine gatewayDefine = new RestfulGatewayDefine(
                 new MemoryInterfaceDefine()
                         .setRequest(new MemoryRequestDefine()
-                                        .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
-                                        .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("api.huceo.com")))
-                                        .setPath(new MemoryPathDefine()
-                                                        .setModule("meinv")
-                                                        .setResource("other")
-                                        )
-                                        .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
+                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("api.huceo.com")))
+                                .setPath(new MemoryPathDefine()
+                                        .setModule("meinv")
+                                        .setResource("other")
+                                )
+                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
                         .setResponse(new MemoryResponseDefine()
-                                        .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
+                                .setEntity(new MemoryEntityDefine().setContentType(MediaType.APPLICATION_JSON_UTF8.toString()))
                         )
         );
         long startTime = System.currentTimeMillis();
         GatewayResponse<TestPack> objectGatewayResponse = restfulGatewayClient.session(TestPack.class, gatewayDefine, gatewayRequest);
         long endTime = System.currentTimeMillis();
-        logger.debug("{}",(endTime-startTime));
+        logger.debug("{}", (endTime - startTime));
         logger.debug("{}", objectGatewayResponse.getResponseBody());
     }
 
@@ -151,13 +158,13 @@ public class RestfulGatewayClientTest {
                 new MemoryInterfaceDefine()
                         .setKey("vg_txapi_mvtp_meinv")
                         .setRequest(new MemoryRequestDefine()
-                                        .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
-                                        .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("t1.27270.com")))
-                                        .setPath(new MemoryPathDefine()
-                                                        .setModule("uploads")
-                                                        .setResource("tu/201508/05/slt.jpg")
-                                        )
-                                        .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
+                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("t1.27270.com")))
+                                .setPath(new MemoryPathDefine()
+                                        .setModule("uploads")
+                                        .setResource("tu/201508/05/slt.jpg")
+                                )
+                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
         );
 
@@ -174,9 +181,9 @@ public class RestfulGatewayClientTest {
         GatewayDefine gatewayDefine = new RestfulGatewayDefine(
                 new MemoryInterfaceDefine()
                         .setRequest(new MemoryRequestDefine()
-                                        .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
-                                        .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("repo.ohayoyo.com")))
-                                        .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
+                                .setProtocols((Set) Sets.newHashSet(MemoryProtocolDefine.HTTP))
+                                .setHosts((Set) Sets.newHashSet(new MemoryHostDefine().setHostname("repo.ohayoyo.com")))
+                                .setMethods((Set) Sets.newHashSet(MemoryMethodDefine.GET))
                         )
         );
         GatewayResponse<String> objectGatewayResponse = restfulGatewayClient.session(gatewayDefine, gatewayRequest);

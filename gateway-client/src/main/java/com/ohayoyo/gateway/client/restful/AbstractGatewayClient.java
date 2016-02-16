@@ -4,6 +4,9 @@ import com.ohayoyo.gateway.client.*;
 import com.ohayoyo.gateway.http.HttpClientHandler;
 import org.springframework.util.Assert;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractGatewayClient implements GatewayClient {
 
     private HttpClientHandler httpClientHandler;

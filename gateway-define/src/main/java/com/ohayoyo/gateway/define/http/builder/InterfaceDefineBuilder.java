@@ -4,15 +4,22 @@ import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import com.ohayoyo.gateway.define.http.RequestDefine;
 import com.ohayoyo.gateway.define.http.ResponseDefine;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class InterfaceDefineBuilder implements DefineBuilder<InterfaceDefine> {
 
-    protected String key;
+    private String key;
 
-    protected String description;
+    private String description;
 
-    protected RequestDefine request;
+    private RequestDefine request;
 
-    protected ResponseDefine response;
+    private ResponseDefine response;
+
+    private RequestDefineBuilder requestDefineBuilder;
+
+    private ResponseDefineBuilder responseDefineBuilder;
 
     public InterfaceDefineBuilder key(String key) {
         this.key = key;
@@ -33,5 +40,32 @@ public abstract class InterfaceDefineBuilder implements DefineBuilder<InterfaceD
         this.response = response;
         return this;
     }
+
+    public RequestDefineBuilder request() {
+        requestDefineBuilder = this.requestBuilder();
+        return requestDefineBuilder;
+    }
+
+    public ResponseDefineBuilder response() {
+        responseDefineBuilder = this.responseBuilder();
+        return responseDefineBuilder;
+    }
+
+    @Override
+    public final InterfaceDefine build() {
+        if (null != requestDefineBuilder) {
+            this.request(requestDefineBuilder.build());
+        }
+        if (null != responseDefineBuilder) {
+            this.response(responseDefineBuilder.build());
+        }
+        return this.buildDetails(key, description, request, response);
+    }
+
+    protected abstract RequestDefineBuilder requestBuilder();
+
+    protected abstract ResponseDefineBuilder responseBuilder();
+
+    protected abstract InterfaceDefine buildDetails(String key, String description, RequestDefine request, ResponseDefine response);
 
 }

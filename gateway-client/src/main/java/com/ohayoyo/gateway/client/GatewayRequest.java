@@ -4,6 +4,9 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Map;
 
+/**
+ * @author 蓝明乐
+ */
 public interface GatewayRequest<RequestBody> {
 
     String getSelect();

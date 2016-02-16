@@ -2,6 +2,9 @@ package com.ohayoyo.gateway.client;
 
 import org.springframework.util.MultiValueMap;
 
+/**
+ * @author 蓝明乐
+ */
 public interface GatewayResponse<ResponseBody> {
 
     Integer getStatusCode();

@@ -13,6 +13,9 @@ import org.springframework.web.client.ResponseErrorHandler;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author 蓝明乐
+ */
 public abstract class AbstractHttpResponseHandler implements HttpResponseHandler {
 
     private ResponseErrorHandler responseErrorHandler;

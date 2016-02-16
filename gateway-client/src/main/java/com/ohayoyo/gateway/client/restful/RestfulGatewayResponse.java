@@ -3,6 +3,9 @@ package com.ohayoyo.gateway.client.restful;
 import com.ohayoyo.gateway.client.GatewayResponse;
 import org.springframework.util.MultiValueMap;
 
+/**
+ * @author 蓝明乐
+ */
 public class RestfulGatewayResponse<ResponseBody> implements GatewayResponse<ResponseBody> {
 
     private Integer statusCode;
