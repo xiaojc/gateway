@@ -32,7 +32,7 @@ public class PathDefineUtil {
         }
     }
 
-    public static String[] pathSegments(PathDefine pathDefine) {
+    public static List<String> pathSegmentsAsList(PathDefine pathDefine) {
         List<String> names = new ArrayList<String>();
         if (null != pathDefine) {
             String project = pathDefine.getProject();
@@ -44,6 +44,11 @@ public class PathDefineUtil {
             pathSegmentItems(operate, names);
             pathSegmentItems(resource, names);
         }
+        return names;
+    }
+
+    public static String[] pathSegments(PathDefine pathDefine) {
+        List<String> names = pathSegmentsAsList(pathDefine);
         int pathSegmentsSize = names.size();
         String[] pathSegments = new String[pathSegmentsSize];
         return names.toArray(pathSegments);

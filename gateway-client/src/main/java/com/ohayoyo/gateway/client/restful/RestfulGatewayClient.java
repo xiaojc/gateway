@@ -3,7 +3,6 @@ package com.ohayoyo.gateway.client.restful;
 import com.ohayoyo.gateway.client.GatewayDefine;
 import com.ohayoyo.gateway.client.GatewayException;
 import com.ohayoyo.gateway.client.GatewayRequest;
-import com.ohayoyo.gateway.client.GatewayResponse;
 import com.ohayoyo.gateway.client.utils.PathDefineUtil;
 import com.ohayoyo.gateway.client.utils.SelectDefineUtil;
 import com.ohayoyo.gateway.define.http.*;
@@ -29,7 +28,7 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class RestfulGatewayClient extends AbstractGatewayClient {
+public class RestfulGatewayClient extends BehaviorGatewayClient {
 
     private static RestfulGatewayClient DEFAULT_GATEWAY_CLIENT = null;
 
@@ -48,26 +47,6 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
             }
         }
         return DEFAULT_GATEWAY_CLIENT;
-    }
-
-    public RestfulGatewayRequestBuilder newRestfulGatewayRequestBuilder() {
-        return RestfulGatewayRequestBuilder.newInstance().conversionService(this.getHttpClientHandler().getConversionService());
-    }
-
-    public RestfulGatewayResponseBuilder newRestfulGatewayResponseBuilder() {
-        return RestfulGatewayResponseBuilder.newInstance().conversionService(this.getHttpClientHandler().getConversionService());
-    }
-
-    @Override
-    protected void defineVerify(GatewayDefine gatewayDefine) throws GatewayException {
-    }
-
-    @Override
-    protected <RequestBody> void requestVerify(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
-    }
-
-    @Override
-    protected <RequestBody> void requestFill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
     }
 
     @Override
@@ -105,7 +84,7 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
         String fragment = requestDefine.getFragment();
         ProtocolDefine protocolDefine = SelectDefineUtil.selectProtocolDefine(select, protocolDefines);
         HostDefine hostDefine = SelectDefineUtil.selectHostDefine(select, hostDefines);
-        String scheme = protocolDefine.getName();
+        String scheme = protocolDefine.getName().toLowerCase();
         String host = hostDefine.getHostname();
         int port = SelectDefineUtil.selectHostDefinePort(protocolDefine, hostDefine);
         String[] pathSegments = PathDefineUtil.pathSegments(pathDefine);
@@ -177,8 +156,4 @@ public class RestfulGatewayClient extends AbstractGatewayClient {
         return customResponseContentType;
     }
 
-    @Override
-    protected <ResponseBody> void resultVerify(GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine) throws GatewayException {
-
-    }
 }

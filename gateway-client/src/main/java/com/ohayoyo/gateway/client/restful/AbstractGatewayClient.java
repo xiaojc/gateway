@@ -36,6 +36,7 @@ public abstract class AbstractGatewayClient implements GatewayClient {
     @Override
     public <ResponseBody, RequestBody> GatewayResponse<ResponseBody> session(Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
         Assert.notNull(responseBodyClass);
+        Assert.notNull(gatewayDefine);
         HttpClientHandler httpClientHandler = this.getHttpClientHandler();
         this.defineVerify(gatewayDefine);
         this.requestFill(gatewayDefine, gatewayRequest);
