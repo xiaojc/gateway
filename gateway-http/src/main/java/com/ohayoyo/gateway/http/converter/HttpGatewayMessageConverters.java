@@ -81,7 +81,7 @@ public class HttpGatewayMessageConverters extends ArrayList<HttpMessageConverter
         }
     }
 
-    protected ConversionService getConversionService() {
+    public ConversionService getConversionService() {
         return conversionService;
     }
 

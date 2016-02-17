@@ -28,23 +28,23 @@ public class HttpGatewayRequestHandler extends AbstractHttpGatewayRequest {
         HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
         HttpHeaders requestHeaders = requestEntity.getHeaders();
         HttpHeaders newHttpHeaders = new HttpHeaders();
-        if (null == requestHeaders) {
-            requestHeaders = new HttpHeaders();
+        if (null != httpHeaders && (!httpHeaders.isEmpty())) {
+            newHttpHeaders.putAll(httpHeaders);
         }
-        MediaType contentType = requestHeaders.getContentType();
-        if (null != contentType) {
-            String defaultHeaderValues = contentType.toString();
-            newHttpHeaders.set(DEFAULT_REQUEST_CONTENT_TYPE, defaultHeaderValues);
-        }
-        if (null != customRequestContentType) {
-            String headerValues = customRequestContentType.toString();
-            newHttpHeaders.set(CUSTOM_REQUEST_CONTENT_TYPE, headerValues);
-            newHttpHeaders.setContentType(customRequestContentType);
-        }
-        if (!requestHeaders.isEmpty()) {
-            httpHeaders.putAll(requestHeaders);
+        if (null != requestHeaders && (!requestHeaders.isEmpty())) {
+            newHttpHeaders.putAll(requestHeaders);
         }
         if (!newHttpHeaders.isEmpty()) {
+            MediaType contentType = newHttpHeaders.getContentType();
+            if (null != contentType) {
+                String defaultHeaderValues = contentType.toString();
+                newHttpHeaders.set(DEFAULT_REQUEST_CONTENT_TYPE, defaultHeaderValues);
+            }
+            if (null != customRequestContentType) {
+                String headerValues = customRequestContentType.toString();
+                newHttpHeaders.set(CUSTOM_REQUEST_CONTENT_TYPE, headerValues);
+                newHttpHeaders.setContentType(customRequestContentType);
+            }
             httpHeaders.putAll(newHttpHeaders);
         }
         if (httpHeaders.getContentLength() == -1) {
@@ -77,7 +77,7 @@ public class HttpGatewayRequestHandler extends AbstractHttpGatewayRequest {
 
     @Override
     protected <RequestBody> void requestBodyHandler(RequestEntity<RequestBody> requestEntity, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException {
-        if (requestEntity.hasBody()) {
+        if (null != requestEntity && requestEntity.hasBody()) {
             RequestBody requestBody = requestEntity.getBody();
             Class<RequestBody> requestBodyClass = (Class<RequestBody>) requestBody.getClass();
             HttpHeaders requestHeaders = clientHttpRequest.getHeaders();

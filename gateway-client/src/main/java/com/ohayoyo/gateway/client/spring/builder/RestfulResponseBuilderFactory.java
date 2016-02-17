@@ -3,6 +3,7 @@ package com.ohayoyo.gateway.client.spring.builder;
 import com.ohayoyo.gateway.client.restful.builder.RestfulResponseBuilder;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.format.support.DefaultFormattingConversionService;
 
@@ -11,13 +12,23 @@ public class RestfulResponseBuilderFactory implements FactoryBean<RestfulRespons
     @Autowired(required = false)
     private ConversionService conversionService;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Override
     public RestfulResponseBuilder getObject() throws Exception {
         if (null == conversionService) {
-            if (null == RestfulRequestBuilderFactory.notConfigConversionService) {
-                RestfulRequestBuilderFactory.notConfigConversionService = new DefaultFormattingConversionService();
+            try {
+                conversionService = this.applicationContext.getBean(ConversionService.class);
+            } catch (Exception ex) {
+                //none
             }
-            conversionService = RestfulRequestBuilderFactory.notConfigConversionService;
+            if (null == conversionService) {
+                if (null == RestfulRequestBuilderFactory.notConfigConversionService) {
+                    RestfulRequestBuilderFactory.notConfigConversionService = new DefaultFormattingConversionService();
+                }
+                conversionService = RestfulRequestBuilderFactory.notConfigConversionService;
+            }
         }
         return RestfulResponseBuilder.newInstance().conversionService(conversionService);
     }

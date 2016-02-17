@@ -4,17 +4,17 @@ import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.*;
+import org.springframework.http.client.ClientHttpRequest;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 
 /**
@@ -86,15 +86,6 @@ public class HttpGatewayHandler extends AbstractHttpGateway {
             }
         }
         return responseEntity;
-    }
-
-    protected <RequestBody> ClientHttpRequest createClientHttpRequest(RequestEntity<RequestBody> requestEntity, ClientHttpRequestFactory clientHttpRequestFactory, List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors) throws HttpGatewayException, IOException {
-        URI uri = requestEntity.getUrl();
-        HttpMethod httpMethod = requestEntity.getMethod();
-        if (!CollectionUtils.isEmpty(clientHttpRequestInterceptors)) {
-            clientHttpRequestFactory = new InterceptingClientHttpRequestFactory(clientHttpRequestFactory, clientHttpRequestInterceptors);
-        }
-        return clientHttpRequestFactory.createRequest(uri, httpMethod);
     }
 
 }
