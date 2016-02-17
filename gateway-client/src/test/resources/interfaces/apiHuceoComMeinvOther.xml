@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="com.ohayoyo.gateway.define.memory.http.MemoryInterfaceDefine">
+        <property name="key" value="api.huceo.com/meinv/other"/>
+        <property name="description" value="美女写真"/>
+        <property name="request">
+            <bean class="com.ohayoyo.gateway.define.memory.http.MemoryRequestDefine">
+                <property name="protocols">
+                    <set>
+                        <bean class="com.ohayoyo.gateway.define.memory.http.MemoryProtocolDefine">
+                            <property name="name" value="http"/>
+                        </bean>
+                    </set>
+                </property>
+                <property name="hosts">
+                    <set>
+                        <bean class="com.ohayoyo.gateway.define.memory.http.MemoryHostDefine">
+                            <property name="hostname" value="api.huceo.com"/>
+                        </bean>
+                    </set>
+                </property>
+                <property name="path">
+                    <bean class="com.ohayoyo.gateway.define.memory.http.MemoryPathDefine">
+                        <property name="project" value="meinv/other"/>
+                    </bean>
+                </property>
+                <property name="queries">
+                    <bean class="com.ohayoyo.gateway.define.memory.http.MemoryQueriesDefine">
+                        <property name="fields">
+                            <set>
+                                <bean class="com.ohayoyo.gateway.define.ParameterDefine">
+                                    <property name="name" value="key"/>
+                                    <property name="overview" value="用户API KEY"/>
+                                    <property name="comment" value=""/>
+                                    <property name="description" value=""/>
+                                    <property name="dataType" value="STRING"/>
+                                    <property name="dataLength" value="-1"/>
+                                    <property name="nullable" value="false"/>
+                                    <property name="defaultValue" value="29e069ec39101eb669121554bf67024f"/>
+                                </bean>
+                                <bean class="com.ohayoyo.gateway.define.ParameterDefine">
+                                    <property name="name" value="num"/>
+                                    <property name="overview" value="查询的结果数"/>
+                                    <property name="comment" value=""/>
+                                    <property name="description" value=""/>
+                                    <property name="dataType" value="INT"/>
+                                    <property name="dataLength" value="-1"/>
+                                    <property name="nullable" value="false"/>
+                                    <property name="defaultValue" value="10"/>
+                                </bean>
+                            </set>
+                        </property>
+                    </bean>
+                </property>
+                <property name="methods">
+                    <set>
+                        <bean class="com.ohayoyo.gateway.define.memory.http.MemoryMethodDefine">
+                            <property name="name" value="GET"/>
+                        </bean>
+                    </set>
+                </property>
+            </bean>
+        </property>
+        <property name="response">
+            <bean class="com.ohayoyo.gateway.define.memory.http.MemoryResponseDefine">
+                <property name="statuses">
+                    <set>
+                        <bean class="com.ohayoyo.gateway.define.memory.http.MemoryStatusDefine">
+                            <property name="statusCode" value="200"/>
+                            <property name="reasonPhrase" value="OK"/>
+                        </bean>
+                    </set>
+                </property>
+                <property name="entity">
+                    <bean class="com.ohayoyo.gateway.define.memory.http.MemoryEntityDefine">
+                        <property name="contentType" value="application/json;charset=UTF-8"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+</beans>

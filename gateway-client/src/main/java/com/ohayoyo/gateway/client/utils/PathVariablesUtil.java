@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.client.utils;
 
-import com.ohayoyo.gateway.define.http.PathDefine;
+import com.ohayoyo.gateway.define.core.PathDefine;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -8,17 +8,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class PathVariablesUtil {
 
-    public static boolean hasExpandNames(PathDefine pathDefine){
-        return CollectionUtils.isEmpty(expandNames(pathDefine)) ;
+    public static boolean hasExpandNames(PathDefine pathDefine) {
+        return !CollectionUtils.isEmpty(expandVariableNames(pathDefine));
     }
 
-    public static Set<String> expandNames(PathDefine pathDefine) {
+    public static Set<String> expandVariableNames(PathDefine pathDefine) {
         Set<String> expandNames = new HashSet<String>();
         List<String> pathSegments = PathDefineUtil.pathSegmentsAsList(pathDefine);
         for (String pathSegment : pathSegments) {
-            Set<String> captureNames = captureNames(pathSegment);
+            Set<String> captureNames = captureVariableNames(pathSegment);
             if (!CollectionUtils.isEmpty(captureNames)) {
                 expandNames.addAll(captureNames);
             }
@@ -26,7 +29,7 @@ public class PathVariablesUtil {
         return expandNames;
     }
 
-    public static Set<String> captureNames(String pathSegment) {
+    private static Set<String> captureVariableNames(String pathSegment) {
         Set<String> captureNames = new HashSet<String>();
         if (!StringUtils.isEmpty(pathSegment)) {
             int formIndex = 0;

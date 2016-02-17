@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.client.utils;
 
-import com.ohayoyo.gateway.define.http.HostDefine;
-import com.ohayoyo.gateway.define.http.MethodDefine;
-import com.ohayoyo.gateway.define.http.ProtocolDefine;
+import com.ohayoyo.gateway.define.core.HostDefine;
+import com.ohayoyo.gateway.define.core.MethodDefine;
+import com.ohayoyo.gateway.define.core.ProtocolDefine;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
