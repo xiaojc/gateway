@@ -8,6 +8,8 @@
 
     <bean class="com.ohayoyo.gateway.client.spring.builder.RestfulResponseBuilderFactory"/>
 
+    <bean class="com.ohayoyo.gateway.client.validator.ClientDefineValidator"/>
+
     <bean id="springClientContainer" class="com.ohayoyo.gateway.client.spring.SpringClientContainer"/>
 
     <bean id="springGatewayChannel" class="com.ohayoyo.gateway.client.spring.SpringClientChannel">

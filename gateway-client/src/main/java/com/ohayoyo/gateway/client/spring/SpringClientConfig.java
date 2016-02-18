@@ -3,6 +3,8 @@ package com.ohayoyo.gateway.client.spring;
 import com.ohayoyo.gateway.client.channel.GatewayChannel;
 import com.ohayoyo.gateway.client.spring.builder.RestfulRequestBuilderFactory;
 import com.ohayoyo.gateway.client.spring.builder.RestfulResponseBuilderFactory;
+import com.ohayoyo.gateway.client.validator.ClientDefineValidator;
+import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,11 @@ public class SpringClientConfig {
     @Bean
     public RestfulRequestBuilderFactory restfulRequestBuilderFactory() {
         return new RestfulRequestBuilderFactory();
+    }
+
+    @Bean
+    public GatewayDefineValidator gatewayDefineValidator() {
+        return new ClientDefineValidator();
     }
 
     @Bean(name = "springGatewayChannel")

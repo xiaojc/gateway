@@ -14,29 +14,18 @@ import org.springframework.util.StringUtils;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class ClientDefineValidator implements GatewayDefineValidator {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ClientDefineValidator.class);
 
     private static final Set<String> CACHE = new HashSet<String>();
 
-    @Override
-    public boolean supports(Class<?> supportType) {
-        if (!ObjectUtils.isEmpty(supportType)) {
-            return InterfaceDefine.class.isAssignableFrom(supportType);
-        }
-        return false;
-    }
-
-    /**
-     * @param target
-     * @throws ValidatorException
-     */
-    public void validate(Object target) throws ValidatorException {
+    public void validate(InterfaceDefine interfaceDefine) throws ValidatorException {
 
         LOGGER.debug("客户端定义验证器进行实际的验证处理 .");
-
-        InterfaceDefine interfaceDefine = (InterfaceDefine) target;
 
         String key = interfaceDefine.getKey();
 

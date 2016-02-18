@@ -1,10 +1,15 @@
 package com.ohayoyo.gateway.client.spring;
 
+import com.ohayoyo.gateway.client.autofill.GatewayAutofill;
 import com.ohayoyo.gateway.client.channel.ClientChannel;
 import com.ohayoyo.gateway.client.channel.GatewayChannel;
+import com.ohayoyo.gateway.client.core.BehaviorClient;
 import com.ohayoyo.gateway.client.core.GatewayClient;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
 import com.ohayoyo.gateway.client.exception.GatewayException;
+import com.ohayoyo.gateway.client.validator.GatewayDataValidator;
+import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
+import com.ohayoyo.gateway.client.validator.GatewayResultValidator;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,23 +53,32 @@ public class SpringClientChannel implements GatewayChannel, InitializingBean, Ap
         this.gatewayClient = gatewayClient;
     }
 
+    private <Bean> Bean applicationContextLoadBean(Class<Bean> type) {
+        try {
+            return applicationContext.getBean(type);
+        } catch (Exception ex) {
+            LOGGER.info("加载失败 {} Bean .", type);
+            return null;
+        }
+    }
+
+    private <Bean> Bean applicationContextLoadBean(String name, Class<Bean> type) {
+        try {
+            return applicationContext.getBean(name, type);
+        } catch (Exception ex) {
+            LOGGER.info("加载失败 {} Bean .", type);
+            return null;
+        }
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
 
         LOGGER.debug("初始化 SpringClientChannel Bean .");
 
         if (ObjectUtils.isEmpty(this.gatewayContainer)) {
-
             LOGGER.debug("不存在引用网关容器对象 .");
-
-            try {
-                LOGGER.debug("加载定义 SpringClientContainer Bean .");
-                this.gatewayContainer = applicationContext.getBean(SpringClientContainer.class);
-                LOGGER.debug("加载成功 SpringClientContainer Bean .");
-            } catch (Exception ex) {
-                LOGGER.info("加载失败 SpringClientContainer Bean .");
-            }
-
+            this.gatewayContainer = applicationContextLoadBean(SpringClientContainer.class);
             if (ObjectUtils.isEmpty(this.gatewayContainer)) {
                 LOGGER.debug("手动初始化 SpringClientContainer 对象 .");
                 SpringClientContainer springClientContainer = new SpringClientContainer();
@@ -84,13 +98,7 @@ public class SpringClientChannel implements GatewayChannel, InitializingBean, Ap
 
         if (ObjectUtils.isEmpty(this.delegateGatewayChannel)) {
             LOGGER.debug("不存在引用委托网关通道对象 .");
-            try {
-                LOGGER.debug("加载定义 {} Bean .", OVERRIDE_DELEGATE_GATEWAY_CHANNEL_NAME);
-                this.delegateGatewayChannel = this.applicationContext.getBean(OVERRIDE_DELEGATE_GATEWAY_CHANNEL_NAME, GatewayChannel.class);
-                LOGGER.debug("加载成功 {} Bean .", OVERRIDE_DELEGATE_GATEWAY_CHANNEL_NAME);
-            } catch (Exception ex) {
-                LOGGER.info("加载失败 {} Bean .", OVERRIDE_DELEGATE_GATEWAY_CHANNEL_NAME);
-            }
+            this.delegateGatewayChannel = applicationContextLoadBean(OVERRIDE_DELEGATE_GATEWAY_CHANNEL_NAME, GatewayChannel.class);
         }
 
         if (ObjectUtils.isEmpty(this.delegateGatewayChannel)) {
@@ -102,6 +110,20 @@ public class SpringClientChannel implements GatewayChannel, InitializingBean, Ap
         if (this.gatewayClient instanceof ApplicationContextAware) {
             LOGGER.debug("网关客户端是实现了ApplicationContextAware接口,注入applicationContext .");
             ((ApplicationContextAware) this.gatewayClient).setApplicationContext(this.applicationContext);
+        }
+
+        if (this.gatewayClient instanceof BehaviorClient) {
+
+            ((BehaviorClient) this.gatewayClient)
+                    //加载定义验证器bean
+                    .setGatewayDefineValidator(applicationContextLoadBean(GatewayDefineValidator.class))
+                    //加载数据验证器bean
+                    .setGatewayDataValidator(applicationContextLoadBean(GatewayDataValidator.class))
+                    //加载结果验证器bean
+                    .setGatewayResultValidator(applicationContextLoadBean(GatewayResultValidator.class))
+                    //加载自动填充验证器bean
+                    .setGatewayAutofill(applicationContextLoadBean(GatewayAutofill.class));
+
         }
 
     }

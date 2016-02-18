@@ -38,22 +38,35 @@ public abstract class AbstractHttpGatewayResponse implements HttpGatewayResponse
 
     @Override
     public void responseErrorHandler(ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException {
+        LOGGER.debug("响应错误处理 .");
         if (!ObjectUtils.isEmpty(this.responseErrorHandler)) {
             boolean hasError = responseErrorHandler.hasError(clientHttpResponse);
+            LOGGER.debug("是否存在响应错误:{} .", hasError);
             if (hasError) {
                 responseErrorHandler.handleError(clientHttpResponse);
             }
         } else {
+            LOGGER.debug("不存在响应错误处理对象 .");
             HttpGatewayException.exception("响应错误处理器对象为空.");
         }
     }
 
     @Override
     public final <ResponseBody> ResponseEntity<ResponseBody> responseHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException {
+        LOGGER.debug("响应处理 .");
+
+        LOGGER.debug("响应体处理 .");
         ResponseBody responseBody = this.responseBodyHandler(customResponseContentType, responseBodyClass, httpMessageConverters, clientHttpResponse);
+
+        LOGGER.debug("响应状态处理 .");
         HttpStatus httpStatus = this.responseHttpStatusHandler(clientHttpResponse);
+
+        LOGGER.debug("响应头处理 .");
         HttpHeaders httpHeaders = this.responseHttpHeadersHandler(customResponseContentType, clientHttpResponse);
+
+        LOGGER.debug("响应实体处理 .");
         ResponseEntity<ResponseBody> responseEntity = this.responseEntityHandler(httpStatus, httpHeaders, responseBody);
+
         return responseEntity;
     }
 

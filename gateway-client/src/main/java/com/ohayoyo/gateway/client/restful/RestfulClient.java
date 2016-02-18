@@ -1,14 +1,10 @@
 package com.ohayoyo.gateway.client.restful;
 
-import com.ohayoyo.gateway.client.autofill.ClientAutofill;
-import com.ohayoyo.gateway.client.autofill.GatewayAutofill;
 import com.ohayoyo.gateway.client.core.BehaviorClient;
 import com.ohayoyo.gateway.client.core.GatewayDefine;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
 import com.ohayoyo.gateway.client.exception.GatewayException;
 import com.ohayoyo.gateway.client.restful.builder.RestfulResponseBuilder;
-import com.ohayoyo.gateway.client.validator.ClientDefineValidator;
-import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
 import com.ohayoyo.gateway.http.core.HttpGateway;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.slf4j.Logger;
@@ -34,18 +30,14 @@ public class RestfulClient extends BehaviorClient {
     }
 
     public RestfulClient(HttpGateway httpGateway) {
-        this(httpGateway, null, null);
-    }
-
-    public RestfulClient(HttpGateway httpGateway, GatewayDefineValidator gatewayDefineValidator, GatewayAutofill gatewayAutofill) {
-        super(httpGateway, gatewayDefineValidator, gatewayAutofill);
+        super(httpGateway);
     }
 
     public static final RestfulClient defaultRestfulClient() {
         if (ObjectUtils.isEmpty(DEFAULT_RESTFUL_CLIENT)) {
             synchronized (LOCKED) {
                 if (ObjectUtils.isEmpty(DEFAULT_RESTFUL_CLIENT)) {
-                    DEFAULT_RESTFUL_CLIENT = new RestfulClient(HttpGateway.DEFAULT_HTTP_GATEWAY, new ClientDefineValidator(), new ClientAutofill());
+                    DEFAULT_RESTFUL_CLIENT = new RestfulClient(HttpGateway.DEFAULT_HTTP_GATEWAY);
                 }
             }
         }

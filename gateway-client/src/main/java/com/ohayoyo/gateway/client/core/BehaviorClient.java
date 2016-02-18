@@ -4,7 +4,9 @@ import com.ohayoyo.gateway.client.autofill.GatewayAutofill;
 import com.ohayoyo.gateway.client.exception.GatewayException;
 import com.ohayoyo.gateway.client.utils.PathDefineUtil;
 import com.ohayoyo.gateway.client.utils.SelectDefineUtil;
+import com.ohayoyo.gateway.client.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
+import com.ohayoyo.gateway.client.validator.GatewayResultValidator;
 import com.ohayoyo.gateway.define.core.*;
 import com.ohayoyo.gateway.http.builder.HttpGatewayRequestEntityBuilder;
 import com.ohayoyo.gateway.http.core.HttpGateway;
@@ -35,16 +37,14 @@ public abstract class BehaviorClient extends AbstractClient {
 
     private GatewayDefineValidator gatewayDefineValidator;
 
+    private GatewayDataValidator gatewayDataValidator;
+
+    private GatewayResultValidator gatewayResultValidator;
+
     private GatewayAutofill gatewayAutofill;
 
     public BehaviorClient(HttpGateway httpGateway) {
-        this(httpGateway, null, null);
-    }
-
-    public BehaviorClient(HttpGateway httpGateway, GatewayDefineValidator gatewayDefineValidator, GatewayAutofill gatewayAutofill) {
         super(httpGateway);
-        this.gatewayDefineValidator = gatewayDefineValidator;
-        this.gatewayAutofill = gatewayAutofill;
     }
 
     public GatewayDefineValidator getGatewayDefineValidator() {
@@ -53,6 +53,24 @@ public abstract class BehaviorClient extends AbstractClient {
 
     public BehaviorClient setGatewayDefineValidator(GatewayDefineValidator gatewayDefineValidator) {
         this.gatewayDefineValidator = gatewayDefineValidator;
+        return this;
+    }
+
+    public GatewayDataValidator getGatewayDataValidator() {
+        return gatewayDataValidator;
+    }
+
+    public BehaviorClient setGatewayDataValidator(GatewayDataValidator gatewayDataValidator) {
+        this.gatewayDataValidator = gatewayDataValidator;
+        return this;
+    }
+
+    public GatewayResultValidator getGatewayResultValidator() {
+        return gatewayResultValidator;
+    }
+
+    public BehaviorClient setGatewayResultValidator(GatewayResultValidator gatewayResultValidator) {
+        this.gatewayResultValidator = gatewayResultValidator;
         return this;
     }
 
@@ -67,52 +85,41 @@ public abstract class BehaviorClient extends AbstractClient {
 
     @Override
     protected final void gatewayDefineVerify(GatewayDefine gatewayDefine) throws GatewayException, IOException, HttpGatewayException {
-
         LOGGER.debug("处理定义验证 .");
-
         if (!ObjectUtils.isEmpty(this.gatewayDefineValidator)) {
-
             LOGGER.debug("存在网关定义验证器 .");
-
-            Class<?> supportType = gatewayDefine.getClass();
-            if (this.gatewayDefineValidator.supports(supportType)) {
-                LOGGER.debug("网关验证器支持验证类型:{} .", supportType);
-                this.gatewayDefineValidator.validate(gatewayDefine);
-                LOGGER.debug("网关验证器验证完成 .");
-            } else {
-                LOGGER.debug("这个网关验证器:{} , 不支持验证类型:{} .", this.gatewayDefineValidator.getClass(), supportType);
-            }
+            this.gatewayDefineValidator.validate(gatewayDefine);
+            LOGGER.debug("网关验证器验证完成 .");
         } else {
-
             LOGGER.debug("不存在网关定义验证器 .");
-
         }
     }
 
     @Override
     protected final <RequestBody> void gatewayAutofill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
-
         LOGGER.debug("处理自动填充 .");
-
         if (!ObjectUtils.isEmpty(this.gatewayAutofill)) {
             RequestDefine requestDefine = gatewayDefine.getRequest();
             LOGGER.debug("开始进行数据自动填充 .");
             this.gatewayAutofill.autofill(requestDefine, gatewayRequest);
             LOGGER.debug("结束进行数据自动填充 .");
         } else {
-
             LOGGER.debug("不存在自动填充器 .");
-
         }
-
     }
 
     @Override
     protected final <RequestBody> void gatewayDataVerify(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
+        if (!ObjectUtils.isEmpty(this.gatewayDataValidator)) {
+            this.gatewayDataValidator.validate(gatewayDefine, gatewayRequest);
+        }
     }
 
     @Override
     protected final <ResponseBody> void gatewayResultVerify(GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine) throws GatewayException {
+        if (!ObjectUtils.isEmpty(this.gatewayResultValidator)) {
+            this.gatewayResultValidator.validate(gatewayDefine, responseBodyClass, gatewayResponse);
+        }
     }
 
     protected <RequestBody> URI resolveRequestUri(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {

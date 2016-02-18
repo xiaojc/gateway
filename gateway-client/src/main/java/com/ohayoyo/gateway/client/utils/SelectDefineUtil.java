@@ -17,7 +17,7 @@ public class SelectDefineUtil {
 
     private static boolean selectCompareRule(String select, String scope) {
         if (!StringUtils.isEmpty(select) && !StringUtils.isEmpty(scope)) {
-            return select.equals(scope);
+            return select.equalsIgnoreCase(scope);
         }
         return false;
     }
@@ -96,7 +96,16 @@ public class SelectDefineUtil {
     }
 
     public static Integer selectHostDefinePort(ProtocolDefine protocolDefine, HostDefine hostDefine) {
-        return (!((!ObjectUtils.isEmpty(hostDefine.getPort())) && (hostDefine.getPort() >= 0 || hostDefine.getPort() <= 65535))) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
+        Integer port = hostDefine.getPort();
+        if ((!ObjectUtils.isEmpty(port)) && (port >= 0 && port <= 65535)) {
+            return port;
+        } else {
+            if (ProtocolDefine.HTTPS_NAME.equalsIgnoreCase(protocolDefine.getName())) {
+                return HostDefine.DEFAULT_HTTPS_PORT;
+            } else {
+                return HostDefine.DEFAULT_HTTP_PORT;
+            }
+        }
     }
 
 }
