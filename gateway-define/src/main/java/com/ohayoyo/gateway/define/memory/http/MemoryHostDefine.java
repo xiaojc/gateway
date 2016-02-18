@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory.http;
 
-import com.ohayoyo.gateway.define.core.HostDefine;
+import com.ohayoyo.gateway.define.http.HostDefine;
 
 /**
  * @author 蓝明乐

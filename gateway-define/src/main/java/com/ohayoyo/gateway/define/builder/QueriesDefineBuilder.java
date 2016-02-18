@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.core.QueriesDefine;
+import com.ohayoyo.gateway.define.http.QueriesDefine;
 
 /**
  * @author 蓝明乐

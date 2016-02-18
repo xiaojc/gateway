@@ -8,7 +8,7 @@ import com.ohayoyo.gateway.client.exception.ChannelException;
 import com.ohayoyo.gateway.client.exception.GatewayException;
 import com.ohayoyo.gateway.client.restful.RestfulDefine;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;

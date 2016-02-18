@@ -1,9 +1,9 @@
-package com.ohayoyo.gateway.define;
+package com.ohayoyo.gateway.define.core;
 
 /**
  * @author 蓝明乐
  */
-public class ParameterDefine implements ObjectDefine {
+public class Parameter implements ObjectDefine {
 
     //primitive -> form & data
 
@@ -30,18 +30,6 @@ public class ParameterDefine implements ObjectDefine {
     //file -> form
 
     String DATA_TYPE_FILE = "file";
-
-    //stream -> data
-
-    String DATA_TYPE_STREAM = "stream";
-
-    //class -> form & data
-
-    String DATA_TYPE_CLASS = "class";
-
-    //arrays -> form & data
-
-    String DATA_TYPE_ARRAYS = "arrays";
 
     //collection -> form & data
 
@@ -73,7 +61,7 @@ public class ParameterDefine implements ObjectDefine {
         return comment;
     }
 
-    public ParameterDefine setComment(String comment) {
+    public Parameter setComment(String comment) {
         this.comment = comment;
         return this;
     }
@@ -82,7 +70,7 @@ public class ParameterDefine implements ObjectDefine {
         return name;
     }
 
-    public ParameterDefine setName(String name) {
+    public Parameter setName(String name) {
         this.name = name;
         return this;
     }
@@ -91,7 +79,7 @@ public class ParameterDefine implements ObjectDefine {
         return overview;
     }
 
-    public ParameterDefine setOverview(String overview) {
+    public Parameter setOverview(String overview) {
         this.overview = overview;
         return this;
     }
@@ -100,7 +88,7 @@ public class ParameterDefine implements ObjectDefine {
         return description;
     }
 
-    public ParameterDefine setDescription(String description) {
+    public Parameter setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -109,7 +97,7 @@ public class ParameterDefine implements ObjectDefine {
         return dataType;
     }
 
-    public ParameterDefine setDataType(String dataType) {
+    public Parameter setDataType(String dataType) {
         this.dataType = dataType;
         return this;
     }
@@ -118,7 +106,7 @@ public class ParameterDefine implements ObjectDefine {
         return dataLength;
     }
 
-    public ParameterDefine setDataLength(Integer dataLength) {
+    public Parameter setDataLength(Integer dataLength) {
         this.dataLength = dataLength;
         return this;
     }
@@ -127,7 +115,7 @@ public class ParameterDefine implements ObjectDefine {
         return nullable;
     }
 
-    public ParameterDefine setNullable(Boolean nullable) {
+    public Parameter setNullable(Boolean nullable) {
         this.nullable = nullable;
         return this;
     }
@@ -136,7 +124,7 @@ public class ParameterDefine implements ObjectDefine {
         return defaultValue;
     }
 
-    public ParameterDefine setDefaultValue(Object defaultValue) {
+    public Parameter setDefaultValue(Object defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
@@ -144,8 +132,8 @@ public class ParameterDefine implements ObjectDefine {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ParameterDefine)) return false;
-        ParameterDefine that = (ParameterDefine) o;
+        if (!(o instanceof Parameter)) return false;
+        Parameter that = (Parameter) o;
         return name != null ? name.equals(that.name) : that.name == null;
     }
 

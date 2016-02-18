@@ -30,9 +30,9 @@
                 </property>
                 <property name="queries">
                     <bean class="com.ohayoyo.gateway.define.memory.http.MemoryQueriesDefine">
-                        <property name="fields">
+                        <property name="parameters">
                             <set>
-                                <bean class="com.ohayoyo.gateway.define.ParameterDefine">
+                                <bean class="com.ohayoyo.gateway.define.core.Parameter">
                                     <property name="name" value="key"/>
                                     <property name="overview" value="用户API KEY"/>
                                     <property name="comment" value=""/>
@@ -42,7 +42,7 @@
                                     <property name="nullable" value="false"/>
                                     <property name="defaultValue" value="29e069ec39101eb669121554bf67024f"/>
                                 </bean>
-                                <bean class="com.ohayoyo.gateway.define.ParameterDefine">
+                                <bean class="com.ohayoyo.gateway.define.core.Parameter">
                                     <property name="name" value="num"/>
                                     <property name="overview" value="查询的结果数"/>
                                     <property name="comment" value=""/>

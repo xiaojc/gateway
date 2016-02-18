@@ -1,9 +1,9 @@
 package com.ohayoyo.gateway.define.memory.builder;
 
-import com.ohayoyo.gateway.define.core.EntityDefine;
-import com.ohayoyo.gateway.define.core.HeadersDefine;
-import com.ohayoyo.gateway.define.core.ResponseDefine;
-import com.ohayoyo.gateway.define.core.StatusDefine;
+import com.ohayoyo.gateway.define.http.EntityDefine;
+import com.ohayoyo.gateway.define.http.HeadersDefine;
+import com.ohayoyo.gateway.define.http.ResponseDefine;
+import com.ohayoyo.gateway.define.http.StatusDefine;
 import com.ohayoyo.gateway.define.builder.*;
 import com.ohayoyo.gateway.define.memory.http.MemoryResponseDefine;
 

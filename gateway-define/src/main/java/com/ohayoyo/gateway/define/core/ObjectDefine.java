@@ -1,4 +1,4 @@
-package com.ohayoyo.gateway.define;
+package com.ohayoyo.gateway.define.core;
 
 import java.io.Serializable;
 

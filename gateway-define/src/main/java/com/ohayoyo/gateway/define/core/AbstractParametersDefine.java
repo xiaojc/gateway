@@ -1,4 +1,4 @@
-package com.ohayoyo.gateway.define;
+package com.ohayoyo.gateway.define.core;
 
 import java.util.Set;
 
@@ -7,17 +7,16 @@ import java.util.Set;
  */
 public abstract class AbstractParametersDefine implements ParametersDefine {
 
-    private Set<ParameterDefine> fields;
-
+    private Set<Parameter> parameters;
 
     @Override
-    public Set<ParameterDefine> getFields() {
-        return fields;
+    public Set<Parameter> getParameters() {
+        return parameters;
     }
 
     @Override
-    public AbstractParametersDefine setFields(Set<ParameterDefine> fields) {
-        this.fields = fields;
+    public AbstractParametersDefine setParameters(Set<Parameter> parameters) {
+        this.parameters = parameters;
         return this;
     }
 
@@ -26,12 +25,12 @@ public abstract class AbstractParametersDefine implements ParametersDefine {
         if (this == o) return true;
         if (!(o instanceof AbstractParametersDefine)) return false;
         AbstractParametersDefine that = (AbstractParametersDefine) o;
-        return fields != null ? fields.equals(that.fields) : that.fields == null;
+        return parameters != null ? parameters.equals(that.parameters) : that.parameters == null;
     }
 
     @Override
     public int hashCode() {
-        return fields != null ? fields.hashCode() : 0;
+        return parameters != null ? parameters.hashCode() : 0;
     }
 
 }

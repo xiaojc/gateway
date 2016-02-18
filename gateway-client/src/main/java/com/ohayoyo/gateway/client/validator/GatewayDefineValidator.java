@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.client.validator;
 
 import com.ohayoyo.gateway.client.exception.ValidatorException;
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
 
 /**
  * @author 蓝明乐

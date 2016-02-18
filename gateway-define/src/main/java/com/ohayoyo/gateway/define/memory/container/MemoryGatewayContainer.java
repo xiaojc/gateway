@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.define.memory.container;
 
 import com.ohayoyo.gateway.define.container.GatewayContainer;
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author 蓝明乐
  */
-public class MemoryContainer implements GatewayContainer {
+public class MemoryGatewayContainer implements GatewayContainer {
 
     private Map<String, InterfaceDefine> interfaceDefineMap;
 
@@ -20,7 +20,7 @@ public class MemoryContainer implements GatewayContainer {
         return this.interfaceDefineMap;
     }
 
-    public MemoryContainer setInterfaceDefineMap(Map<String, InterfaceDefine> interfaceDefineMap) {
+    public MemoryGatewayContainer setInterfaceDefineMap(Map<String, InterfaceDefine> interfaceDefineMap) {
         this.doInterfaceDefineMap();
         this.interfaceDefineMap.putAll(interfaceDefineMap);
         return this;
@@ -42,7 +42,7 @@ public class MemoryContainer implements GatewayContainer {
         return null;
     }
 
-    public MemoryContainer save(InterfaceDefine interfaceDefine) {
+    public MemoryGatewayContainer save(InterfaceDefine interfaceDefine) {
         doInterfaceDefineMap();
         if (!ObjectUtils.isEmpty(interfaceDefine)) {
             String key = interfaceDefine.getKey();

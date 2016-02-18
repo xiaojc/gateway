@@ -2,8 +2,8 @@ package com.ohayoyo.gateway.define.memory.builder;
 
 import com.ohayoyo.gateway.define.builder.QueriesDefineBuilder;
 import com.ohayoyo.gateway.define.builder.RequestDefineBuilder;
-import com.ohayoyo.gateway.define.ParameterDefine;
-import com.ohayoyo.gateway.define.core.QueriesDefine;
+import com.ohayoyo.gateway.define.core.Parameter;
+import com.ohayoyo.gateway.define.http.QueriesDefine;
 import com.ohayoyo.gateway.define.memory.http.MemoryQueriesDefine;
 
 import java.util.Set;
@@ -18,9 +18,9 @@ public class MemoryQueriesDefineBuilder extends QueriesDefineBuilder {
     }
 
     @Override
-    protected QueriesDefine buildDetails(Set<ParameterDefine> fields) {
+    protected QueriesDefine buildDetails(Set<Parameter> parameters) {
         return (QueriesDefine) new MemoryQueriesDefine()
-                .setFields(fields);
+                .setParameters(parameters);
     }
 
 }

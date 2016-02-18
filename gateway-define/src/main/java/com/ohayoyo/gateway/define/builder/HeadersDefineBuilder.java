@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.core.HeadersDefine;
+import com.ohayoyo.gateway.define.http.HeadersDefine;
 
 /**
  * @author 蓝明乐

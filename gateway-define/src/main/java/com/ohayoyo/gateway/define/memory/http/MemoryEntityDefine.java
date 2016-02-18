@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory.http;
 
-import com.ohayoyo.gateway.define.core.EntityDefine;
+import com.ohayoyo.gateway.define.http.EntityDefine;
 
 /**
  * @author 蓝明乐

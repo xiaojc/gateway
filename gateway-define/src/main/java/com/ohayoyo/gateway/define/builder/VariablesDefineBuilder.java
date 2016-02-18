@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.core.VariablesDefine;
+import com.ohayoyo.gateway.define.http.VariablesDefine;
 
 /**
  * @author 蓝明乐

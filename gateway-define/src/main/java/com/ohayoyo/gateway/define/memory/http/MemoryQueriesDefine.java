@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.define.memory.http;
 
-import com.ohayoyo.gateway.define.AbstractParametersDefine;
-import com.ohayoyo.gateway.define.core.QueriesDefine;
+import com.ohayoyo.gateway.define.core.AbstractParametersDefine;
+import com.ohayoyo.gateway.define.http.QueriesDefine;
 
 /**
  * @author 蓝明乐

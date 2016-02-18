@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.core.ProtocolDefine;
+import com.ohayoyo.gateway.define.http.ProtocolDefine;
 
 /**
  * @author 蓝明乐

@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory.http;
 
-import com.ohayoyo.gateway.define.core.*;
+import com.ohayoyo.gateway.define.http.*;
 
 import java.util.Set;
 

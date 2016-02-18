@@ -1,13 +1,11 @@
 package com.ohayoyo.gateway.client.autofill;
 
 import com.ohayoyo.gateway.client.core.GatewayRequest;
-import com.ohayoyo.gateway.define.ParameterDefine;
-import com.ohayoyo.gateway.define.core.*;
+import com.ohayoyo.gateway.define.core.Parameter;
+import com.ohayoyo.gateway.define.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -22,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author 蓝明乐
+ */
 public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ClientAutofill.class);
@@ -106,17 +107,17 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
         }
     }
 
-    protected void autofillValue(Set<ParameterDefine> parameterDefines, Map<String, String> dataMapString, MultiValueMap<String, String> dataMapStrings) {
-        if (CollectionUtils.isEmpty(parameterDefines)) {
+    protected void autofillValue(Set<Parameter> parameters, Map<String, String> dataMapString, MultiValueMap<String, String> dataMapStrings) {
+        if (CollectionUtils.isEmpty(parameters)) {
             return;
         }
-        for (ParameterDefine parameterDefine : parameterDefines) {
-            Object defaultValue = parameterDefine.getDefaultValue();
+        for (Parameter parameter : parameters) {
+            Object defaultValue = parameter.getDefaultValue();
             if (ObjectUtils.isEmpty(defaultValue)) {
                 continue;
             }
-            String parameterName = parameterDefine.getName();
-            Boolean parameterNullable = parameterDefine.getNullable();
+            String parameterName = parameter.getName();
+            Boolean parameterNullable = parameter.getNullable();
             if (ObjectUtils.isEmpty(parameterNullable)) {
                 parameterNullable = true;
             }
@@ -185,8 +186,8 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
         if (ObjectUtils.isEmpty(variablesDefine)) {
             return;
         }
-        Set<ParameterDefine> parameterDefines = variablesDefine.getFields();
-        if (CollectionUtils.isEmpty(parameterDefines)) {
+        Set<Parameter> parameters = variablesDefine.getParameters();
+        if (CollectionUtils.isEmpty(parameters)) {
             return;
         }
         Map<String, String> requestPathVariables = gatewayRequest.getRequestPathVariables();
@@ -194,7 +195,7 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
             requestPathVariables = new HashMap<String, String>();
             gatewayRequest.setRequestPathVariables(requestPathVariables);
         }
-        autofillValue(parameterDefines, requestPathVariables, null);
+        autofillValue(parameters, requestPathVariables, null);
     }
 
 
@@ -203,8 +204,8 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
         if (ObjectUtils.isEmpty(queriesDefine)) {
             return;
         }
-        Set<ParameterDefine> parameterDefines = queriesDefine.getFields();
-        if (CollectionUtils.isEmpty(parameterDefines)) {
+        Set<Parameter> parameters = queriesDefine.getParameters();
+        if (CollectionUtils.isEmpty(parameters)) {
             return;
         }
         MultiValueMap<String, String> requestQueries = gatewayRequest.getRequestQueries();
@@ -212,7 +213,7 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
             requestQueries = new LinkedMultiValueMap<String, String>();
             gatewayRequest.setRequestQueries(requestQueries);
         }
-        autofillValue(parameterDefines, null, requestQueries);
+        autofillValue(parameters, null, requestQueries);
     }
 
     protected void autofillHeaders(RequestDefine requestDefine, GatewayRequest<?> gatewayRequest) {
@@ -220,8 +221,8 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
         if (ObjectUtils.isEmpty(headersDefine)) {
             return;
         }
-        Set<ParameterDefine> parameterDefines = headersDefine.getFields();
-        if (CollectionUtils.isEmpty(parameterDefines)) {
+        Set<Parameter> parameters = headersDefine.getParameters();
+        if (CollectionUtils.isEmpty(parameters)) {
             return;
         }
         MultiValueMap<String, String> requestHeaders = gatewayRequest.getRequestHeaders();
@@ -229,7 +230,7 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
             requestHeaders = new LinkedMultiValueMap<String, String>();
             gatewayRequest.setRequestHeaders(requestHeaders);
         }
-        autofillValue(parameterDefines, null, requestHeaders);
+        autofillValue(parameters, null, requestHeaders);
     }
 
     @Override

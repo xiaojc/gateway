@@ -1,9 +1,9 @@
 package com.ohayoyo.gateway.client.restful;
 
 import com.ohayoyo.gateway.client.core.GatewayDefine;
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
-import com.ohayoyo.gateway.define.core.RequestDefine;
-import com.ohayoyo.gateway.define.core.ResponseDefine;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.RequestDefine;
+import com.ohayoyo.gateway.define.http.ResponseDefine;
 
 /**
  * @author 蓝明乐

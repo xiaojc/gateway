@@ -3,8 +3,8 @@ package com.ohayoyo.gateway.test;
 import com.ohayoyo.gateway.client.channel.GatewayChannel;
 import com.ohayoyo.gateway.client.restful.builder.RestfulRequestBuilder;
 import com.ohayoyo.gateway.client.spring.SpringClientConfig;
-import com.ohayoyo.gateway.define.Builders;
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
+import com.ohayoyo.gateway.define.core.DefineBuilders;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import com.ohayoyo.gateway.test.model.TestPack;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -85,7 +85,7 @@ public class JavaGatewayChannelTest {
         @Bean
         public InterfaceDefine apiHuceoComMeinvOther() {
             //@formatter:off
-            InterfaceDefine interfaceDefine = Builders
+            InterfaceDefine interfaceDefine = DefineBuilders
                     .memory()
                         .key("api.huceo.com/meinv/other")
                         .request()
@@ -96,11 +96,11 @@ public class JavaGatewayChannelTest {
                             .path()
                                 .project("meinv/other").then()
                             .queries()
-                                .field()
+                                .parameter()
                                     .name("key")
                                     .dataType("STRING")
                                     .defaultValue("29e069ec39101eb669121554bf67024f").then()
-                                .field()
+                                .parameter()
                                     .name("num")
                                     .dataType("INT")
                                     .defaultValue("10").then()

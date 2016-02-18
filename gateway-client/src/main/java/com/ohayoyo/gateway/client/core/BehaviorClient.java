@@ -7,7 +7,7 @@ import com.ohayoyo.gateway.client.utils.SelectDefineUtil;
 import com.ohayoyo.gateway.client.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
 import com.ohayoyo.gateway.client.validator.GatewayResultValidator;
-import com.ohayoyo.gateway.define.core.*;
+import com.ohayoyo.gateway.define.http.*;
 import com.ohayoyo.gateway.http.builder.HttpGatewayRequestEntityBuilder;
 import com.ohayoyo.gateway.http.core.HttpGateway;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;

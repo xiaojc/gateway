@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.ParameterDefine;
-import com.ohayoyo.gateway.define.ParametersDefine;
+import com.ohayoyo.gateway.define.core.Parameter;
+import com.ohayoyo.gateway.define.core.ParametersDefine;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
@@ -12,9 +12,9 @@ import java.util.Set;
  */
 public abstract class AbstractParametersDefineBuilder<Define extends ParametersDefine, ThenDefineBuilder extends DefineBuilder> extends AbstractThenDefineBuilder<Define, ThenDefineBuilder> {
 
-    private Set<ParameterDefine> fields;
+    private Set<Parameter> parameters;
 
-    private Set<FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>>> fieldDefineBuilders = new HashSet<FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>>>();
+    private Set<ParameterDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>>> parameterDefineBuilders = new HashSet<ParameterDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>>>();
 
     protected AbstractParametersDefineBuilder(ThenDefineBuilder thenDefineBuilder) {
         super(thenDefineBuilder);
@@ -22,41 +22,41 @@ public abstract class AbstractParametersDefineBuilder<Define extends ParametersD
 
     @Override
     public final Define build() {
-        if (!CollectionUtils.isEmpty(fieldDefineBuilders)) {
-            for (FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> fieldDefineBuilder : fieldDefineBuilders) {
-                field(fieldDefineBuilder.build());
+        if (!CollectionUtils.isEmpty(parameterDefineBuilders)) {
+            for (ParameterDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> parameterDefineBuilder : parameterDefineBuilders) {
+                parameter(parameterDefineBuilder.build());
             }
         }
-        return this.buildDetails(fields);
+        return this.buildDetails(parameters);
     }
 
-    protected abstract Define buildDetails(Set<ParameterDefine> fields);
+    protected abstract Define buildDetails(Set<Parameter> parameters);
 
-    public FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> field() {
-        FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> fieldDefineBuilder = this.fieldBuilder();
-        fieldDefineBuilders.add(fieldDefineBuilder);
-        return fieldDefineBuilder;
+    public ParameterDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> parameter() {
+        ParameterDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> parameterDefineBuilder = this.parameterBuilder();
+        parameterDefineBuilders.add(parameterDefineBuilder);
+        return parameterDefineBuilder;
     }
 
-    private FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> fieldBuilder() {
-        return new FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>>(this);
+    private ParameterDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> parameterBuilder() {
+        return new ParameterDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>>(this);
     }
 
-    public AbstractParametersDefineBuilder<Define, ThenDefineBuilder> fields(Set<ParameterDefine> fields) {
-        if (CollectionUtils.isEmpty(this.fields)) {
-            this.fields = new HashSet<ParameterDefine>();
+    public AbstractParametersDefineBuilder<Define, ThenDefineBuilder> parameters(Set<Parameter> parameters) {
+        if (CollectionUtils.isEmpty(this.parameters)) {
+            this.parameters = new HashSet<Parameter>();
         }
-        if (!CollectionUtils.isEmpty(fields)) {
-            this.fields.addAll(fields);
+        if (!CollectionUtils.isEmpty(parameters)) {
+            this.parameters.addAll(parameters);
         }
         return this;
     }
 
-    public AbstractParametersDefineBuilder<Define, ThenDefineBuilder> field(ParameterDefine field) {
-        if (CollectionUtils.isEmpty(this.fields)) {
-            this.fields = new HashSet<ParameterDefine>();
+    public AbstractParametersDefineBuilder<Define, ThenDefineBuilder> parameter(Parameter parameter) {
+        if (CollectionUtils.isEmpty(this.parameters)) {
+            this.parameters = new HashSet<Parameter>();
         }
-        this.fields.add(field);
+        this.parameters.add(parameter);
         return this;
     }
 

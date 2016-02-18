@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.client.spring;
 
 import com.ohayoyo.gateway.define.container.GatewayContainer;
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
-import com.ohayoyo.gateway.define.memory.container.MemoryContainer;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
+import com.ohayoyo.gateway.define.memory.container.MemoryGatewayContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -49,7 +49,7 @@ public class SpringClientContainer implements GatewayContainer, InitializingBean
         }
         if (ObjectUtils.isEmpty(this.delegateGatewayContainer)) {
             LOGGER.debug("手动初始化委托网关容器,使用内存容器 .");
-            this.delegateGatewayContainer = new MemoryContainer();
+            this.delegateGatewayContainer = new MemoryGatewayContainer();
         }
         try {
             LOGGER.debug("开始扫描实现InterfaceDefine接口了类型Bean");

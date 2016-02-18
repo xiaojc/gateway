@@ -2,8 +2,8 @@ package com.ohayoyo.gateway.define.memory.builder;
 
 import com.ohayoyo.gateway.define.builder.DefineBuilder;
 import com.ohayoyo.gateway.define.builder.HeadersDefineBuilder;
-import com.ohayoyo.gateway.define.core.HeadersDefine;
-import com.ohayoyo.gateway.define.ParameterDefine;
+import com.ohayoyo.gateway.define.http.HeadersDefine;
+import com.ohayoyo.gateway.define.core.Parameter;
 import com.ohayoyo.gateway.define.memory.http.MemoryHeadersDefine;
 
 import java.util.Set;
@@ -18,9 +18,9 @@ public class MemoryHeadersDefineBuilder<Reference extends DefineBuilder> extends
     }
 
     @Override
-    protected HeadersDefine buildDetails(Set<ParameterDefine> fields) {
+    protected HeadersDefine buildDetails(Set<Parameter> parameters) {
         return (HeadersDefine) new MemoryHeadersDefine()
-                .setFields(fields);
+                .setParameters(parameters);
     }
 
 }

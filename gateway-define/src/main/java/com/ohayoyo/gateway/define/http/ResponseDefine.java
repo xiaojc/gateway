@@ -1,6 +1,6 @@
-package com.ohayoyo.gateway.define.core;
+package com.ohayoyo.gateway.define.http;
 
-import com.ohayoyo.gateway.define.ObjectDefine;
+import com.ohayoyo.gateway.define.core.ObjectDefine;
 
 import java.util.Set;
 

@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
-import com.ohayoyo.gateway.define.core.RequestDefine;
-import com.ohayoyo.gateway.define.core.ResponseDefine;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.RequestDefine;
+import com.ohayoyo.gateway.define.http.ResponseDefine;
 import org.springframework.util.ObjectUtils;
 
 /**

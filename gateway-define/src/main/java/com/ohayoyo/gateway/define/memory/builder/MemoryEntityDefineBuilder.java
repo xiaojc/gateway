@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.define.memory.builder;
 
 import com.ohayoyo.gateway.define.builder.DefineBuilder;
 import com.ohayoyo.gateway.define.builder.EntityDefineBuilder;
-import com.ohayoyo.gateway.define.core.EntityDefine;
+import com.ohayoyo.gateway.define.http.EntityDefine;
 import com.ohayoyo.gateway.define.memory.http.MemoryEntityDefine;
 
 /**

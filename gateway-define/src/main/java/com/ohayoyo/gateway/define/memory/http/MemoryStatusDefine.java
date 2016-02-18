@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory.http;
 
-import com.ohayoyo.gateway.define.core.StatusDefine;
+import com.ohayoyo.gateway.define.http.StatusDefine;
 
 /**
  * @author 蓝明乐

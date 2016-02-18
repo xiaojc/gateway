@@ -1,4 +1,4 @@
-package com.ohayoyo.gateway.define;
+package com.ohayoyo.gateway.define.core;
 
 import com.ohayoyo.gateway.define.builder.InterfaceDefineBuilder;
 import com.ohayoyo.gateway.define.memory.builder.MemoryInterfaceDefineBuilder;
@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author 蓝明乐
  */
-public final class Builders {
+public final class DefineBuilders {
 
     public static final Map<String, Class<? extends InterfaceDefineBuilder>> REGISTERS = new HashMap<String, Class<? extends InterfaceDefineBuilder>>();
 

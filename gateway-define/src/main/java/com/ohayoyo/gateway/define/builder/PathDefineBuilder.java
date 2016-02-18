@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.core.PathDefine;
-import com.ohayoyo.gateway.define.core.VariablesDefine;
+import com.ohayoyo.gateway.define.http.PathDefine;
+import com.ohayoyo.gateway.define.http.VariablesDefine;
 import org.springframework.util.ObjectUtils;
 
 /**

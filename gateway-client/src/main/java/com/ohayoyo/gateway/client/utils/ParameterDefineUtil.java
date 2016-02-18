@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.client.utils;
 
-import com.ohayoyo.gateway.define.ParameterDefine;
+import com.ohayoyo.gateway.define.core.Parameter;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -12,10 +12,10 @@ import java.util.Set;
  */
 public class ParameterDefineUtil {
 
-    public static boolean isExistEmptyParameterName(Set<ParameterDefine> parameterDefines) {
-        if (!CollectionUtils.isEmpty(parameterDefines)) {
-            for (ParameterDefine parameterDefine : parameterDefines) {
-                String name = parameterDefine.getName();
+    public static boolean isExistEmptyParameterName(Set<Parameter> parameters) {
+        if (!CollectionUtils.isEmpty(parameters)) {
+            for (Parameter parameter : parameters) {
+                String name = parameter.getName();
                 if (StringUtils.isEmpty(name)) {
                     return true;
                 }
@@ -24,23 +24,23 @@ public class ParameterDefineUtil {
         return false;
     }
 
-    public static Set<String> getParameterNames(Set<ParameterDefine> parameterDefines) {
+    public static Set<String> getParameterNames(Set<Parameter> parameters) {
         Set<String> parameterNames = new HashSet<String>();
-        if (!CollectionUtils.isEmpty(parameterDefines)) {
-            for (ParameterDefine parameterDefine : parameterDefines) {
-                String name = parameterDefine.getName();
+        if (!CollectionUtils.isEmpty(parameters)) {
+            for (Parameter parameter : parameters) {
+                String name = parameter.getName();
                 parameterNames.add(name);
             }
         }
         return parameterNames;
     }
 
-    public static ParameterDefine findParameterDefineByName(String name, Set<ParameterDefine> parameterDefines) {
-        if (StringUtils.isEmpty(name) && !CollectionUtils.isEmpty(parameterDefines)) {
-            for (ParameterDefine parameterDefine : parameterDefines) {
-                String parameterName = parameterDefine.getName();
+    public static Parameter findParameterDefineByName(String name, Set<Parameter> parameters) {
+        if (StringUtils.isEmpty(name) && !CollectionUtils.isEmpty(parameters)) {
+            for (Parameter parameter : parameters) {
+                String parameterName = parameter.getName();
                 if (name.equals(parameterName)) {
-                    return parameterDefine;
+                    return parameter;
                 }
             }
         }

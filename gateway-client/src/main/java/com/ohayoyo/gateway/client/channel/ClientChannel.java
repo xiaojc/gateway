@@ -3,7 +3,7 @@ package com.ohayoyo.gateway.client.channel;
 import com.ohayoyo.gateway.client.core.GatewayClient;
 import com.ohayoyo.gateway.client.core.GatewayResponse;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
-import com.ohayoyo.gateway.define.core.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;

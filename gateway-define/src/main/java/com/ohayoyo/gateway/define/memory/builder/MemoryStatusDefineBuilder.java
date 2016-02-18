@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.memory.builder;
 
-import com.ohayoyo.gateway.define.core.StatusDefine;
+import com.ohayoyo.gateway.define.http.StatusDefine;
 import com.ohayoyo.gateway.define.builder.ResponseDefineBuilder;
 import com.ohayoyo.gateway.define.builder.StatusDefineBuilder;
 import com.ohayoyo.gateway.define.memory.http.MemoryStatusDefine;
