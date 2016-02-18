@@ -5,7 +5,12 @@ import com.ohayoyo.gateway.define.ParameterDefine;
 import com.ohayoyo.gateway.define.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.StandardEnvironment;
@@ -17,13 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ClientAutofill implements GatewayAutofill {
+public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ClientAutofill.class);
 
     public static final String CLIENT_AUTOFILL_SELECT_ENVIRONMENT = "CLIENT_AUTOFILL_SELECT_ENVIRONMENT";
 
-    public static final String CLIENT_AUTOFILL_SELECT_ENVIRONMENT_CONFIG = "ohayoyo.gateway.autofill.select.environment";
+    public static final String CLIENT_AUTOFILL_SELECT_ENVIRONMENT_CONFIG = "gateway.ohayoyo.com";
+
+    public static final String CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN = "CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN";
 
     @Autowired(required = false)
     private ConversionService conversionService;
@@ -65,19 +72,29 @@ public class ClientAutofill implements GatewayAutofill {
         if (!StringUtils.isEmpty(this.environmentSelect)) {
             return;
         }
-        String select;
+        String select = null;
         if (ObjectUtils.isEmpty(environment)) {
             this.environment = new StandardEnvironment();
         }
-        try {
-            select = this.environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT_CONFIG);
-            if (StringUtils.isEmpty(select)) {
-                select = this.environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT);
+        if(!ObjectUtils.isEmpty(this.applicationContext)){
+            try{
+                select =this.applicationContext.getBean(CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN,String.class) ;
+            }catch (Exception ex){
+                LOGGER.info("获取配置{}失败,信息:{}",CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN,ex.getMessage());
             }
-        } catch (Exception ex) {
-            select = null;
-            LOGGER.info("自动选择环境错误:{}", ex);
         }
+        if (StringUtils.isEmpty(select)) {
+            try {
+                select = this.environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT_CONFIG);
+                if (StringUtils.isEmpty(select)) {
+                    select = this.environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT);
+                }
+            } catch (Exception ex) {
+                select = null;
+                LOGGER.info("自动选择环境错误:{}", ex);
+            }
+        }
+
         this.environmentSelect = select;
     }
 
@@ -100,8 +117,8 @@ public class ClientAutofill implements GatewayAutofill {
             }
             String parameterName = parameterDefine.getName();
             Boolean parameterNullable = parameterDefine.getNullable();
-            if(ObjectUtils.isEmpty(parameterNullable)){
-                parameterNullable = true ;
+            if (ObjectUtils.isEmpty(parameterNullable)) {
+                parameterNullable = true;
             }
             boolean isAutofill;
             if (parameterNullable && isNullableAutofill()) {
@@ -241,4 +258,11 @@ public class ClientAutofill implements GatewayAutofill {
 
     }
 
+    @Autowired
+    private ApplicationContext applicationContext ;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext =applicationContext ;
+    }
 }
