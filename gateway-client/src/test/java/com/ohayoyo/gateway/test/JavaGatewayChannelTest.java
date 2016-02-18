@@ -6,19 +6,41 @@ import com.ohayoyo.gateway.client.spring.SpringClientConfig;
 import com.ohayoyo.gateway.define.Builders;
 import com.ohayoyo.gateway.define.core.InterfaceDefine;
 import com.ohayoyo.gateway.test.model.TestPack;
-import com.ohayoyo.spring.test.junit4.SpringJunit4Test;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration(classes = {
         SpringClientConfig.class,
         JavaGatewayChannelTest.TestConfig.class
 })
-public class JavaGatewayChannelTest extends SpringJunit4Test {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class JavaGatewayChannelTest {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
 
     @Autowired
     private GatewayChannel gatewayChannel;
@@ -41,6 +63,22 @@ public class JavaGatewayChannelTest extends SpringJunit4Test {
         logger.debug("{}", testPack);
     }
 
+    @Test
+    public void testApiHuceoComMeinvOther2() throws Exception {
+        String key = "api.huceo.com/meinv/other";
+        TestPack testPack = gatewayChannel.channel(TestPack.class, key, restfulRequestBuilder
+                .requestQueries("num", "30")
+                .build());
+        logger.debug("{}", testPack);
+    }
+
+    @Test
+    public void testApiHuceoComMeinvOther3() throws Exception {
+        String key = "api.huceo.com/meinv/other";
+        TestPack testPack = gatewayChannel.channel(TestPack.class, key);
+        logger.debug("{}", testPack);
+    }
+
     @Configuration
     public static class TestConfig {
 
@@ -57,6 +95,16 @@ public class JavaGatewayChannelTest extends SpringJunit4Test {
                                 .hostname("api.huceo.com").then()
                             .path()
                                 .project("meinv/other").then()
+                            .queries()
+                                .field()
+                                    .name("key")
+                                    .dataType("STRING")
+                                    .defaultValue("29e069ec39101eb669121554bf67024f").then()
+                                .field()
+                                    .name("num")
+                                    .dataType("INT")
+                                    .defaultValue("10").then()
+                                .then()
                             .method()
                                 .name("GET").then().then()
                         .response()

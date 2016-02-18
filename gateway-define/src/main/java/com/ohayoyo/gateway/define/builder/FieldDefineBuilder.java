@@ -19,7 +19,7 @@ public class FieldDefineBuilder<ThenDefineBuilder extends DefineBuilder> extends
 
     private Integer dataLength = -1;
 
-    private Boolean nullable;
+    private Boolean nullable = true;
 
     private Object defaultValue;
 

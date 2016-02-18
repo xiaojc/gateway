@@ -3,11 +3,14 @@ package com.ohayoyo.gateway.test;
 import com.ohayoyo.gateway.client.channel.GatewayChannel;
 import com.ohayoyo.gateway.client.restful.builder.RestfulRequestBuilder;
 import com.ohayoyo.gateway.test.model.DDQ;
-import com.ohayoyo.spring.test.junit4.SpringJunit4Test;
 import org.apache.commons.codec.binary.Base64;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +20,26 @@ import java.io.FileInputStream;
         "classpath:/conf/test-gateway-channel-bean.xml",
         "classpath:/interfaces/**/*.xml"
 })
-public class GatewayChannelTest2 extends SpringJunit4Test {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class GatewayChannelTest2 {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
 
     @Autowired
     private GatewayChannel gatewayChannel;

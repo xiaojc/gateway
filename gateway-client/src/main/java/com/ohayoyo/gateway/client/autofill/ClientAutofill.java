@@ -100,6 +100,9 @@ public class ClientAutofill implements GatewayAutofill {
             }
             String parameterName = parameterDefine.getName();
             Boolean parameterNullable = parameterDefine.getNullable();
+            if(ObjectUtils.isEmpty(parameterNullable)){
+                parameterNullable = true ;
+            }
             boolean isAutofill;
             if (parameterNullable && isNullableAutofill()) {
                 isAutofill = true;
