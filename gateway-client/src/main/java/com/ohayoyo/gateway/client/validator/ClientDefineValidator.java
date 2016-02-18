@@ -1,11 +1,12 @@
 package com.ohayoyo.gateway.client.validator;
 
 import com.ohayoyo.gateway.client.exception.ValidatorException;
-import com.ohayoyo.gateway.client.utils.FieldDefineUtil;
-import com.ohayoyo.gateway.client.utils.PathVariablesUtil;
+import com.ohayoyo.gateway.client.utils.ParameterDefineUtil;
+import com.ohayoyo.gateway.client.utils.PathDefineUtil;
 import com.ohayoyo.gateway.define.ParameterDefine;
 import com.ohayoyo.gateway.define.core.*;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
@@ -42,7 +43,7 @@ public class ClientDefineValidator implements GatewayDefineValidator {
         }
 
         RequestDefine requestDefine = interfaceDefine.getRequest();
-        if (null == requestDefine) {
+        if (ObjectUtils.isEmpty(requestDefine)) {
             ValidatorException.exception("请求定义对象是必须存在的.");
         }
 
@@ -74,26 +75,31 @@ public class ClientDefineValidator implements GatewayDefineValidator {
         }
 
         PathDefine pathDefine = requestDefine.getPath();
-        if (null != pathDefine) {
-            Set<String> variableNames = PathVariablesUtil.expandVariableNames(pathDefine);
+        if (!ObjectUtils.isEmpty(pathDefine)) {
+            Set<String> variableNames = PathDefineUtil.expandVariableNames(pathDefine);
             if (!CollectionUtils.isEmpty(variableNames)) {
+
                 VariablesDefine variablesDefine = pathDefine.getVariables();
-                if (null == variablesDefine) {
+                if (ObjectUtils.isEmpty(variablesDefine)) {
                     ValidatorException.exception("请求路径定义中的存在路径变量,然而不存在路径变量的定义.");
                 }
+
                 Set<ParameterDefine> parameterDefines = variablesDefine.getFields();
                 if (CollectionUtils.isEmpty(parameterDefines)) {
                     ValidatorException.exception("请求路径定义中的存在路径变量,这个路径变量对象存在,但是没有存在相关的字段集合定义.");
                 }
-                if (FieldDefineUtil.hasEmptyFieldName(parameterDefines)) {
+
+                if (ParameterDefineUtil.isExistEmptyParameterName(parameterDefines)) {
                     ValidatorException.exception("请求路径定义中的存在路径变量,这个路径变量对象存在,但是路径变量字段集合中存在空值的字段名称.");
                 }
+
                 int variableNamesLen = variableNames.size();
                 int fieldDefinesLen = parameterDefines.size();
                 if (variableNamesLen > fieldDefinesLen) {
                     ValidatorException.exception("请求路径定义中的存在路径变量,这个路径变量对象存在,但是路径变量字段集合实际的个数少于值中的变量个数,路径变量长度:%d,字段定义长度:%d.", variableNamesLen, fieldDefinesLen);
                 }
-                Set<String> fieldNames = FieldDefineUtil.getFieldNames(parameterDefines);
+
+                Set<String> fieldNames = ParameterDefineUtil.getParameterNames(parameterDefines);
                 Set<String> notExistDefineVariableNames = new HashSet<String>();
                 for (String variableName : variableNames) {
                     if (!fieldNames.contains(variableName)) {
@@ -103,12 +109,14 @@ public class ClientDefineValidator implements GatewayDefineValidator {
                 if (!CollectionUtils.isEmpty(notExistDefineVariableNames)) {
                     ValidatorException.exception("请求路径定义中的存在路径变量,这个路径变量对象存在,但是路径变量字段集合中缺少字段名称[%s].", notExistDefineVariableNames);
                 }
-                //子对象处理
+
             }
         }
 
-        //QueriesDefine queriesDefine = requestDefine.getQueries();
-        //查询参数不进行检查
+        QueriesDefine queriesDefine = requestDefine.getQueries();
+        if (!ObjectUtils.isEmpty(queriesDefine)) {
+
+        }
 
         //HeadersDefine requestHeadersDefine = requestDefine.getHeaders() ;
         //请求头不进行检查

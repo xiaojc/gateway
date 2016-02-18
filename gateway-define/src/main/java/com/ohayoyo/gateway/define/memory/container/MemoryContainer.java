@@ -2,8 +2,9 @@ package com.ohayoyo.gateway.define.memory.container;
 
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.define.core.InterfaceDefine;
-import com.ohayoyo.gateway.define.utils.CollectionUtils;
-import com.ohayoyo.gateway.define.utils.StringUtils;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +34,8 @@ public class MemoryContainer implements GatewayContainer {
 
     @Override
     public InterfaceDefine query(String interfaceDefineKey) {
-        if (CollectionUtils.isNotEmpty(this.interfaceDefineMap)) {
-            if (StringUtils.isNotEmpty(interfaceDefineKey) && this.interfaceDefineMap.containsKey(interfaceDefineKey)) {
+        if (!CollectionUtils.isEmpty(this.interfaceDefineMap)) {
+            if ((!StringUtils.isEmpty(interfaceDefineKey)) && this.interfaceDefineMap.containsKey(interfaceDefineKey)) {
                 return this.interfaceDefineMap.get(interfaceDefineKey);
             }
         }
@@ -43,9 +44,9 @@ public class MemoryContainer implements GatewayContainer {
 
     public MemoryContainer save(InterfaceDefine interfaceDefine) {
         doInterfaceDefineMap();
-        if (null != interfaceDefine) {
+        if (!ObjectUtils.isEmpty(interfaceDefine)) {
             String key = interfaceDefine.getKey();
-            if (StringUtils.isNotEmpty(key)) {
+            if (!StringUtils.isEmpty(key)) {
                 this.interfaceDefineMap.put(key, interfaceDefine);
             }
         }
@@ -55,9 +56,9 @@ public class MemoryContainer implements GatewayContainer {
     @Override
     public GatewayContainer remove(InterfaceDefine interfaceDefine) {
         doInterfaceDefineMap();
-        if (null != interfaceDefine) {
+        if (!ObjectUtils.isEmpty(interfaceDefine)) {
             String key = interfaceDefine.getKey();
-            if (StringUtils.isNotEmpty(key)) {
+            if (!StringUtils.isEmpty(key)) {
                 if (this.interfaceDefineMap.containsKey(key)) {
                     this.interfaceDefineMap.remove(key);
                 }

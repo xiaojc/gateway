@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,14 +28,14 @@ public class SpringClientContainer implements GatewayContainer, InitializingBean
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (null == this.delegateGatewayContainer) {
+        if (ObjectUtils.isEmpty(this.delegateGatewayContainer)) {
             try {
                 this.delegateGatewayContainer = applicationContext.getBean(OVERRIDE_DELEGATE_GATEWAY_CONTAINER_NAME, GatewayContainer.class);
             } catch (Exception e) {
                 //none
             }
         }
-        if (null == this.delegateGatewayContainer) {
+        if (ObjectUtils.isEmpty(this.delegateGatewayContainer)) {
             this.delegateGatewayContainer = new MemoryContainer();
         }
         //自动扫描InterfaceDefine类型Bean
@@ -44,7 +45,7 @@ public class SpringClientContainer implements GatewayContainer, InitializingBean
                 Set<Map.Entry<String, InterfaceDefine>> entries = interfaceDefineMap.entrySet();
                 for (Map.Entry<String, InterfaceDefine> entry : entries) {
                     InterfaceDefine interfaceDefine = entry.getValue();
-                    if (null != interfaceDefine) {
+                    if (!ObjectUtils.isEmpty(interfaceDefine)) {
                         this.save(interfaceDefine);
                     }
                 }
@@ -73,4 +74,5 @@ public class SpringClientContainer implements GatewayContainer, InitializingBean
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
 }

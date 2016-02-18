@@ -1,22 +1,15 @@
 package com.ohayoyo.gateway.client.autofill;
 
 import com.ohayoyo.gateway.client.core.GatewayRequest;
-import com.ohayoyo.gateway.define.ParameterDefine;
-import com.ohayoyo.gateway.define.core.PathDefine;
 import com.ohayoyo.gateway.define.core.RequestDefine;
-import com.ohayoyo.gateway.define.core.VariablesDefine;
-import org.springframework.util.CollectionUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import org.springframework.util.ObjectUtils;
 
 public class ClientAutofill implements GatewayAutofill {
 
     @Override
     public <RequestBody> void autofill(RequestDefine requestDefine, GatewayRequest<RequestBody> gatewayRequest) {
 
-        if (null == gatewayRequest) {
+        if (ObjectUtils.isEmpty(gatewayRequest)) {
             return;
         }
 

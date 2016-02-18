@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -57,9 +58,9 @@ public abstract class HttpGatewayEntityBuilder<Body, SubHttpEntity extends HttpE
     }
 
     public HttpGatewayEntityBuilder<Body, SubHttpEntity> headers(HttpHeaders headers) {
-        if (null == this.headers) {
+        if (ObjectUtils.isEmpty(this.headers)) {
             this.headers = headers;
-        } else if (null != headers) {
+        } else if (!ObjectUtils.isEmpty(headers)) {
             this.headers.putAll(headers);
         }
         return this;

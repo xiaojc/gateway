@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.define;
 
 import com.ohayoyo.gateway.define.builder.InterfaceDefineBuilder;
 import com.ohayoyo.gateway.define.memory.builder.MemoryInterfaceDefineBuilder;
-import com.ohayoyo.gateway.define.utils.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public final class Builders {
     }
 
     public static InterfaceDefineBuilder builder(String name) throws IllegalAccessException, InstantiationException {
-        if (StringUtils.isNotEmpty(name)) {
+        if (!StringUtils.isEmpty(name)) {
             if (REGISTERS.containsKey(name)) {
                 Class<? extends InterfaceDefineBuilder> InterfaceDefineBuilderClass = REGISTERS.get(name);
                 return InterfaceDefineBuilderClass.newInstance();

@@ -81,7 +81,7 @@ public class HttpGatewayHandler extends AbstractHttpGateway {
             responseEntity = httpGatewayResponse.responseHandler(customResponseContentType, responseBodyClass, httpMessageConverters, clientHttpResponse);
             httpGatewayResponse.responseCallback(customResponseContentType, responseEntity, clientHttpResponse);
         } finally {
-            if (null != clientHttpResponse) {
+            if (!ObjectUtils.isEmpty(clientHttpResponse)) {
                 clientHttpResponse.close();
             }
         }

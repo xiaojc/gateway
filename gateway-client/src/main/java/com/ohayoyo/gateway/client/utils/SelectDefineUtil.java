@@ -4,6 +4,7 @@ import com.ohayoyo.gateway.define.core.HostDefine;
 import com.ohayoyo.gateway.define.core.MethodDefine;
 import com.ohayoyo.gateway.define.core.ProtocolDefine;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Iterator;
@@ -45,7 +46,7 @@ public class SelectDefineUtil {
                 }
             }
         }
-        if (null == selectProtocolDefine && (!CollectionUtils.isEmpty(protocolDefines))) {
+        if (ObjectUtils.isEmpty(selectProtocolDefine) && (!CollectionUtils.isEmpty(protocolDefines))) {
             Iterator<ProtocolDefine> protocolDefineIterator = protocolDefines.iterator();
             if (protocolDefineIterator.hasNext()) {
                 selectProtocolDefine = protocolDefineIterator.next();
@@ -65,7 +66,7 @@ public class SelectDefineUtil {
                 }
             }
         }
-        if (null == selectMethodDefine && (!CollectionUtils.isEmpty(methodDefines))) {
+        if (ObjectUtils.isEmpty(selectMethodDefine) && (!CollectionUtils.isEmpty(methodDefines))) {
             Iterator<MethodDefine> methodDefineIterator = methodDefines.iterator();
             if (methodDefineIterator.hasNext()) {
                 selectMethodDefine = methodDefineIterator.next();
@@ -85,7 +86,7 @@ public class SelectDefineUtil {
                 }
             }
         }
-        if (null == selectHostDefine && (!CollectionUtils.isEmpty(hostDefines))) {
+        if (ObjectUtils.isEmpty(selectHostDefine) && (!CollectionUtils.isEmpty(hostDefines))) {
             Iterator<HostDefine> hostDefineIterator = hostDefines.iterator();
             if (hostDefineIterator.hasNext()) {
                 selectHostDefine = hostDefineIterator.next();
@@ -95,7 +96,7 @@ public class SelectDefineUtil {
     }
 
     public static Integer selectHostDefinePort(ProtocolDefine protocolDefine, HostDefine hostDefine) {
-        return (!(null != hostDefine.getPort() && (hostDefine.getPort() >= 0 || hostDefine.getPort() <= 65535))) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
+        return (!((!ObjectUtils.isEmpty(hostDefine.getPort())) && (hostDefine.getPort() >= 0 || hostDefine.getPort() <= 65535))) ? (ProtocolDefine.HTTPS_NAME.equals(protocolDefine.getName()) ? HostDefine.DEFAULT_HTTPS_PORT : HostDefine.DEFAULT_HTTP_PORT) : hostDefine.getPort();
     }
 
 }

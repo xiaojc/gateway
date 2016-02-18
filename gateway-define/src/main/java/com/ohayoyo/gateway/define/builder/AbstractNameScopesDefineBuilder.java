@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.builder;
 
-import com.ohayoyo.gateway.define.utils.CollectionUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +36,7 @@ public abstract class AbstractNameScopesDefineBuilder<Define, ThenDefineBuilder 
         if (CollectionUtils.isEmpty(this.scopes)) {
             this.scopes = new HashSet<String>();
         }
-        if (CollectionUtils.isNotEmpty(scopes)) {
+        if (!CollectionUtils.isEmpty(scopes)) {
             this.scopes.addAll(scopes);
         }
         return this;

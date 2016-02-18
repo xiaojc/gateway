@@ -2,6 +2,7 @@ package com.ohayoyo.gateway.define.builder;
 
 import com.ohayoyo.gateway.define.core.PathDefine;
 import com.ohayoyo.gateway.define.core.VariablesDefine;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author 蓝明乐
@@ -26,7 +27,7 @@ public abstract class PathDefineBuilder extends AbstractThenDefineBuilder<PathDe
 
     @Override
     public final PathDefine build() {
-        if (null != variablesDefineBuilder) {
+        if (!ObjectUtils.isEmpty(variablesDefineBuilder)) {
             variables(variablesDefineBuilder.build());
         }
         return this.buildDetails(project, module, operate, resource, variables);

@@ -9,6 +9,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,19 +29,19 @@ public class HttpGatewayRequestHandler extends AbstractHttpGatewayRequest {
         HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
         HttpHeaders requestHeaders = requestEntity.getHeaders();
         HttpHeaders newHttpHeaders = new HttpHeaders();
-        if (null != httpHeaders && (!httpHeaders.isEmpty())) {
+        if (!ObjectUtils.isEmpty(httpHeaders)) {
             newHttpHeaders.putAll(httpHeaders);
         }
-        if (null != requestHeaders && (!requestHeaders.isEmpty())) {
+        if (!ObjectUtils.isEmpty(requestHeaders)) {
             newHttpHeaders.putAll(requestHeaders);
         }
         if (!newHttpHeaders.isEmpty()) {
             MediaType contentType = newHttpHeaders.getContentType();
-            if (null != contentType) {
+            if (!ObjectUtils.isEmpty(contentType)) {
                 String defaultHeaderValues = contentType.toString();
                 newHttpHeaders.set(DEFAULT_REQUEST_CONTENT_TYPE, defaultHeaderValues);
             }
-            if (null != customRequestContentType) {
+            if (!ObjectUtils.isEmpty(customRequestContentType)) {
                 String headerValues = customRequestContentType.toString();
                 newHttpHeaders.set(CUSTOM_REQUEST_CONTENT_TYPE, headerValues);
                 newHttpHeaders.setContentType(customRequestContentType);
@@ -77,7 +78,7 @@ public class HttpGatewayRequestHandler extends AbstractHttpGatewayRequest {
 
     @Override
     protected <RequestBody> void requestBodyHandler(RequestEntity<RequestBody> requestEntity, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException {
-        if (null != requestEntity && requestEntity.hasBody()) {
+        if ((!ObjectUtils.isEmpty(requestEntity)) && requestEntity.hasBody()) {
             RequestBody requestBody = requestEntity.getBody();
             Class<RequestBody> requestBodyClass = (Class<RequestBody>) requestBody.getClass();
             HttpHeaders requestHeaders = clientHttpRequest.getHeaders();

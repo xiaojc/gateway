@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.GenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,13 +29,13 @@ public class HttpGatewayResponseHandler extends AbstractHttpGatewayResponse {
         if (httpGatewayResponseWrapper.hasMessageBody() && (!httpGatewayResponseWrapper.hasEmptyMessageBody())) {
             MediaType contentType = resolveCustomResponseContentType(customResponseContentType, httpGatewayResponseWrapper);
             for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
-                if ((httpMessageConverter instanceof GenericHttpMessageConverter) && (null != responseBodyClass)) {
+                if ((httpMessageConverter instanceof GenericHttpMessageConverter) && (!ObjectUtils.isEmpty(responseBodyClass))) {
                     GenericHttpMessageConverter<?> genericHttpMessageConverter = (GenericHttpMessageConverter<?>) httpMessageConverter;
                     if (genericHttpMessageConverter.canRead(responseBodyClass, responseBodyClass, contentType)) {
                         return (ResponseBody) genericHttpMessageConverter.read(responseBodyClass, responseBodyClass, httpGatewayResponseWrapper);
                     }
                 }
-                if (null != responseBodyClass) {
+                if (!ObjectUtils.isEmpty(responseBodyClass)) {
                     if (httpMessageConverter.canRead(responseBodyClass, contentType)) {
                         return (ResponseBody) httpMessageConverter.read((Class) responseBodyClass, httpGatewayResponseWrapper);
                     }
@@ -55,9 +56,9 @@ public class HttpGatewayResponseHandler extends AbstractHttpGatewayResponse {
         HttpHeaders httpHeaders = clientHttpResponse.getHeaders();
         HttpHeaders newHttpHeaders = new HttpHeaders();
         newHttpHeaders.putAll(httpHeaders);
-        if (null != customResponseContentType) {
+        if (!ObjectUtils.isEmpty(customResponseContentType)) {
             MediaType contentType = httpHeaders.getContentType();
-            if (null != contentType) {
+            if (!ObjectUtils.isEmpty(contentType)) {
                 newHttpHeaders.set(DEFAULT_RESPONSE_CONTENT_TYPE, contentType.toString());
             }
             newHttpHeaders.setContentType(customResponseContentType);
@@ -67,12 +68,12 @@ public class HttpGatewayResponseHandler extends AbstractHttpGatewayResponse {
     }
 
     private MediaType resolveCustomResponseContentType(MediaType customResponseContentType, ClientHttpResponse clientHttpResponse) {
-        if (null != customResponseContentType) {
+        if (!ObjectUtils.isEmpty(customResponseContentType)) {
             return customResponseContentType;
         }
         HttpHeaders httpHeaders = clientHttpResponse.getHeaders();
         MediaType contentType = httpHeaders.getContentType();
-        if (contentType == null) {
+        if (ObjectUtils.isEmpty(contentType)) {
             contentType = MediaType.APPLICATION_OCTET_STREAM;
         }
         return contentType;

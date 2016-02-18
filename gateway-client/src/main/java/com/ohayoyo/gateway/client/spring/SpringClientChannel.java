@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author 蓝明乐
@@ -44,30 +45,37 @@ public class SpringClientChannel implements GatewayChannel, InitializingBean, Ap
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (null == this.gatewayContainer) {
+
+        if (ObjectUtils.isEmpty(this.gatewayContainer)) {
+
             try {
                 this.gatewayContainer = applicationContext.getBean(SpringClientContainer.class);
             } catch (Exception ex) {
                 //node
             }
-            if (null == this.gatewayContainer) {
+
+            if (ObjectUtils.isEmpty(this.gatewayContainer)) {
                 SpringClientContainer springClientContainer = new SpringClientContainer();
                 springClientContainer.setApplicationContext(this.applicationContext);
                 springClientContainer.afterPropertiesSet();
                 this.gatewayContainer = springClientContainer;
             }
+
         }
-        if (null == this.gatewayClient) {
+
+        if (ObjectUtils.isEmpty(this.gatewayClient)) {
             this.gatewayClient = GatewayClient.DEFAULT_CLIENT;
         }
-        if (null == this.delegateGatewayChannel) {
+
+        if (ObjectUtils.isEmpty(this.delegateGatewayChannel)) {
             try {
                 this.delegateGatewayChannel = this.applicationContext.getBean(OVERRIDE_DELEGATE_GATEWAY_CHANNEL_NAME, GatewayChannel.class);
             } catch (Exception ex) {
                 //node
             }
         }
-        if (null == this.delegateGatewayChannel) {
+
+        if (ObjectUtils.isEmpty(this.delegateGatewayChannel)) {
             this.delegateGatewayChannel = new ClientChannel(this.gatewayContainer, this.gatewayClient);
         }
 

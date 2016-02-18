@@ -4,7 +4,8 @@ import com.ohayoyo.gateway.define.core.EntityDefine;
 import com.ohayoyo.gateway.define.core.HeadersDefine;
 import com.ohayoyo.gateway.define.core.ResponseDefine;
 import com.ohayoyo.gateway.define.core.StatusDefine;
-import com.ohayoyo.gateway.define.utils.CollectionUtils;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,10 +31,10 @@ public abstract class ResponseDefineBuilder extends AbstractThenDefineBuilder<Re
 
     @Override
     public final ResponseDefine build() {
-        if (null != entityDefineBuilder) {
+        if (!ObjectUtils.isEmpty(entityDefineBuilder)) {
             entity(entityDefineBuilder.build());
         }
-        if (CollectionUtils.isNotEmpty(statusDefineBuilders)) {
+        if (!CollectionUtils.isEmpty(statusDefineBuilders)) {
             for (StatusDefineBuilder statusDefineBuilder : statusDefineBuilders) {
                 status(statusDefineBuilder.build());
             }
@@ -89,7 +90,7 @@ public abstract class ResponseDefineBuilder extends AbstractThenDefineBuilder<Re
         if (CollectionUtils.isEmpty(this.statuses)) {
             this.statuses = new HashSet<StatusDefine>();
         }
-        if (CollectionUtils.isNotEmpty(statuses)) {
+        if (!CollectionUtils.isEmpty(statuses)) {
             this.statuses.addAll(statuses);
         }
         return this;

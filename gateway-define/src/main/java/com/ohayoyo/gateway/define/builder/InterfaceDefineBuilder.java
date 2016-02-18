@@ -3,6 +3,7 @@ package com.ohayoyo.gateway.define.builder;
 import com.ohayoyo.gateway.define.core.InterfaceDefine;
 import com.ohayoyo.gateway.define.core.RequestDefine;
 import com.ohayoyo.gateway.define.core.ResponseDefine;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author 蓝明乐
@@ -53,10 +54,10 @@ public abstract class InterfaceDefineBuilder implements DefineBuilder<InterfaceD
 
     @Override
     public final InterfaceDefine build() {
-        if (null != requestDefineBuilder) {
+        if (!ObjectUtils.isEmpty(requestDefineBuilder)) {
             this.request(requestDefineBuilder.build());
         }
-        if (null != responseDefineBuilder) {
+        if (!ObjectUtils.isEmpty(responseDefineBuilder)) {
             this.response(responseDefineBuilder.build());
         }
         return this.buildDetails(key, description, request, response);

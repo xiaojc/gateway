@@ -8,6 +8,7 @@ import com.ohayoyo.gateway.client.restful.RestfulDefine;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.define.core.InterfaceDefine;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author 蓝明乐
@@ -53,7 +54,7 @@ public abstract class AbstractChannel implements GatewayChannel {
         Assert.notNull(interfaceDefineKey);
         Result result = null;
         InterfaceDefine interfaceDefine = this.gatewayContainer.query(interfaceDefineKey);
-        if (null != interfaceDefine) {
+        if (!ObjectUtils.isEmpty(interfaceDefine)) {
             Class<?> responseBodyClass = this.resolveResponseType(responseType, interfaceDefine);
             GatewayDefine gatewayDefine = this.resolveGatewayDefine(interfaceDefine);
             GatewayResponse<?> gatewayResponse = this.gatewayClient.session(responseBodyClass, gatewayDefine, gatewayRequest);

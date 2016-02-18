@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.define.builder;
 
 import com.ohayoyo.gateway.define.ParameterDefine;
 import com.ohayoyo.gateway.define.ParametersDefine;
-import com.ohayoyo.gateway.define.utils.CollectionUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ public abstract class AbstractParametersDefineBuilder<Define extends ParametersD
 
     @Override
     public final Define build() {
-        if (CollectionUtils.isNotEmpty(fieldDefineBuilders)) {
+        if (!CollectionUtils.isEmpty(fieldDefineBuilders)) {
             for (FieldDefineBuilder<AbstractParametersDefineBuilder<Define, ThenDefineBuilder>> fieldDefineBuilder : fieldDefineBuilders) {
                 field(fieldDefineBuilder.build());
             }
@@ -46,7 +46,7 @@ public abstract class AbstractParametersDefineBuilder<Define extends ParametersD
         if (CollectionUtils.isEmpty(this.fields)) {
             this.fields = new HashSet<ParameterDefine>();
         }
-        if (CollectionUtils.isNotEmpty(fields)) {
+        if (!CollectionUtils.isEmpty(fields)) {
             this.fields.addAll(fields);
         }
         return this;

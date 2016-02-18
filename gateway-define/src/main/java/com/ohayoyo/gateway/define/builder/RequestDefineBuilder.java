@@ -1,7 +1,8 @@
 package com.ohayoyo.gateway.define.builder;
 
 import com.ohayoyo.gateway.define.core.*;
-import com.ohayoyo.gateway.define.utils.CollectionUtils;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,29 +44,29 @@ public abstract class RequestDefineBuilder extends AbstractThenDefineBuilder<Req
 
     @Override
     public final RequestDefine build() {
-        if (null != entityDefineBuilder) {
+        if (!ObjectUtils.isEmpty(entityDefineBuilder)) {
             entity(entityDefineBuilder.build());
         }
-        if (null != headersDefineBuilder) {
+        if (!ObjectUtils.isEmpty(headersDefineBuilder)) {
             headers(headersDefineBuilder.build());
         }
-        if (CollectionUtils.isNotEmpty(methodDefineBuilders)) {
+        if (!CollectionUtils.isEmpty(methodDefineBuilders)) {
             for (MethodDefineBuilder methodDefineBuilder : methodDefineBuilders) {
                 method(methodDefineBuilder.build());
             }
         }
-        if (null != queriesDefineBuilder) {
+        if (!ObjectUtils.isEmpty(queriesDefineBuilder)) {
             queries(queriesDefineBuilder.build());
         }
-        if (null != pathDefineBuilder) {
+        if (!ObjectUtils.isEmpty(pathDefineBuilder)) {
             path(pathDefineBuilder.build());
         }
-        if (CollectionUtils.isNotEmpty(hostDefineBuilders)) {
+        if (!CollectionUtils.isEmpty(hostDefineBuilders)) {
             for (HostDefineBuilder hostDefineBuilder : hostDefineBuilders) {
                 host(hostDefineBuilder.build());
             }
         }
-        if (CollectionUtils.isNotEmpty(protocolDefineBuilders)) {
+        if (!CollectionUtils.isEmpty(protocolDefineBuilders)) {
             for (ProtocolDefineBuilder protocolDefineBuilder : protocolDefineBuilders) {
                 protocol(protocolDefineBuilder.build());
             }
@@ -145,7 +146,7 @@ public abstract class RequestDefineBuilder extends AbstractThenDefineBuilder<Req
         if (CollectionUtils.isEmpty(this.methods)) {
             this.methods = new HashSet<MethodDefine>();
         }
-        if (CollectionUtils.isNotEmpty(methods)) {
+        if (!CollectionUtils.isEmpty(methods)) {
             this.methods.addAll(methods);
         }
         return this;
@@ -178,7 +179,7 @@ public abstract class RequestDefineBuilder extends AbstractThenDefineBuilder<Req
         if (CollectionUtils.isEmpty(this.hosts)) {
             this.hosts = new HashSet<HostDefine>();
         }
-        if (CollectionUtils.isNotEmpty(hosts)) {
+        if (!CollectionUtils.isEmpty(hosts)) {
             this.hosts.addAll(hosts);
         }
         return this;
@@ -196,7 +197,7 @@ public abstract class RequestDefineBuilder extends AbstractThenDefineBuilder<Req
         if (CollectionUtils.isEmpty(this.protocols)) {
             this.protocols = new HashSet<ProtocolDefine>();
         }
-        if (CollectionUtils.isNotEmpty(protocols)) {
+        if (!CollectionUtils.isEmpty(protocols)) {
             this.protocols.addAll(protocols);
         }
         return this;

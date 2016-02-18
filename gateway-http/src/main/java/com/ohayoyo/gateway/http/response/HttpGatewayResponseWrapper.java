@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,7 @@ public class HttpGatewayResponseWrapper implements ClientHttpResponse {
 
     public boolean hasEmptyMessageBody() throws IOException {
         InputStream body = this.clientHttpResponse.getBody();
-        if (body == null) {
+        if (ObjectUtils.isEmpty(body)) {
             return true;
         } else if (body.markSupported()) {
             body.mark(1);

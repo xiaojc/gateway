@@ -63,7 +63,7 @@ public abstract class BehaviorClient extends AbstractClient {
 
     @Override
     protected final void gatewayDefineVerify(GatewayDefine gatewayDefine) throws GatewayException, IOException, HttpGatewayException {
-        if (null != this.gatewayDefineValidator) {
+        if (!ObjectUtils.isEmpty(this.gatewayDefineValidator)) {
             Class<?> supportType = gatewayDefine.getClass();
             if (this.gatewayDefineValidator.supports(supportType)) {
                 this.gatewayDefineValidator.validate(gatewayDefine);
@@ -73,9 +73,9 @@ public abstract class BehaviorClient extends AbstractClient {
 
     @Override
     protected final <RequestBody> void gatewayAutofill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException, IOException, HttpGatewayException {
-        if (null != this.gatewayAutofill) {
+        if (!ObjectUtils.isEmpty(this.gatewayAutofill)) {
             RequestDefine requestDefine = gatewayDefine.getRequest();
-            if (null != requestDefine) {
+            if (!ObjectUtils.isEmpty(requestDefine)) {
                 this.gatewayAutofill.autofill(requestDefine, gatewayRequest);
             }
         }
@@ -147,7 +147,7 @@ public abstract class BehaviorClient extends AbstractClient {
 
     protected MediaType resolveEntityDefineContentType(EntityDefine entityDefine) {
         MediaType customContentType = null;
-        if (null != entityDefine) {
+        if (!ObjectUtils.isEmpty(entityDefine)) {
             String contentType = entityDefine.getContentType();
             if (!StringUtils.isEmpty(contentType)) {
                 try {
@@ -163,7 +163,7 @@ public abstract class BehaviorClient extends AbstractClient {
     protected MediaType resolveCustomRequestContentType(GatewayDefine gatewayDefine) {
         RequestDefine requestDefine = gatewayDefine.getRequest();
         MediaType customRequestContentType = null;
-        if (null != requestDefine) {
+        if (!ObjectUtils.isEmpty(requestDefine)) {
             EntityDefine entityDefine = requestDefine.getEntity();
             customRequestContentType = resolveEntityDefineContentType(entityDefine);
         }
@@ -173,7 +173,7 @@ public abstract class BehaviorClient extends AbstractClient {
     protected MediaType resolveCustomResponseContentType(GatewayDefine gatewayDefine) {
         ResponseDefine responseDefine = gatewayDefine.getResponse();
         MediaType customResponseContentType = null;
-        if (null != responseDefine) {
+        if (!ObjectUtils.isEmpty(responseDefine)) {
             EntityDefine entityDefine = responseDefine.getEntity();
             customResponseContentType = resolveEntityDefineContentType(entityDefine);
         }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.ResponseErrorHandler;
 
@@ -37,7 +38,7 @@ public abstract class AbstractHttpGatewayResponse implements HttpGatewayResponse
 
     @Override
     public void responseErrorHandler(ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException {
-        if (null != this.responseErrorHandler) {
+        if (!ObjectUtils.isEmpty(this.responseErrorHandler)) {
             boolean hasError = responseErrorHandler.hasError(clientHttpResponse);
             if (hasError) {
                 responseErrorHandler.handleError(clientHttpResponse);

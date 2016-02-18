@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 
@@ -57,14 +58,14 @@ public abstract class AbstractClient implements GatewayClient, ApplicationContex
 
     private RestfulResponseBuilder autoSupportSpringRestfulResponseBuilder() {
         RestfulResponseBuilder restfulResponseBuilder = null;
-        if (null != this.applicationContext) {
+        if (!ObjectUtils.isEmpty(this.applicationContext)) {
             try {
                 restfulResponseBuilder = this.applicationContext.getBean(RestfulResponseBuilder.class);
             } catch (Exception ex) {
                 //none
             }
         }
-        if (null == restfulResponseBuilder) {
+        if (ObjectUtils.isEmpty(restfulResponseBuilder)) {
             restfulResponseBuilder = RestfulResponseBuilder.newInstance();
         }
         return restfulResponseBuilder;
