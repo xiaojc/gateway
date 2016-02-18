@@ -25,11 +25,8 @@ public class ClientChannel extends AbstractChannel {
 
     @Override
     protected <Result> Result resolveGatewayResult(Class<Result> responseType, InterfaceDefine interfaceDefine, GatewayResponse<?> gatewayResponse) {
-        LOGGER.debug("反转响应网关结果 .");
         Object responseBody = gatewayResponse.getResponseBody();
-        LOGGER.debug("网关响应结果:{} .", responseBody);
         if ((!ObjectUtils.isEmpty(responseBody)) && responseBody.getClass().isAssignableFrom(responseType)) {
-            LOGGER.debug("直接返回归属这个定义的结果 .");
             return (Result) responseBody;
         }
         return null;

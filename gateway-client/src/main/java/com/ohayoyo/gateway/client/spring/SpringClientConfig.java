@@ -1,5 +1,7 @@
 package com.ohayoyo.gateway.client.spring;
 
+import com.ohayoyo.gateway.client.autofill.ClientAutofill;
+import com.ohayoyo.gateway.client.autofill.GatewayAutofill;
 import com.ohayoyo.gateway.client.channel.GatewayChannel;
 import com.ohayoyo.gateway.client.spring.builder.RestfulRequestBuilderFactory;
 import com.ohayoyo.gateway.client.spring.builder.RestfulResponseBuilderFactory;
@@ -29,6 +31,11 @@ public class SpringClientConfig {
     @Bean
     public GatewayDefineValidator gatewayDefineValidator() {
         return new ClientDefineValidator();
+    }
+
+    @Bean
+    public GatewayAutofill gatewayAutofill() {
+        return new ClientAutofill();
     }
 
     @Bean(name = "springGatewayChannel")

@@ -30,7 +30,23 @@ public class GatewayChannelTest extends SpringJunit4Test {
         String key = "api.huceo.com/meinv/other";
         TestPack testPack = gatewayChannel.channel(TestPack.class, key, restfulRequestBuilder
                 .requestQueries("key", "29e069ec39101eb669121554bf67024f")
-                .requestQueries("num", "20")
+                .requestQueries("num", "30")
+                .build());
+        logger.debug("{}", testPack);
+    }
+
+    @Test
+    public void testApiHuceoComMeinvOther2() throws Exception {
+        String key = "api.huceo.com/meinv/other";
+        TestPack testPack = gatewayChannel.channel(TestPack.class, key);
+        logger.debug("{}", testPack);
+    }
+
+    @Test
+    public void testApiHuceoComMeinvOther3() throws Exception {
+        String key = "api.huceo.com/meinv/other";
+        TestPack testPack = gatewayChannel.channel(TestPack.class, key, restfulRequestBuilder
+                .requestQueries("num", "30")
                 .build());
         logger.debug("{}", testPack);
     }

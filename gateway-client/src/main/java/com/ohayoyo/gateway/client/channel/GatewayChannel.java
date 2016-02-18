@@ -2,7 +2,6 @@ package com.ohayoyo.gateway.client.channel;
 
 import com.ohayoyo.gateway.client.core.GatewayClient;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
-import com.ohayoyo.gateway.client.exception.ChannelException;
 import com.ohayoyo.gateway.client.exception.GatewayException;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 
@@ -18,6 +17,12 @@ public interface GatewayChannel {
     GatewayClient getGatewayClient();
 
     GatewayChannel setGatewayClient(GatewayClient gatewayClient);
+
+    String channel(String interfaceDefineKey) throws GatewayException;
+
+    String channel(String interfaceDefineKey,GatewayRequest<Object> gatewayRequest) throws GatewayException;
+
+    <Result> Result channel(Class<Result> responseType, String interfaceDefineKey) throws GatewayException;
 
     <Result> Result channel(Class<Result> responseType, String interfaceDefineKey, GatewayRequest<Object> gatewayRequest) throws GatewayException;
 

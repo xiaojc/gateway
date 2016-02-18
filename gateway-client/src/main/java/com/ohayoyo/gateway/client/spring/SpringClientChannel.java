@@ -151,6 +151,21 @@ public class SpringClientChannel implements GatewayChannel, InitializingBean, Ap
     }
 
     @Override
+    public String channel(String interfaceDefineKey) throws GatewayException {
+        return this.delegateGatewayChannel.channel(interfaceDefineKey);
+    }
+
+    @Override
+    public String channel(String interfaceDefineKey, GatewayRequest<Object> gatewayRequest) throws GatewayException {
+        return this.delegateGatewayChannel.channel(interfaceDefineKey, gatewayRequest);
+    }
+
+    @Override
+    public <Result> Result channel(Class<Result> responseType, String interfaceDefineKey) throws GatewayException {
+        return this.delegateGatewayChannel.channel(responseType, interfaceDefineKey);
+    }
+
+    @Override
     public <Result> Result channel(Class<Result> responseType, String interfaceDefineKey, GatewayRequest<Object> gatewayRequest) throws GatewayException {
         return this.delegateGatewayChannel.channel(responseType, interfaceDefineKey, gatewayRequest);
     }

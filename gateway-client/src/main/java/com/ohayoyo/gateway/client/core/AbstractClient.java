@@ -1,6 +1,7 @@
 package com.ohayoyo.gateway.client.core;
 
 import com.ohayoyo.gateway.client.exception.GatewayException;
+import com.ohayoyo.gateway.client.restful.builder.RestfulRequestBuilder;
 import com.ohayoyo.gateway.client.restful.builder.RestfulResponseBuilder;
 import com.ohayoyo.gateway.http.core.HttpGateway;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
@@ -49,7 +50,10 @@ public abstract class AbstractClient implements GatewayClient, ApplicationContex
     public final <ResponseBody, RequestBody> GatewayResponse<ResponseBody> session(Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
         Assert.notNull(responseBodyClass);
         Assert.notNull(gatewayDefine);
-        LOGGER.debug("网关客户端进行一次会话 .");
+
+        if (ObjectUtils.isEmpty(gatewayRequest)) {
+            gatewayRequest = autoSupportSpringRestfulRequestBuilder().build();
+        }
         try {
             HttpGateway httpGateway = this.getHttpGateway();
             LOGGER.debug("网关客户端进行定义验证 .");
@@ -72,29 +76,31 @@ public abstract class AbstractClient implements GatewayClient, ApplicationContex
         }
     }
 
+    private RestfulRequestBuilder autoSupportSpringRestfulRequestBuilder() {
+        RestfulRequestBuilder restfulRequestBuilder = null;
+        if (!ObjectUtils.isEmpty(this.applicationContext)) {
+            try {
+                restfulRequestBuilder = this.applicationContext.getBean(RestfulRequestBuilder.class);
+            } catch (Exception ex) {
+                LOGGER.info("向spring容器获取 RestfulRequestBuilder 异常 : {} .", ex.getMessage());
+            }
+        }
+        if (ObjectUtils.isEmpty(applicationContext)) {
+            restfulRequestBuilder = RestfulRequestBuilder.newInstance();
+        }
+        return restfulRequestBuilder;
+    }
+
     private RestfulResponseBuilder autoSupportSpringRestfulResponseBuilder() {
         RestfulResponseBuilder restfulResponseBuilder = null;
-
-        LOGGER.debug("自动支持 spring RestfulResponseBuilder 工厂bean的注入.");
-
         if (!ObjectUtils.isEmpty(this.applicationContext)) {
-
-            LOGGER.debug("存在spring环境 .");
-
             try {
-
-                LOGGER.debug("向spring容器获取 RestfulResponseBuilder Bean .");
-
                 restfulResponseBuilder = this.applicationContext.getBean(RestfulResponseBuilder.class);
-
-                LOGGER.debug("向spring容器获取 RestfulResponseBuilder 完成 .");
-
             } catch (Exception ex) {
                 LOGGER.info("向spring容器获取 RestfulResponseBuilder 异常 : {} .", ex.getMessage());
             }
         }
         if (ObjectUtils.isEmpty(restfulResponseBuilder)) {
-            LOGGER.debug("可能不存在spring环境,或者向spring容器获取RestfulResponseBuilder失败 , 进行手动构建RestfulResponseBuilder .");
             restfulResponseBuilder = RestfulResponseBuilder.newInstance();
         }
         return restfulResponseBuilder;

@@ -55,10 +55,24 @@ public abstract class AbstractChannel implements GatewayChannel {
     }
 
     @Override
+    public String channel(String interfaceDefineKey) throws GatewayException {
+        return channel(interfaceDefineKey, null);
+    }
+
+    @Override
+    public String channel(String interfaceDefineKey, GatewayRequest<Object> gatewayRequest) throws GatewayException {
+        return channel(String.class, interfaceDefineKey, gatewayRequest);
+    }
+
+    @Override
+    public <Result> Result channel(Class<Result> responseType, String interfaceDefineKey) throws GatewayException {
+        return channel(responseType, interfaceDefineKey, null);
+    }
+
+    @Override
     public <Result> Result channel(Class<Result> responseType, String interfaceDefineKey, GatewayRequest<Object> gatewayRequest) throws GatewayException {
         Assert.notNull(responseType);
         Assert.notNull(interfaceDefineKey);
-        LOGGER.debug("网关通道执行 .");
         Result result = null;
         InterfaceDefine interfaceDefine = this.gatewayContainer.query(interfaceDefineKey);
         LOGGER.debug("根据接口键:{},向网关容器获取接口定义:{} .", interfaceDefineKey, interfaceDefine);

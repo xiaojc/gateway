@@ -108,31 +108,42 @@ public class ClientDefineValidator implements GatewayDefineValidator {
             }
         }
 
-//        QueriesDefine queriesDefine = requestDefine.getQueries();
-//        if (!ObjectUtils.isEmpty(queriesDefine)) {
-//
-//        }
+        QueriesDefine queriesDefine = requestDefine.getQueries();
+        if (!ObjectUtils.isEmpty(queriesDefine)) {
+            Set<ParameterDefine> parameterDefines = queriesDefine.getFields();
+            if (CollectionUtils.isEmpty(parameterDefines)) {
+                ValidatorException.exception("请求查询定义中的存在查询对象,但是没有存在相关的字段集合定义.");
+            }
+            if (ParameterDefineUtil.isExistEmptyParameterName(parameterDefines)) {
+                ValidatorException.exception("请求查询定义中的存在查询对象,但是查询对象字段集合中存在空值的字段名称.");
+            }
+        }
 
-        //HeadersDefine requestHeadersDefine = requestDefine.getHeaders() ;
-        //请求头不进行检查
+        HeadersDefine requestHeadersDefine = requestDefine.getHeaders();
+        if (!ObjectUtils.isEmpty(requestHeadersDefine)) {
+            Set<ParameterDefine> parameterDefines = requestHeadersDefine.getFields();
+            if (CollectionUtils.isEmpty(parameterDefines)) {
+                ValidatorException.exception("请求头定义中的存在查询对象,但是没有存在相关的字段集合定义.");
+            }
+            if (ParameterDefineUtil.isExistEmptyParameterName(parameterDefines)) {
+                ValidatorException.exception("请求头定义中的存在查询对象,但是头对象字段集合中存在空值的字段名称.");
+            }
+        }
 
         //EntityDefine requestEntityDefine = requestDefine.getEntity();
-        //请求实体不进行检查
+        //请求实体目前是非必须检查
 
-        //响应定义不进行检查
+        //响应目前是非必须检查
         //ResponseDefine responseDefine = interfaceDefine.getResponse();
-        //if (null == responseDefine) {
-        //    throw new GatewayException("响应定义对象是必须存在的.");
-        //}
 
         //Set<StatusDefine>  statusDefines = responseDefine.getStatuses() ;
-        //响应状态集合不进行检查
+        //响应状态集合目前是非必须检查
 
         //HeadersDefine responseHeadersDefine = responseDefine.getHeaders() ;
-        //响应头不进行检查
+        //响应头目前是非必须检查
 
         //EntityDefine responseEntityDefine = responseDefine.getEntity();
-        //响应实体不进行检查
+        //响应实体目前是非必须检查
 
         CACHE.add(key);
     }

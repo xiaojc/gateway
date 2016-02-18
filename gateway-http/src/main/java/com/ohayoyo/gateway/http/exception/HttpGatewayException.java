@@ -22,10 +22,6 @@ public class HttpGatewayException extends Exception {
         super(cause);
     }
 
-    public HttpGatewayException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-
     public static void exception(String exMsg, Object... args) throws HttpGatewayException {
         throw new HttpGatewayException(String.format(Locale.CHINA, exMsg, args));
     }

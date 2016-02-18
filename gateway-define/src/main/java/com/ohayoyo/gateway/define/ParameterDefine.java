@@ -65,7 +65,7 @@ public class ParameterDefine implements ObjectDefine {
 
     private Integer dataLength = -1;
 
-    private Boolean nullable;
+    private Boolean nullable = true;
 
     private Object defaultValue;
 

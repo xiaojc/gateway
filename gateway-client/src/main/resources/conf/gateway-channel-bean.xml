@@ -10,6 +10,8 @@
 
     <bean class="com.ohayoyo.gateway.client.validator.ClientDefineValidator"/>
 
+    <bean class="com.ohayoyo.gateway.client.autofill.ClientAutofill"/>
+
     <bean id="springClientContainer" class="com.ohayoyo.gateway.client.spring.SpringClientContainer"/>
 
     <bean id="springGatewayChannel" class="com.ohayoyo.gateway.client.spring.SpringClientChannel">

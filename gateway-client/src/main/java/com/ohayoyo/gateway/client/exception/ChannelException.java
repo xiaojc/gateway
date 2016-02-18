@@ -22,10 +22,6 @@ public class ChannelException extends GatewayException {
         super(cause);
     }
 
-    public ChannelException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-
     public static void exception(String exMsg, Object... args) throws ChannelException {
         throw new ChannelException(String.format(Locale.CHINA, exMsg, args));
     }

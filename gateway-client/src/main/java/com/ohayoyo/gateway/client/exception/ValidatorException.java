@@ -22,10 +22,6 @@ public class ValidatorException extends GatewayException {
         super(cause);
     }
 
-    public ValidatorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-
     public static void exception(String exMsg, Object... args) throws ValidatorException {
         throw new ValidatorException(String.format(Locale.CHINA, exMsg, args));
     }

@@ -85,7 +85,6 @@ public abstract class BehaviorClient extends AbstractClient {
 
     @Override
     protected final void gatewayDefineVerify(GatewayDefine gatewayDefine) throws GatewayException, IOException, HttpGatewayException {
-        LOGGER.debug("处理定义验证 .");
         if (!ObjectUtils.isEmpty(this.gatewayDefineValidator)) {
             LOGGER.debug("存在网关定义验证器 .");
             this.gatewayDefineValidator.validate(gatewayDefine);
@@ -97,7 +96,6 @@ public abstract class BehaviorClient extends AbstractClient {
 
     @Override
     protected final <RequestBody> void gatewayAutofill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
-        LOGGER.debug("处理自动填充 .");
         if (!ObjectUtils.isEmpty(this.gatewayAutofill)) {
             RequestDefine requestDefine = gatewayDefine.getRequest();
             LOGGER.debug("开始进行数据自动填充 .");
@@ -123,8 +121,6 @@ public abstract class BehaviorClient extends AbstractClient {
     }
 
     protected <RequestBody> URI resolveRequestUri(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {
-
-        LOGGER.debug("反转请求URL .");
 
         String select = gatewayRequest.getSelect();
 
@@ -186,8 +182,6 @@ public abstract class BehaviorClient extends AbstractClient {
 
     protected <RequestBody> RequestEntity<RequestBody> resolveRequestEntity(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {
 
-        LOGGER.debug("反转请求实体 .");
-
         URI uri = this.resolveRequestUri(gatewayDefine, gatewayRequest);
         HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayDefine, gatewayRequest);
         MultiValueMap<String, String> requestHeaders = gatewayRequest.getRequestHeaders();
@@ -197,8 +191,6 @@ public abstract class BehaviorClient extends AbstractClient {
     }
 
     protected <RequestBody> HttpMethod resolveRequestHttpMethod(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {
-
-        LOGGER.debug("反转请求方法 .");
 
         String select = gatewayRequest.getSelect();
 
