@@ -9,6 +9,8 @@ import com.ohayoyo.gateway.define.core.*;
 import com.ohayoyo.gateway.http.builder.HttpGatewayRequestEntityBuilder;
 import com.ohayoyo.gateway.http.core.HttpGateway;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -28,6 +30,8 @@ import java.util.Set;
  * @author 蓝明乐
  */
 public abstract class BehaviorClient extends AbstractClient {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(BehaviorClient.class);
 
     private GatewayDefineValidator gatewayDefineValidator;
 
@@ -63,34 +67,62 @@ public abstract class BehaviorClient extends AbstractClient {
 
     @Override
     protected final void gatewayDefineVerify(GatewayDefine gatewayDefine) throws GatewayException, IOException, HttpGatewayException {
+
+        LOGGER.debug("处理定义验证 .");
+
         if (!ObjectUtils.isEmpty(this.gatewayDefineValidator)) {
+
+            LOGGER.debug("存在网关定义验证器 .");
+
             Class<?> supportType = gatewayDefine.getClass();
             if (this.gatewayDefineValidator.supports(supportType)) {
+                LOGGER.debug("网关验证器支持验证类型:{} .", supportType);
                 this.gatewayDefineValidator.validate(gatewayDefine);
+                LOGGER.debug("网关验证器验证完成 .");
+            } else {
+                LOGGER.debug("这个网关验证器:{} , 不支持验证类型:{} .", this.gatewayDefineValidator.getClass(), supportType);
             }
+        } else {
+
+            LOGGER.debug("不存在网关定义验证器 .");
+
         }
     }
 
     @Override
-    protected final <RequestBody> void gatewayAutofill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException, IOException, HttpGatewayException {
+    protected final <RequestBody> void gatewayAutofill(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
+
+        LOGGER.debug("处理自动填充 .");
+
         if (!ObjectUtils.isEmpty(this.gatewayAutofill)) {
             RequestDefine requestDefine = gatewayDefine.getRequest();
-            if (!ObjectUtils.isEmpty(requestDefine)) {
-                this.gatewayAutofill.autofill(requestDefine, gatewayRequest);
-            }
+            LOGGER.debug("开始进行数据自动填充 .");
+            this.gatewayAutofill.autofill(requestDefine, gatewayRequest);
+            LOGGER.debug("结束进行数据自动填充 .");
+        } else {
+
+            LOGGER.debug("不存在自动填充器 .");
+
         }
+
     }
 
     @Override
-    protected final <RequestBody> void gatewayDataVerify(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException, IOException, HttpGatewayException {
+    protected final <RequestBody> void gatewayDataVerify(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
     }
 
     @Override
-    protected final <ResponseBody> void gatewayResultVerify(GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine) throws GatewayException, IOException, HttpGatewayException {
+    protected final <ResponseBody> void gatewayResultVerify(GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine) throws GatewayException {
     }
 
     protected <RequestBody> URI resolveRequestUri(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {
+
+        LOGGER.debug("反转请求URL .");
+
         String select = gatewayRequest.getSelect();
+
+        LOGGER.debug("当前选择作用域环境:{}", select);
+
         Map<String, String> requestPathVariables = gatewayRequest.getRequestPathVariables();
         MultiValueMap<String, String> requestQueries = gatewayRequest.getRequestQueries();
         RequestDefine requestDefine = gatewayDefine.getRequest();
@@ -98,12 +130,27 @@ public abstract class BehaviorClient extends AbstractClient {
         Set<HostDefine> hostDefines = requestDefine.getHosts();
         PathDefine pathDefine = requestDefine.getPath();
         String fragment = requestDefine.getFragment();
+
+
         ProtocolDefine protocolDefine = SelectDefineUtil.selectProtocolDefine(select, protocolDefines);
+
+        LOGGER.debug("选择的协议定义名称:{} .", protocolDefine.getName());
+
         HostDefine hostDefine = SelectDefineUtil.selectHostDefine(select, hostDefines);
+
+        LOGGER.debug("选择的主机定义名称:{},端口:{} .", hostDefine.getHostname(), hostDefine.getPort());
+
         String scheme = protocolDefine.getName().toLowerCase();
         String host = hostDefine.getHostname();
+
         int port = SelectDefineUtil.selectHostDefinePort(protocolDefine, hostDefine);
+
+        LOGGER.debug("自动选择端口:{} .", port);
+
         String[] pathSegments = PathDefineUtil.pathSegments(pathDefine);
+
+        LOGGER.debug("路径值片段集合:{} .", pathSegments);
+
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance();
         uriComponentsBuilder.scheme(scheme);
         uriComponentsBuilder.host(host);
@@ -124,23 +171,39 @@ public abstract class BehaviorClient extends AbstractClient {
             uriComponents = uriComponentsBuilder.build();
         }
         URI uri = uriComponents.encode().toUri();
+
+        LOGGER.debug("反转的URL:{} .", uri);
+
         return uri;
     }
 
     protected <RequestBody> RequestEntity<RequestBody> resolveRequestEntity(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {
+
+        LOGGER.debug("反转请求实体 .");
+
         URI uri = this.resolveRequestUri(gatewayDefine, gatewayRequest);
         HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayDefine, gatewayRequest);
         MultiValueMap<String, String> requestHeaders = gatewayRequest.getRequestHeaders();
         RequestBody requestEntity = gatewayRequest.getRequestBody();
+
         return (RequestEntity<RequestBody>) HttpGatewayRequestEntityBuilder.newInstance().url(uri).headers(requestHeaders).httpMethod(httpMethod).body(requestEntity).build();
     }
 
     protected <RequestBody> HttpMethod resolveRequestHttpMethod(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {
+
+        LOGGER.debug("反转请求方法 .");
+
         String select = gatewayRequest.getSelect();
+
+        LOGGER.debug("当前选择作用域环境:{}", select);
+
         RequestDefine requestDefine = gatewayDefine.getRequest();
         Set<MethodDefine> methodDefines = requestDefine.getMethods();
         MethodDefine methodDefine = SelectDefineUtil.selectMethodDefine(select, methodDefines);
         String name = methodDefine.getName();
+
+        LOGGER.debug("选择定义的方法名称:{} .", name);
+
         HttpMethod httpMethod = HttpMethod.resolve(name);
         return httpMethod;
     }

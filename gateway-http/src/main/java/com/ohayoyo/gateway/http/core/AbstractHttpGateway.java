@@ -77,15 +77,20 @@ public abstract class AbstractHttpGateway implements HttpGateway {
     }
 
     @Override
-    public final <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException, IOException {
+    public final <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException {
         return this.handler(null, null, responseBodyClass, requestEntity);
     }
 
     @Override
-    public final <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException, IOException {
+    public final <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException {
         Assert.notNull(responseBodyClass);
         Assert.notNull(requestEntity);
-        ResponseEntity<ResponseBody> responseEntity = this.doHandler(customRequestContentType, customResponseContentType, responseBodyClass, requestEntity);
+        ResponseEntity<ResponseBody> responseEntity = null;
+        try {
+            responseEntity = this.doHandler(customRequestContentType, customResponseContentType, responseBodyClass, requestEntity);
+        } catch (IOException ex) {
+            HttpGatewayException.exception(ex);
+        }
         return responseEntity;
     }
 

@@ -30,4 +30,8 @@ public class HttpGatewayException extends Exception {
         throw new HttpGatewayException(String.format(Locale.CHINA, exMsg, args));
     }
 
+    public static void exception(Throwable cause) throws HttpGatewayException {
+        throw new HttpGatewayException(cause);
+    }
+
 }

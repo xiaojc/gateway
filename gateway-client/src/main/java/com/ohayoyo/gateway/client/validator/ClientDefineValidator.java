@@ -5,6 +5,8 @@ import com.ohayoyo.gateway.client.utils.ParameterDefineUtil;
 import com.ohayoyo.gateway.client.utils.PathDefineUtil;
 import com.ohayoyo.gateway.define.ParameterDefine;
 import com.ohayoyo.gateway.define.core.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -14,11 +16,13 @@ import java.util.Set;
 
 public class ClientDefineValidator implements GatewayDefineValidator {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(ClientDefineValidator.class);
+
     private static final Set<String> CACHE = new HashSet<String>();
 
     @Override
     public boolean supports(Class<?> supportType) {
-        if (null != supportType) {
+        if (!ObjectUtils.isEmpty(supportType)) {
             return InterfaceDefine.class.isAssignableFrom(supportType);
         }
         return false;
@@ -29,6 +33,8 @@ public class ClientDefineValidator implements GatewayDefineValidator {
      * @throws ValidatorException
      */
     public void validate(Object target) throws ValidatorException {
+
+        LOGGER.debug("客户端定义验证器进行实际的验证处理 .");
 
         InterfaceDefine interfaceDefine = (InterfaceDefine) target;
 
@@ -113,10 +119,10 @@ public class ClientDefineValidator implements GatewayDefineValidator {
             }
         }
 
-        QueriesDefine queriesDefine = requestDefine.getQueries();
-        if (!ObjectUtils.isEmpty(queriesDefine)) {
-
-        }
+//        QueriesDefine queriesDefine = requestDefine.getQueries();
+//        if (!ObjectUtils.isEmpty(queriesDefine)) {
+//
+//        }
 
         //HeadersDefine requestHeadersDefine = requestDefine.getHeaders() ;
         //请求头不进行检查

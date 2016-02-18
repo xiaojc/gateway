@@ -3,6 +3,8 @@ package com.ohayoyo.gateway.client.spring;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.define.core.InterfaceDefine;
 import com.ohayoyo.gateway.define.memory.container.MemoryContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import java.util.Set;
  */
 public class SpringClientContainer implements GatewayContainer, InitializingBean, ApplicationContextAware {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(SpringClientContainer.class);
+
     public static final String OVERRIDE_DELEGATE_GATEWAY_CONTAINER_NAME = "overrideDelegateGatewayContainer";
 
     @Autowired
@@ -28,19 +32,29 @@ public class SpringClientContainer implements GatewayContainer, InitializingBean
 
     @Override
     public void afterPropertiesSet() throws Exception {
+
+        LOGGER.debug("初始化 SpringClientContainer Bean .");
+
         if (ObjectUtils.isEmpty(this.delegateGatewayContainer)) {
+
+            LOGGER.debug("不存在委托网关容器 .");
+
             try {
+                LOGGER.debug("加载定义 SpringClientContainer Bean {} .", OVERRIDE_DELEGATE_GATEWAY_CONTAINER_NAME);
                 this.delegateGatewayContainer = applicationContext.getBean(OVERRIDE_DELEGATE_GATEWAY_CONTAINER_NAME, GatewayContainer.class);
+                LOGGER.debug("加载成功 SpringClientContainer Bean {} .", OVERRIDE_DELEGATE_GATEWAY_CONTAINER_NAME);
             } catch (Exception e) {
-                //none
+                LOGGER.info("加载失败 SpringClientContainer Bean {} .", OVERRIDE_DELEGATE_GATEWAY_CONTAINER_NAME);
             }
         }
         if (ObjectUtils.isEmpty(this.delegateGatewayContainer)) {
+            LOGGER.debug("手动初始化委托网关容器,使用内存容器 .");
             this.delegateGatewayContainer = new MemoryContainer();
         }
-        //自动扫描InterfaceDefine类型Bean
         try {
+            LOGGER.debug("开始扫描实现InterfaceDefine接口了类型Bean");
             Map<String, InterfaceDefine> interfaceDefineMap = applicationContext.getBeansOfType(InterfaceDefine.class);
+            LOGGER.debug("扫描到interfaceDefineMap:{}", interfaceDefineMap);
             if (!CollectionUtils.isEmpty(interfaceDefineMap)) {
                 Set<Map.Entry<String, InterfaceDefine>> entries = interfaceDefineMap.entrySet();
                 for (Map.Entry<String, InterfaceDefine> entry : entries) {
@@ -51,7 +65,7 @@ public class SpringClientContainer implements GatewayContainer, InitializingBean
                 }
             }
         } catch (Exception ex) {
-            //none
+            LOGGER.info("扫描实现InterfaceDefine接口了类型Bean出现了错误:{}", ex.getMessage());
         }
     }
 
