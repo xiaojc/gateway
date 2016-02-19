@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.client.validator;
 
 import com.ohayoyo.gateway.client.exception.ValidatorException;
-import com.ohayoyo.gateway.client.utils.ParameterDefineUtil;
-import com.ohayoyo.gateway.client.utils.PathDefineUtil;
+import com.ohayoyo.gateway.client.utils.ParameterUtils;
+import com.ohayoyo.gateway.client.utils.PathUtils;
 import com.ohayoyo.gateway.define.core.Parameter;
 import com.ohayoyo.gateway.define.http.*;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class ClientDefineValidator implements GatewayDefineValidator {
 
         PathDefine pathDefine = requestDefine.getPath();
         if (!ObjectUtils.isEmpty(pathDefine)) {
-            Set<String> variableNames = PathDefineUtil.expandVariableNames(pathDefine);
+            Set<String> variableNames = PathUtils.expandVariableNames(pathDefine);
             if (!CollectionUtils.isEmpty(variableNames)) {
 
                 VariablesDefine variablesDefine = pathDefine.getVariables();
@@ -84,7 +84,7 @@ public class ClientDefineValidator implements GatewayDefineValidator {
                     ValidatorException.exception("请求路径定义中的存在路径变量,这个路径变量对象存在,但是没有存在相关的字段集合定义.");
                 }
 
-                if (ParameterDefineUtil.isExistEmptyParameterName(parameters)) {
+                if (ParameterUtils.isExistEmptyParameterName(parameters)) {
                     ValidatorException.exception("请求路径定义中的存在路径变量,这个路径变量对象存在,但是路径变量字段集合中存在空值的字段名称.");
                 }
 
@@ -94,7 +94,7 @@ public class ClientDefineValidator implements GatewayDefineValidator {
                     ValidatorException.exception("请求路径定义中的存在路径变量,这个路径变量对象存在,但是路径变量字段集合实际的个数少于值中的变量个数,路径变量长度:%d,字段定义长度:%d.", variableNamesLen, fieldDefinesLen);
                 }
 
-                Set<String> fieldNames = ParameterDefineUtil.getParameterNames(parameters);
+                Set<String> fieldNames = ParameterUtils.getParameterNames(parameters);
                 Set<String> notExistDefineVariableNames = new HashSet<String>();
                 for (String variableName : variableNames) {
                     if (!fieldNames.contains(variableName)) {
@@ -114,7 +114,7 @@ public class ClientDefineValidator implements GatewayDefineValidator {
             if (CollectionUtils.isEmpty(parameters)) {
                 ValidatorException.exception("请求查询定义中的存在查询对象,但是没有存在相关的字段集合定义.");
             }
-            if (ParameterDefineUtil.isExistEmptyParameterName(parameters)) {
+            if (ParameterUtils.isExistEmptyParameterName(parameters)) {
                 ValidatorException.exception("请求查询定义中的存在查询对象,但是查询对象字段集合中存在空值的字段名称.");
             }
         }
@@ -125,7 +125,7 @@ public class ClientDefineValidator implements GatewayDefineValidator {
             if (CollectionUtils.isEmpty(parameters)) {
                 ValidatorException.exception("请求头定义中的存在查询对象,但是没有存在相关的字段集合定义.");
             }
-            if (ParameterDefineUtil.isExistEmptyParameterName(parameters)) {
+            if (ParameterUtils.isExistEmptyParameterName(parameters)) {
                 ValidatorException.exception("请求头定义中的存在查询对象,但是头对象字段集合中存在空值的字段名称.");
             }
         }

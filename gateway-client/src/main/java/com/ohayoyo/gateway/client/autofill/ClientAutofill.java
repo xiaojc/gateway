@@ -1,6 +1,7 @@
 package com.ohayoyo.gateway.client.autofill;
 
 import com.ohayoyo.gateway.client.core.GatewayRequest;
+import com.ohayoyo.gateway.client.utils.ParameterUtils;
 import com.ohayoyo.gateway.define.core.Parameter;
 import com.ohayoyo.gateway.define.http.*;
 import org.slf4j.Logger;
@@ -16,14 +17,13 @@ import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.util.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * @author 蓝明乐
  */
-public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware {
+public class ClientAutofill implements GatewayAutofill, ApplicationContextAware {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ClientAutofill.class);
 
@@ -36,78 +36,61 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
     @Autowired(required = false)
     private ConversionService conversionService;
 
-    //自动选择环境 CLIENT_AUTOFILL_SELECT_ENVIRONMENT | CLIENT_AUTOFILL_SELECT_ENVIRONMENT_CONFIG
-    private volatile String environmentSelect = null;
-
     @Autowired(required = false)
     private Environment environment;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    //自动选择环境 CLIENT_AUTOFILL_SELECT_ENVIRONMENT | CLIENT_AUTOFILL_SELECT_ENVIRONMENT_CONFIG
+    private volatile String applicationEnvironmentSelect = null;
 
     //是否可为空值并存在默认值同时也使用自动填充
     private boolean nullableAutofill = true;
 
-    public boolean isNullableAutofill() {
-        return nullableAutofill;
-    }
-
-    public ClientAutofill setNullableAutofill(boolean nullableAutofill) {
-        this.nullableAutofill = nullableAutofill;
-        return this;
-    }
-
-    public ConversionService getConversionService() {
-        return conversionService;
-    }
-
-    public ClientAutofill setConversionService(ConversionService conversionService) {
-        this.conversionService = conversionService;
-        return this;
-    }
-
-    private void checkConversionService() {
+    protected ConversionService checkConversionService() {
         if (ObjectUtils.isEmpty(this.conversionService)) {
             this.conversionService = new DefaultFormattingConversionService();
         }
+        return this.conversionService;
     }
 
-    protected void environmentSelect() {
-        if (!StringUtils.isEmpty(this.environmentSelect)) {
+    protected void applicationContextEnvironmentSelect() {
+        if (!StringUtils.isEmpty(this.applicationEnvironmentSelect)) {
             return;
         }
-        String select = null;
+        String select;
         if (ObjectUtils.isEmpty(environment)) {
             this.environment = new StandardEnvironment();
         }
-        if(!ObjectUtils.isEmpty(this.applicationContext)){
-            try{
-                select =this.applicationContext.getBean(CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN,String.class) ;
-            }catch (Exception ex){
-                LOGGER.info("获取配置{}失败,信息:{}",CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN,ex.getMessage());
-            }
-        }
-        if (StringUtils.isEmpty(select)) {
-            try {
+        try {
+            select = this.environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT);
+            if (StringUtils.isEmpty(select)) {
                 select = this.environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT_CONFIG);
-                if (StringUtils.isEmpty(select)) {
-                    select = this.environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT);
-                }
+            }
+        } catch (Exception ex) {
+            select = null;
+            LOGGER.info("自动选择环境错误:{}", ex);
+        }
+        if (StringUtils.isEmpty(select) && (!ObjectUtils.isEmpty(this.applicationContext))) {
+            try {
+                select = this.applicationContext.getBean(CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN, String.class);
             } catch (Exception ex) {
-                select = null;
-                LOGGER.info("自动选择环境错误:{}", ex);
+                LOGGER.info("获取选择环境Bean配置{}失败,信息:{}", CLIENT_AUTOFILL_SELECT_ENVIRONMENT_BEAN, ex.getMessage());
             }
         }
-
-        this.environmentSelect = select;
+        this.applicationEnvironmentSelect = select;
     }
 
-    protected void autofillSelect(GatewayRequest<?> gatewayRequest) {
+    protected void autofillRequestSelect(GatewayRequest<?> gatewayRequest) {
         String select = gatewayRequest.getSelect();
         if (StringUtils.isEmpty(select)) {
-            environmentSelect();
-            gatewayRequest.setSelect(environmentSelect);
+            applicationContextEnvironmentSelect();
+            gatewayRequest.setSelect(applicationEnvironmentSelect);
         }
     }
 
-    protected void autofillValue(Set<Parameter> parameters, Map<String, String> dataMapString, MultiValueMap<String, String> dataMapStrings) {
+    protected void autofillRequestDataValues(Set<Parameter> parameters, Map<String, String> singleValueData, MultiValueMap<String, String> multiValueData) {
         if (CollectionUtils.isEmpty(parameters)) {
             return;
         }
@@ -127,57 +110,21 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
             } else {
                 isAutofill = !parameterNullable;
             }
-            if (null != dataMapString) {
-                autofillValueMapString(isAutofill, parameterName, defaultValue, dataMapString);
-            } else if (null != dataMapStrings) {
-                autofillValueMapStrings(isAutofill, parameterName, defaultValue, dataMapStrings);
-            }
-        }
-    }
-
-    protected void autofillValueMapStrings(boolean isAutofill, String parameterName, Object defaultValue, MultiValueMap<String, String> dataStrings) {
-        if (isAutofill && (!dataStrings.containsKey(parameterName))) {
-            Class<?> defaultValueType = defaultValue.getClass();
-            Class<String> stringType = String.class;
-            Class<List> listType = List.class;
-            boolean isHasError = false;
-            checkConversionService();
-            if (this.conversionService.canConvert(defaultValueType, listType)) {
-                try {
-                    List<Object> valueObjects = this.conversionService.convert(defaultValue, listType);
-                    for (Object valueObject : valueObjects) {
-                        if (ObjectUtils.isEmpty(valueObject)) {
-                            continue;
-                        }
-                        if (this.conversionService.canConvert(valueObject.getClass(), stringType)) {
-                            String valueString = this.conversionService.convert(valueObject, stringType);
-                            dataStrings.add(parameterName, valueString);
-                        }
-                    }
-                } catch (Exception ex) {
-                    isHasError = true;
+            if (isAutofill && (null != singleValueData) && (!singleValueData.containsKey(parameterName))) {
+                String valueString = ParameterUtils.resolveParameterDefaultValueToString(parameter, checkConversionService());
+                if (!StringUtils.isEmpty(valueString)) {
+                    singleValueData.put(parameterName, valueString);
+                }
+            } else if (isAutofill && (null != multiValueData) && (!multiValueData.containsKey(parameterName))) {
+                String valueString = ParameterUtils.resolveParameterDefaultValueToString(parameter, checkConversionService());
+                if (!StringUtils.isEmpty(valueString)) {
+                    multiValueData.add(parameterName, valueString);
                 }
             }
-            if (isHasError && this.conversionService.canConvert(defaultValueType, stringType)) {
-                String valueString = this.conversionService.convert(defaultValue, stringType);
-                dataStrings.add(parameterName, valueString);
-            }
         }
     }
 
-    protected void autofillValueMapString(boolean isAutofill, String parameterName, Object defaultValue, Map<String, String> dataString) {
-        if (isAutofill && (!dataString.containsKey(parameterName))) {
-            Class<?> defaultValueType = defaultValue.getClass();
-            Class<String> stringType = String.class;
-            checkConversionService();
-            if (this.conversionService.canConvert(defaultValueType, stringType)) {
-                String valueString = this.conversionService.convert(defaultValue, stringType);
-                dataString.put(parameterName, valueString);
-            }
-        }
-    }
-
-    protected void autofillPath(RequestDefine requestDefine, GatewayRequest<?> gatewayRequest) {
+    protected void autofillRequestPath(RequestDefine requestDefine, GatewayRequest<?> gatewayRequest) {
         PathDefine pathDefine = requestDefine.getPath();
         if (ObjectUtils.isEmpty(pathDefine)) {
             return;
@@ -195,11 +142,10 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
             requestPathVariables = new HashMap<String, String>();
             gatewayRequest.setRequestPathVariables(requestPathVariables);
         }
-        autofillValue(parameters, requestPathVariables, null);
+        autofillRequestDataValues(parameters, requestPathVariables, null);
     }
 
-
-    protected void autofillQueries(RequestDefine requestDefine, GatewayRequest<?> gatewayRequest) {
+    protected void autofillRequestQueries(RequestDefine requestDefine, GatewayRequest<?> gatewayRequest) {
         QueriesDefine queriesDefine = requestDefine.getQueries();
         if (ObjectUtils.isEmpty(queriesDefine)) {
             return;
@@ -213,10 +159,10 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
             requestQueries = new LinkedMultiValueMap<String, String>();
             gatewayRequest.setRequestQueries(requestQueries);
         }
-        autofillValue(parameters, null, requestQueries);
+        autofillRequestDataValues(parameters, null, requestQueries);
     }
 
-    protected void autofillHeaders(RequestDefine requestDefine, GatewayRequest<?> gatewayRequest) {
+    protected void autofillRequestHeaders(RequestDefine requestDefine, GatewayRequest<?> gatewayRequest) {
         HeadersDefine headersDefine = requestDefine.getHeaders();
         if (ObjectUtils.isEmpty(headersDefine)) {
             return;
@@ -230,7 +176,7 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
             requestHeaders = new LinkedMultiValueMap<String, String>();
             gatewayRequest.setRequestHeaders(requestHeaders);
         }
-        autofillValue(parameters, null, requestHeaders);
+        autofillRequestDataValues(parameters, null, requestHeaders);
     }
 
     @Override
@@ -243,27 +189,40 @@ public class ClientAutofill implements GatewayAutofill ,ApplicationContextAware 
         }
 
         LOGGER.debug("选择作用域环境自动填充.");
-        autofillSelect(gatewayRequest);
+        autofillRequestSelect(gatewayRequest);
 
         LOGGER.debug("请求路径值自动填充.");
-        autofillPath(requestDefine, gatewayRequest);
+        autofillRequestPath(requestDefine, gatewayRequest);
 
         LOGGER.debug("请求查询参数自动填充");
-        autofillQueries(requestDefine, gatewayRequest);
+        autofillRequestQueries(requestDefine, gatewayRequest);
 
         LOGGER.debug("请求头参数自动填充");
-        autofillHeaders(requestDefine, gatewayRequest);
-
-        //请求实体自动填充
-        //目前还没有可支持
+        autofillRequestHeaders(requestDefine, gatewayRequest);
 
     }
-
-    @Autowired
-    private ApplicationContext applicationContext ;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext =applicationContext ;
+        this.applicationContext = applicationContext;
     }
+
+    public boolean isNullableAutofill() {
+        return nullableAutofill;
+    }
+
+    public ClientAutofill setNullableAutofill(boolean nullableAutofill) {
+        this.nullableAutofill = nullableAutofill;
+        return this;
+    }
+
+    public ConversionService getConversionService() {
+        return conversionService;
+    }
+
+    public ClientAutofill setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
+        return this;
+    }
+
 }

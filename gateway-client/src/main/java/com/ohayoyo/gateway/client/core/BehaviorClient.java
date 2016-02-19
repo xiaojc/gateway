@@ -2,8 +2,8 @@ package com.ohayoyo.gateway.client.core;
 
 import com.ohayoyo.gateway.client.autofill.GatewayAutofill;
 import com.ohayoyo.gateway.client.exception.GatewayException;
-import com.ohayoyo.gateway.client.utils.PathDefineUtil;
-import com.ohayoyo.gateway.client.utils.SelectDefineUtil;
+import com.ohayoyo.gateway.client.utils.PathUtils;
+import com.ohayoyo.gateway.client.utils.SelectUtils;
 import com.ohayoyo.gateway.client.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
 import com.ohayoyo.gateway.client.validator.GatewayResultValidator;
@@ -135,22 +135,22 @@ public abstract class BehaviorClient extends AbstractClient {
         String fragment = requestDefine.getFragment();
 
 
-        ProtocolDefine protocolDefine = SelectDefineUtil.selectProtocolDefine(select, protocolDefines);
+        ProtocolDefine protocolDefine = SelectUtils.selectProtocolDefine(select, protocolDefines);
 
         LOGGER.debug("选择的协议定义名称:{} .", protocolDefine.getName());
 
-        HostDefine hostDefine = SelectDefineUtil.selectHostDefine(select, hostDefines);
+        HostDefine hostDefine = SelectUtils.selectHostDefine(select, hostDefines);
 
         LOGGER.debug("选择的主机定义名称:{},端口:{} .", hostDefine.getHostname(), hostDefine.getPort());
 
         String scheme = protocolDefine.getName().toLowerCase();
         String host = hostDefine.getHostname();
 
-        int port = SelectDefineUtil.selectHostDefinePort(protocolDefine, hostDefine);
+        int port = SelectUtils.selectHostDefinePort(protocolDefine, hostDefine);
 
         LOGGER.debug("自动选择端口:{} .", port);
 
-        String[] pathSegments = PathDefineUtil.pathSegments(pathDefine);
+        String[] pathSegments = PathUtils.pathSegments(pathDefine);
 
         LOGGER.debug("路径值片段集合:{} .", pathSegments);
 
@@ -198,7 +198,7 @@ public abstract class BehaviorClient extends AbstractClient {
 
         RequestDefine requestDefine = gatewayDefine.getRequest();
         Set<MethodDefine> methodDefines = requestDefine.getMethods();
-        MethodDefine methodDefine = SelectDefineUtil.selectMethodDefine(select, methodDefines);
+        MethodDefine methodDefine = SelectUtils.selectMethodDefine(select, methodDefines);
         String name = methodDefine.getName();
 
         LOGGER.debug("选择定义的方法名称:{} .", name);

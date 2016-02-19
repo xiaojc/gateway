@@ -5,42 +5,6 @@ package com.ohayoyo.gateway.define.core;
  */
 public class Parameter implements ObjectDefine {
 
-    //primitive -> form & data
-
-    String DATA_TYPE_BYTE = "byte";
-
-    String DATA_TYPE_SHORT = "short";
-
-    String DATA_TYPE_INT = "int";
-
-    String DATA_TYPE_LONG = "long";
-
-    String DATA_TYPE_CHAR = "char";
-
-    String DATA_TYPE_FLOAT = "float";
-
-    String DATA_TYPE_DOUBLE = "double";
-
-    String DATA_TYPE_BOOLEAN = "boolean";
-
-    // object -> form & data
-
-    String DATA_TYPE_STRING = "string";
-
-    //file -> form
-
-    String DATA_TYPE_FILE = "file";
-
-    //collection -> form & data
-
-    String DATA_TYPE_LIST = "list";
-
-    String DATA_TYPE_SET = "set";
-
-    //map -> form & data
-
-    String DATA_TYPE_MAP = "map";
-
     private String name;
 
     private String comment;
@@ -56,6 +20,8 @@ public class Parameter implements ObjectDefine {
     private Boolean nullable = true;
 
     private Object defaultValue;
+
+    private String referenceClass;
 
     public String getComment() {
         return comment;
@@ -126,6 +92,15 @@ public class Parameter implements ObjectDefine {
 
     public Parameter setDefaultValue(Object defaultValue) {
         this.defaultValue = defaultValue;
+        return this;
+    }
+
+    public String getReferenceClass() {
+        return referenceClass;
+    }
+
+    public Parameter setReferenceClass(String referenceClass) {
+        this.referenceClass = referenceClass;
         return this;
     }
 

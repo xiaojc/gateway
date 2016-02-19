@@ -25,7 +25,25 @@
                 </property>
                 <property name="path">
                     <bean class="com.ohayoyo.gateway.define.memory.http.MemoryPathDefine">
-                        <property name="project" value="meinv/other"/>
+                        <property name="project" value="meinv/{other}"/>
+                        <property name="variables">
+                            <bean class="com.ohayoyo.gateway.define.memory.http.MemoryVariablesDefine">
+                                <property name="parameters">
+                                    <set>
+                                        <bean class="com.ohayoyo.gateway.define.core.Parameter">
+                                            <property name="name" value="other"/>
+                                            <property name="overview" value="other"/>
+                                            <property name="comment" value=""/>
+                                            <property name="description" value=""/>
+                                            <property name="dataType" value="STRING"/>
+                                            <property name="dataLength" value="-1"/>
+                                            <property name="nullable" value="true"/>
+                                            <property name="defaultValue" value="other"/>
+                                        </bean>
+                                    </set>
+                                </property>
+                            </bean>
+                        </property>
                     </bean>
                 </property>
                 <property name="queries">
