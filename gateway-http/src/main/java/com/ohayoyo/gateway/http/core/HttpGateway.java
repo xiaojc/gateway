@@ -1,7 +1,6 @@
 package com.ohayoyo.gateway.http.core;
 
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +13,9 @@ import java.util.List;
  */
 public interface HttpGateway extends HttpGatewayAccessor, HttpGatewayRequestIntercepting {
 
-    HttpGateway DEFAULT_HTTP_GATEWAY = HttpGatewayHandler.defaultHttpGatewayHandler();
-
     List<HttpMessageConverter<?>> getHttpMessageConverters();
 
     HttpGateway setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters);
-
-    ConversionService getConversionService();
-
-    HttpGateway setConversionService(ConversionService conversionService);
 
     HttpGatewayRequest getHttpGatewayRequest();
 
@@ -31,8 +24,6 @@ public interface HttpGateway extends HttpGatewayAccessor, HttpGatewayRequestInte
     HttpGatewayResponse getHttpGatewayResponse();
 
     HttpGateway setHttpGatewayResponse(HttpGatewayResponse httpGatewayResponse);
-
-    <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException;
 
     <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException;
 

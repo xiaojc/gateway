@@ -4,18 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean class="com.ohayoyo.gateway.client.spring.builder.RestfulRequestBuilderFactory"/>
-
-    <bean class="com.ohayoyo.gateway.client.spring.builder.RestfulResponseBuilderFactory"/>
-
-    <bean class="com.ohayoyo.gateway.client.validator.ClientDefineValidator"/>
-
-    <bean class="com.ohayoyo.gateway.client.autofill.ClientAutofill"/>
-
-    <bean id="springClientContainer" class="com.ohayoyo.gateway.client.spring.SpringClientContainer"/>
-
-    <bean id="springGatewayChannel" class="com.ohayoyo.gateway.client.spring.SpringClientChannel">
-        <property name="gatewayContainer" ref="springClientContainer"/>
-    </bean>
+    <bean class="com.ohayoyo.gateway.client.spring.SpringClientConfiguration"/>
 
 </beans>

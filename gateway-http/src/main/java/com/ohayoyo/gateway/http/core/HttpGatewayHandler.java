@@ -3,7 +3,6 @@ package com.ohayoyo.gateway.http.core;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,45 +22,6 @@ import java.util.List;
 public class HttpGatewayHandler extends AbstractHttpGateway {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(HttpGatewayHandler.class);
-
-    private static HttpGatewayHandler DEFAULT_HTTP_GATEWAY_HANDLER = null;
-
-    private static final Object LOCKED = new Object();
-
-    public HttpGatewayHandler() {
-        super();
-    }
-
-    public HttpGatewayHandler(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService) {
-        super(httpMessageConverters, conversionService);
-    }
-
-    public HttpGatewayHandler(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, ClientHttpRequestFactory clientHttpRequestFactory) {
-        super(httpMessageConverters, conversionService, clientHttpRequestFactory);
-    }
-
-    public HttpGatewayHandler(List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequestFactory clientHttpRequestFactory, List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors, ConversionService conversionService) {
-        super(httpMessageConverters, clientHttpRequestFactory, clientHttpRequestInterceptors, conversionService);
-    }
-
-    public HttpGatewayHandler(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, HttpGatewayRequest httpGatewayRequest, HttpGatewayResponse httpGatewayResponse, ClientHttpRequestFactory clientHttpRequestFactory) {
-        super(httpMessageConverters, conversionService, httpGatewayRequest, httpGatewayResponse, clientHttpRequestFactory);
-    }
-
-    public HttpGatewayHandler(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, HttpGatewayRequest httpGatewayRequest, HttpGatewayResponse httpGatewayResponse, List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors, ClientHttpRequestFactory clientHttpRequestFactory) {
-        super(httpMessageConverters, conversionService, httpGatewayRequest, httpGatewayResponse, clientHttpRequestInterceptors, clientHttpRequestFactory);
-    }
-
-    public static final HttpGatewayHandler defaultHttpGatewayHandler() {
-        if (ObjectUtils.isEmpty(DEFAULT_HTTP_GATEWAY_HANDLER)) {
-            synchronized (LOCKED) {
-                if (ObjectUtils.isEmpty(DEFAULT_HTTP_GATEWAY_HANDLER)) {
-                    DEFAULT_HTTP_GATEWAY_HANDLER = new HttpGatewayHandler();
-                }
-            }
-        }
-        return DEFAULT_HTTP_GATEWAY_HANDLER;
-    }
 
     @Override
     protected <ResponseBody, RequestBody> ResponseEntity<ResponseBody> doHandler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException, IOException {

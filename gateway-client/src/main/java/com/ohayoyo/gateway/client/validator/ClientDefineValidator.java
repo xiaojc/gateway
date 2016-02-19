@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.client.validator;
 
+import com.ohayoyo.gateway.client.core.GatewayContext;
 import com.ohayoyo.gateway.client.exception.ValidatorException;
 import com.ohayoyo.gateway.client.utils.ParameterDefineUtils;
 import com.ohayoyo.gateway.client.utils.PathDefineUtils;
@@ -23,9 +24,9 @@ public class ClientDefineValidator implements GatewayDefineValidator {
 
     private static final Set<String> CACHE = new HashSet<String>();
 
-    public void validate(InterfaceDefine interfaceDefine) throws ValidatorException {
+    private GatewayContext gatewayContext;
 
-        LOGGER.debug("客户端定义验证器进行实际的验证处理 .");
+    public void validate(InterfaceDefine interfaceDefine) throws ValidatorException {
 
         String key = interfaceDefine.getKey();
 
@@ -146,6 +147,17 @@ public class ClientDefineValidator implements GatewayDefineValidator {
         //响应实体目前是非必须检查
 
         CACHE.add(key);
+    }
+
+    @Override
+    public GatewayContext getGatewayContext() {
+        return gatewayContext;
+    }
+
+    @Override
+    public ClientDefineValidator setGatewayContext(GatewayContext gatewayContext) {
+        this.gatewayContext = gatewayContext;
+        return this;
     }
 
 }

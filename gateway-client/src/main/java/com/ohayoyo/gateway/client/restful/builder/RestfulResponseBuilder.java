@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.client.restful.builder;
 
+import com.ohayoyo.gateway.client.core.GatewayContext;
 import com.ohayoyo.gateway.client.restful.RestfulResponse;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.util.*;
 
 import java.util.Map;
@@ -13,8 +13,6 @@ import java.util.Set;
  */
 public class RestfulResponseBuilder {
 
-    private ConversionService conversionService;
-
     private Integer statusCode;
 
     private String reasonPhrase;
@@ -23,24 +21,8 @@ public class RestfulResponseBuilder {
 
     private Object responseBody;
 
-    public RestfulResponseBuilder() {
-    }
+    private GatewayContext gatewayContext;
 
-    public static RestfulResponseBuilder newInstance() {
-        return new RestfulResponseBuilder();
-    }
-
-    public RestfulResponseBuilder conversionService(ConversionService conversionService) {
-        Assert.notNull(conversionService);
-        this.conversionService = conversionService;
-        return this;
-    }
-
-    private void checkConversionService() {
-        if (ObjectUtils.isEmpty(this.conversionService)) {
-            this.conversionService = new DefaultFormattingConversionService();
-        }
-    }
 
     public RestfulResponseBuilder statusCode(int statusCode) {
         Assert.state(statusCode > 0 || statusCode < 600);
@@ -75,9 +57,9 @@ public class RestfulResponseBuilder {
             if (!ObjectUtils.isEmpty(value)) {
                 Class<?> sourceType = value.getClass();
                 Class<String> targetType = String.class;
-                checkConversionService();
-                if (this.conversionService.canConvert(sourceType, targetType)) {
-                    String responseHeaderValue = this.conversionService.convert(value, targetType);
+                ConversionService conversionService = gatewayContext.getConversionService();
+                if (conversionService.canConvert(sourceType, targetType)) {
+                    String responseHeaderValue = conversionService.convert(value, targetType);
                     this.responseHeaders.add(key, responseHeaderValue);
                 }
             }
@@ -102,9 +84,9 @@ public class RestfulResponseBuilder {
         }
         Class<?> sourceType = responseHeaderValueObject.getClass();
         Class<String> targetType = String.class;
-        checkConversionService();
-        if (this.conversionService.canConvert(sourceType, targetType)) {
-            String requestHeaderValueString = this.conversionService.convert(responseHeaderValueObject, targetType);
+        ConversionService conversionService = gatewayContext.getConversionService();
+        if (conversionService.canConvert(sourceType, targetType)){
+            String requestHeaderValueString = conversionService.convert(responseHeaderValueObject, targetType);
             this.responseHeaders.add(responseHeaderKey, requestHeaderValueString);
         }
         return this;
@@ -121,7 +103,16 @@ public class RestfulResponseBuilder {
                 .setStatusCode(this.statusCode)
                 .setReasonPhrase(this.reasonPhrase)
                 .setResponseHeaders(this.responseHeaders)
-                .setResponseBody((ResponseBody) this.responseBody);
+                .setResponseBody(this.responseBody);
+    }
+
+    public GatewayContext getGatewayContext() {
+        return gatewayContext;
+    }
+
+    public RestfulResponseBuilder setGatewayContext(GatewayContext gatewayContext) {
+        this.gatewayContext = gatewayContext;
+        return this;
     }
 
 }

@@ -6,7 +6,7 @@ public class RestfulRequestBuilderFactory extends AbstractRestfulBuilderFactory<
 
     @Override
     public RestfulRequestBuilder getObject() throws Exception {
-        return RestfulRequestBuilder.newInstance().conversionService(this.configConversionService());
+        return new RestfulRequestBuilder().setGatewayContext(this.getGatewayContext());
     }
 
     @Override

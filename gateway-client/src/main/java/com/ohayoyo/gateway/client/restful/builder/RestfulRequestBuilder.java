@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.client.restful.builder;
 
+import com.ohayoyo.gateway.client.core.GatewayContext;
 import com.ohayoyo.gateway.client.restful.RestfulRequest;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.util.*;
 
 import java.util.HashMap;
@@ -14,8 +14,6 @@ import java.util.Set;
  */
 public class RestfulRequestBuilder {
 
-    private ConversionService conversionService;
-
     private String select;
 
     private Map<String, String> requestPathVariables;
@@ -26,24 +24,7 @@ public class RestfulRequestBuilder {
 
     private Object requestBody;
 
-    public RestfulRequestBuilder() {
-    }
-
-    public static RestfulRequestBuilder newInstance() {
-        return new RestfulRequestBuilder();
-    }
-
-    public RestfulRequestBuilder conversionService(ConversionService conversionService) {
-        Assert.notNull(conversionService);
-        this.conversionService = conversionService;
-        return this;
-    }
-
-    private void checkConversionService() {
-        if (ObjectUtils.isEmpty(this.conversionService)) {
-            this.conversionService = new DefaultFormattingConversionService();
-        }
-    }
+    private GatewayContext gatewayContext;
 
     public RestfulRequestBuilder select(String select) {
         this.select = select;
@@ -73,9 +54,9 @@ public class RestfulRequestBuilder {
         Assert.notNull(requestPathVariableValueObject);
         Class<?> sourceType = requestPathVariableValueObject.getClass();
         Class<String> targetType = String.class;
-        checkConversionService();
-        if (this.conversionService.canConvert(sourceType, targetType)) {
-            String requestPathVariableValueString = this.conversionService.convert(requestPathVariableValueObject, targetType);
+        ConversionService conversionService = gatewayContext.getConversionService();
+        if (conversionService.canConvert(sourceType, targetType)) {
+            String requestPathVariableValueString = conversionService.convert(requestPathVariableValueObject, targetType);
             this.requestPathVariables.put(requestPathVariableKey, requestPathVariableValueString);
         }
         return this;
@@ -102,9 +83,9 @@ public class RestfulRequestBuilder {
             if (!ObjectUtils.isEmpty(value)) {
                 Class<?> sourceType = value.getClass();
                 Class<String> targetType = String.class;
-                checkConversionService();
-                if (this.conversionService.canConvert(sourceType, targetType)) {
-                    String requestQueryValue = this.conversionService.convert(value, targetType);
+                ConversionService conversionService = gatewayContext.getConversionService();
+                if (conversionService.canConvert(sourceType, targetType)) {
+                    String requestQueryValue = conversionService.convert(value, targetType);
                     this.requestQueries.add(key, requestQueryValue);
                 }
             }
@@ -129,9 +110,9 @@ public class RestfulRequestBuilder {
         }
         Class<?> sourceType = requestQueryValueObject.getClass();
         Class<String> targetType = String.class;
-        checkConversionService();
-        if (this.conversionService.canConvert(sourceType, targetType)) {
-            String requestQueryValueString = this.conversionService.convert(requestQueryValueObject, targetType);
+        ConversionService conversionService = gatewayContext.getConversionService();
+        if (conversionService.canConvert(sourceType, targetType)) {
+            String requestQueryValueString = conversionService.convert(requestQueryValueObject, targetType);
             this.requestQueries.add(requestQueryKey, requestQueryValueString);
         }
         return this;
@@ -158,9 +139,9 @@ public class RestfulRequestBuilder {
             if (!ObjectUtils.isEmpty(value)) {
                 Class<?> sourceType = value.getClass();
                 Class<String> targetType = String.class;
-                checkConversionService();
-                if (this.conversionService.canConvert(sourceType, targetType)) {
-                    String requestHeaderValue = this.conversionService.convert(value, targetType);
+                ConversionService conversionService = gatewayContext.getConversionService();
+                if (conversionService.canConvert(sourceType, targetType)) {
+                    String requestHeaderValue = conversionService.convert(value, targetType);
                     this.requestHeaders.add(key, requestHeaderValue);
                 }
             }
@@ -185,9 +166,9 @@ public class RestfulRequestBuilder {
         }
         Class<?> sourceType = requestHeaderValueObject.getClass();
         Class<String> targetType = String.class;
-        checkConversionService();
-        if (this.conversionService.canConvert(sourceType, targetType)) {
-            String requestHeaderValueString = this.conversionService.convert(requestHeaderValueObject, targetType);
+        ConversionService conversionService = gatewayContext.getConversionService();
+        if (conversionService.canConvert(sourceType, targetType)) {
+            String requestHeaderValueString = conversionService.convert(requestHeaderValueObject, targetType);
             this.requestHeaders.add(requestHeaderKey, requestHeaderValueString);
         }
         return this;
@@ -205,6 +186,15 @@ public class RestfulRequestBuilder {
                 .setRequestQueries(this.requestQueries)
                 .setRequestHeaders(this.requestHeaders)
                 .setRequestBody((RequestBody) this.requestBody);
+    }
+
+    public GatewayContext getGatewayContext() {
+        return gatewayContext;
+    }
+
+    public RestfulRequestBuilder setGatewayContext(GatewayContext gatewayContext) {
+        this.gatewayContext = gatewayContext;
+        return this;
     }
 
 }

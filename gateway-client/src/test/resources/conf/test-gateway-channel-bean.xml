@@ -4,30 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean class="com.ohayoyo.gateway.client.spring.builder.RestfulRequestBuilderFactory"/>
-
-    <bean class="com.ohayoyo.gateway.client.spring.builder.RestfulResponseBuilderFactory"/>
-
-    <bean id="springClientContainer" class="com.ohayoyo.gateway.client.spring.SpringClientContainer"/>
+    <bean class="com.ohayoyo.gateway.client.spring.SpringClientConfiguration"/>
 
     <bean id="defaultFormattingConversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
 
-    <bean id="ddqGatewayHttpMessageConverters" class="com.ohayoyo.gateway.test.converter.DDQHttpGatewayMessageConverters">
-        <constructor-arg name="conversionService" ref="defaultFormattingConversionService"/>
-    </bean>
-
-    <bean id="httpGatewayHandler" class="com.ohayoyo.gateway.http.core.HttpGatewayHandler">
-        <constructor-arg name="httpMessageConverters" ref="ddqGatewayHttpMessageConverters"/>
-        <constructor-arg name="conversionService" ref="defaultFormattingConversionService"/>
-    </bean>
-
-    <bean id="restfulClient" class="com.ohayoyo.gateway.client.restful.RestfulClient">
-        <property name="httpGateway" ref="httpGatewayHandler"/>
-    </bean>
-
-    <bean id="springGatewayChannel" class="com.ohayoyo.gateway.client.spring.SpringClientChannel">
-        <constructor-arg name="gatewayContainer" ref="springClientContainer"/>
-        <constructor-arg name="gatewayClient" ref="restfulClient"/>
-    </bean>
+    <bean id="ddqGatewayHttpMessageConverters" class="com.ohayoyo.gateway.test.converter.DDQHttpGatewayMessageConverters"/>
 
 </beans>

@@ -14,9 +14,7 @@ public class DefineDataType implements ResolveDataType {
 
     @Override
     public Class<?> resolve(String dataType, String referenceClass) {
-
         if (!StringUtils.isEmpty(dataType)) {
-
             if (BYTE.equalsIgnoreCase(dataType)) {
                 return byte.class;
             } else if (SHORT.equalsIgnoreCase(dataType)) {
@@ -43,7 +41,7 @@ public class DefineDataType implements ResolveDataType {
                 return String.class;
             } else if (FILE.equalsIgnoreCase(dataType)) {
                 return File.class;
-            } else if (OBJECT.equalsIgnoreCase(dataType)) {
+            } else if (OBJECT.equalsIgnoreCase(dataType) && (!StringUtils.isEmpty(referenceClass))) {
                 try {
                     return Class.forName(referenceClass);
                 } catch (ClassNotFoundException ex) {

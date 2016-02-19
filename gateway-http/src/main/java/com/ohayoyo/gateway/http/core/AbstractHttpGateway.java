@@ -1,18 +1,16 @@
 package com.ohayoyo.gateway.http.core;
 
-import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
-import com.ohayoyo.gateway.http.request.HttpGatewayRequestHandler;
-import com.ohayoyo.gateway.http.response.HttpGatewayResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.*;
+import org.springframework.http.client.ClientHttpRequest;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.InterceptingClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -30,8 +28,6 @@ public abstract class AbstractHttpGateway implements HttpGateway {
 
     private List<HttpMessageConverter<?>> httpMessageConverters;
 
-    private ConversionService conversionService;
-
     private HttpGatewayRequest httpGatewayRequest;
 
     private HttpGatewayResponse httpGatewayResponse;
@@ -39,47 +35,6 @@ public abstract class AbstractHttpGateway implements HttpGateway {
     private List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors;
 
     private ClientHttpRequestFactory clientHttpRequestFactory;
-
-    private static final ConversionService CONVERSION_SERVICE = new DefaultFormattingConversionService();
-
-    public AbstractHttpGateway() {
-        this(new HttpGatewayMessageConverters(CONVERSION_SERVICE), CONVERSION_SERVICE, new HttpGatewayRequestHandler(), new HttpGatewayResponseHandler(), null, new SimpleClientHttpRequestFactory());
-    }
-
-    public AbstractHttpGateway(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService) {
-        this(httpMessageConverters, conversionService, new HttpGatewayRequestHandler(), new HttpGatewayResponseHandler(), null, new SimpleClientHttpRequestFactory());
-    }
-
-    public AbstractHttpGateway(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, ClientHttpRequestFactory clientHttpRequestFactory) {
-        this(httpMessageConverters, conversionService, new HttpGatewayRequestHandler(), new HttpGatewayResponseHandler(), null, clientHttpRequestFactory);
-    }
-
-    public AbstractHttpGateway(List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequestFactory clientHttpRequestFactory, List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors, ConversionService conversionService) {
-        this(httpMessageConverters, conversionService, new HttpGatewayRequestHandler(), new HttpGatewayResponseHandler(), clientHttpRequestInterceptors, clientHttpRequestFactory);
-    }
-
-    public AbstractHttpGateway(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, HttpGatewayRequest httpGatewayRequest, HttpGatewayResponse httpGatewayResponse, ClientHttpRequestFactory clientHttpRequestFactory) {
-        this(httpMessageConverters, conversionService, httpGatewayRequest, httpGatewayResponse, null, clientHttpRequestFactory);
-    }
-
-    public AbstractHttpGateway(List<HttpMessageConverter<?>> httpMessageConverters, ConversionService conversionService, HttpGatewayRequest httpGatewayRequest, HttpGatewayResponse httpGatewayResponse, List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors, ClientHttpRequestFactory clientHttpRequestFactory) {
-        Assert.notEmpty(httpMessageConverters);
-        Assert.notNull(conversionService);
-        Assert.notNull(httpGatewayRequest);
-        Assert.notNull(httpGatewayResponse);
-        Assert.notNull(clientHttpRequestFactory);
-        this.httpMessageConverters = httpMessageConverters;
-        this.conversionService = conversionService;
-        this.httpGatewayRequest = httpGatewayRequest;
-        this.httpGatewayResponse = httpGatewayResponse;
-        this.clientHttpRequestInterceptors = clientHttpRequestInterceptors;
-        this.clientHttpRequestFactory = clientHttpRequestFactory;
-    }
-
-    @Override
-    public final <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException {
-        return this.handler(null, null, responseBodyClass, requestEntity);
-    }
 
     @Override
     public final <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException {
@@ -108,19 +63,6 @@ public abstract class AbstractHttpGateway implements HttpGateway {
         return this;
     }
 
-    @Override
-    public ConversionService getConversionService() {
-        return conversionService;
-    }
-
-    @Override
-    public AbstractHttpGateway setConversionService(ConversionService conversionService) {
-        Assert.notNull(conversionService);
-        this.conversionService = conversionService;
-        return this;
-    }
-
-
     public HttpGatewayRequest getHttpGatewayRequest() {
         return httpGatewayRequest;
     }
@@ -148,7 +90,6 @@ public abstract class AbstractHttpGateway implements HttpGateway {
 
     @Override
     public AbstractHttpGateway setClientHttpRequestInterceptors(List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors) {
-        Assert.notEmpty(clientHttpRequestInterceptors);
         this.clientHttpRequestInterceptors = clientHttpRequestInterceptors;
         return this;
     }

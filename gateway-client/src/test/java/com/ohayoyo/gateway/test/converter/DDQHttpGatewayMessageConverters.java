@@ -5,8 +5,7 @@ import org.springframework.core.convert.ConversionService;
 
 public class DDQHttpGatewayMessageConverters extends HttpGatewayMessageConverters {
 
-    public DDQHttpGatewayMessageConverters(ConversionService conversionService) {
-        super(conversionService);
+    public DDQHttpGatewayMessageConverters() {
         this.add(new DDQHttpMessageConverter());
     }
 

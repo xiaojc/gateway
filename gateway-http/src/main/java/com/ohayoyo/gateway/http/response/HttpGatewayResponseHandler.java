@@ -25,9 +25,6 @@ public class HttpGatewayResponseHandler extends AbstractHttpGatewayResponse {
 
     @Override
     protected <ResponseBody> ResponseBody responseBodyHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException {
-
-        LOGGER.debug("响应体处理 .");
-
         HttpGatewayResponseWrapper httpGatewayResponseWrapper = new HttpGatewayResponseWrapper(clientHttpResponse);
         if (httpGatewayResponseWrapper.hasMessageBody() && (!httpGatewayResponseWrapper.hasEmptyMessageBody())) {
             MediaType contentType = resolveCustomResponseContentType(customResponseContentType, httpGatewayResponseWrapper);
@@ -44,10 +41,7 @@ public class HttpGatewayResponseHandler extends AbstractHttpGatewayResponse {
                     }
                 }
             }
-            LOGGER.debug("没有找到适合的HTTP消息转换器 .");
             HttpGatewayException.exception("没有匹配合适的HTTP消息转换器支持读取数据操作,内容类型:%s,响应实体类型:%s.", contentType, responseBodyClass);
-        }else{
-            LOGGER.info("不存响应体 .");
         }
         return null;
     }

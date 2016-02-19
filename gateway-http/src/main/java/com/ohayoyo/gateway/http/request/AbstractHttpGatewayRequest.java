@@ -21,11 +21,8 @@ public abstract class AbstractHttpGatewayRequest implements HttpGatewayRequest {
 
     @Override
     public final <RequestBody> void requestHandler(MediaType customRequestContentType, RequestEntity<RequestBody> requestEntity, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException {
-        LOGGER.debug("请求头处理 .");
         this.requestHeadersHandler(customRequestContentType, requestEntity, clientHttpRequest);
-        LOGGER.debug("请求Accept头处理 .");
         this.requestAcceptHeaderHandler(httpMessageConverters, clientHttpRequest);
-        LOGGER.debug("请求体处理 .");
         this.requestBodyHandler(requestEntity, httpMessageConverters, clientHttpRequest);
     }
 

@@ -2,8 +2,6 @@ package com.ohayoyo.gateway.http.converter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.feed.AtomFeedHttpMessageConverter;
 import org.springframework.http.converter.feed.RssChannelHttpMessageConverter;
@@ -14,7 +12,6 @@ import org.springframework.http.converter.xml.Jaxb2CollectionHttpMessageConverte
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
-import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import javax.xml.transform.Source;
@@ -41,15 +38,7 @@ public class HttpGatewayMessageConverters extends ArrayList<HttpMessageConverter
 
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
-    private ConversionService conversionService;
-
     public HttpGatewayMessageConverters() {
-        this(new DefaultFormattingConversionService());
-    }
-
-    public HttpGatewayMessageConverters(ConversionService conversionService) {
-        Assert.notNull(conversionService);
-        this.conversionService = conversionService;
         this.configDefaultHttpMessageConverters();
     }
 
@@ -61,9 +50,6 @@ public class HttpGatewayMessageConverters extends ArrayList<HttpMessageConverter
         this.add(new FormHttpMessageConverter());
         this.add(new AllEncompassingFormHttpMessageConverter());
         this.add(new BufferedImageHttpMessageConverter());
-        this.add(new ObjectToStringHttpMessageConverter(this.conversionService, DEFAULT_CHARSET));
-        //MarshallingHttpMessageConverter : 暂时不支持
-        //ProtobufHttpMessageConverter : 暂时不支持
         if (ROME_PRESENT) {
             this.add(new AtomFeedHttpMessageConverter());
             this.add(new RssChannelHttpMessageConverter());
@@ -79,10 +65,6 @@ public class HttpGatewayMessageConverters extends ArrayList<HttpMessageConverter
         } else if (GSON_PRESENT) {
             this.add(new GsonHttpMessageConverter());
         }
-    }
-
-    public ConversionService getConversionService() {
-        return conversionService;
     }
 
 }
