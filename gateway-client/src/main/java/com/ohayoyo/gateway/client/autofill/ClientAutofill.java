@@ -1,7 +1,7 @@
 package com.ohayoyo.gateway.client.autofill;
 
 import com.ohayoyo.gateway.client.core.GatewayRequest;
-import com.ohayoyo.gateway.client.utils.ParameterUtils;
+import com.ohayoyo.gateway.client.utils.ParameterDefineUtils;
 import com.ohayoyo.gateway.define.core.Parameter;
 import com.ohayoyo.gateway.define.http.*;
 import org.slf4j.Logger;
@@ -111,12 +111,12 @@ public class ClientAutofill implements GatewayAutofill, ApplicationContextAware 
                 isAutofill = !parameterNullable;
             }
             if (isAutofill && (null != singleValueData) && (!singleValueData.containsKey(parameterName))) {
-                String valueString = ParameterUtils.resolveParameterDefaultValueToString(parameter, checkConversionService());
+                String valueString = ParameterDefineUtils.resolveParameterDefaultValueToString(parameter, checkConversionService());
                 if (!StringUtils.isEmpty(valueString)) {
                     singleValueData.put(parameterName, valueString);
                 }
             } else if (isAutofill && (null != multiValueData) && (!multiValueData.containsKey(parameterName))) {
-                String valueString = ParameterUtils.resolveParameterDefaultValueToString(parameter, checkConversionService());
+                String valueString = ParameterDefineUtils.resolveParameterDefaultValueToString(parameter, checkConversionService());
                 if (!StringUtils.isEmpty(valueString)) {
                     multiValueData.add(parameterName, valueString);
                 }

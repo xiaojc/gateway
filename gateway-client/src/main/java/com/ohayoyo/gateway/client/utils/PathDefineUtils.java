@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * @author 蓝明乐
  */
-public class PathUtils {
+public class PathDefineUtils {
 
     private static final String PATH_DELIMITER = "/";
 
@@ -59,7 +59,7 @@ public class PathUtils {
 
     public static Set<String> expandVariableNames(PathDefine pathDefine) {
         Set<String> expandNames = new HashSet<String>();
-        List<String> pathSegments = PathUtils.pathSegmentsAsList(pathDefine);
+        List<String> pathSegments = PathDefineUtils.pathSegmentsAsList(pathDefine);
         for (String pathSegment : pathSegments) {
             Set<String> captureNames = captureVariableNames(pathSegment);
             if (!CollectionUtils.isEmpty(captureNames)) {
