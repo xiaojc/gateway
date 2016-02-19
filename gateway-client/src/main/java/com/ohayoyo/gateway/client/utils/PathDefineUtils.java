@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * @author 蓝明乐
  */
-public class PathDefineUtils {
+public final class PathDefineUtils {
 
     private static final String PATH_DELIMITER = "/";
 

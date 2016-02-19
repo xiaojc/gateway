@@ -14,31 +14,31 @@ import java.io.IOException;
 /**
  * @author 蓝明乐
  */
-public abstract class AbstractClient implements GatewayClient {
+public abstract class AbstractClient extends AbstractContextAccessor implements GatewayClient {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(AbstractClient.class);
-
-    private GatewayContext gatewayContext;
 
     @Override
     public final <ResponseBody, RequestBody> GatewayResponse<ResponseBody> session(Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException {
         Assert.notNull(responseBodyClass);
         Assert.notNull(gatewayDefine);
+        GatewayContext gatewayContext = this.getGatewayContext() ;
         if (ObjectUtils.isEmpty(gatewayRequest)) {
-            gatewayRequest = this.gatewayContext.newRestfulRequestBuilder().build();
+            gatewayRequest = gatewayContext.newRestfulRequestBuilder().build();
         }
         try {
-            HttpGateway httpGateway = this.gatewayContext.getHttpGateway();
+            HttpGateway httpGateway = gatewayContext.getHttpGateway();
             this.gatewayDefineVerify(gatewayDefine);
             this.gatewayAutofill(gatewayDefine, gatewayRequest);
             this.gatewayDataVerify(gatewayDefine, gatewayRequest);
-            RestfulResponseBuilder restfulResponseBuilder = this.gatewayContext.newRestfulResponseBuilder();
+            RestfulResponseBuilder restfulResponseBuilder = gatewayContext.newRestfulResponseBuilder();
             this.doSession(httpGateway, restfulResponseBuilder, responseBodyClass, gatewayDefine, gatewayRequest);
             GatewayResponse<ResponseBody> gatewayResponse = restfulResponseBuilder.build();
             this.gatewayResultVerify(gatewayResponse, responseBodyClass, gatewayDefine);
             return gatewayResponse;
         } catch (Exception ex) {
-            throw new GatewayException(ex);
+            //ex.printStackTrace();
+            throw new GatewayException(ex.getMessage());
         }
     }
 
@@ -51,16 +51,5 @@ public abstract class AbstractClient implements GatewayClient {
     protected abstract <ResponseBody, RequestBody> void doSession(HttpGateway httpGateway, RestfulResponseBuilder restfulResponseBuilder, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) throws GatewayException;
 
     protected abstract <ResponseBody> void gatewayResultVerify(GatewayResponse<ResponseBody> gatewayResponse, Class<ResponseBody> responseBodyClass, GatewayDefine gatewayDefine) throws GatewayException;
-
-    @Override
-    public GatewayContext getGatewayContext() {
-        return gatewayContext;
-    }
-
-    @Override
-    public AbstractClient setGatewayContext(GatewayContext gatewayContext) {
-        this.gatewayContext = gatewayContext;
-        return this;
-    }
 
 }

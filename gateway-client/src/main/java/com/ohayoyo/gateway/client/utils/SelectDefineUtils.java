@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class SelectDefineUtils {
+public final class SelectDefineUtils {
 
     private static boolean selectCompareRule(String select, String scope) {
         if (!StringUtils.isEmpty(select) && !StringUtils.isEmpty(scope)) {

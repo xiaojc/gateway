@@ -1,14 +1,13 @@
 package com.ohayoyo.gateway.http.core;
 
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author 蓝明乐
@@ -23,7 +22,7 @@ public interface HttpGatewayResponse {
 
     HttpGatewayResponse setResponseErrorHandler(ResponseErrorHandler responseErrorHandler);
 
-    <ResponseBody> ResponseEntity<ResponseBody> responseHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException;
+    <ResponseBody> ResponseEntity<ResponseBody> responseHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, HttpGatewayMessageConverters httpGatewayMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException;
 
     <ResponseBody> void responseCallback(MediaType customResponseContentType, ResponseEntity<ResponseBody> responseEntity, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException;
 

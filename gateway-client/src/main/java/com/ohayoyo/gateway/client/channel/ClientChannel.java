@@ -14,6 +14,7 @@ public class ClientChannel extends AbstractChannel {
     public static final Logger LOGGER = LoggerFactory.getLogger(ClientChannel.class);
 
     @Override
+    @SuppressWarnings("unchecked")
     protected <Result> Result resolveGatewayResult(Class<Result> responseType, InterfaceDefine interfaceDefine, GatewayResponse<?> gatewayResponse) {
         Object responseBody = gatewayResponse.getResponseBody();
         if ((!ObjectUtils.isEmpty(responseBody)) && responseBody.getClass().isAssignableFrom(responseType)) {

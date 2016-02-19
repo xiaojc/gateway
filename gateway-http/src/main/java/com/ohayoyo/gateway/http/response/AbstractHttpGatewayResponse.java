@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.http.response;
 
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.core.HttpGatewayResponse;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.slf4j.Logger;
@@ -9,14 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author 蓝明乐
@@ -49,8 +48,9 @@ public abstract class AbstractHttpGatewayResponse implements HttpGatewayResponse
     }
 
     @Override
-    public final <ResponseBody> ResponseEntity<ResponseBody> responseHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException {
-        ResponseBody responseBody = this.responseBodyHandler(customResponseContentType, responseBodyClass, httpMessageConverters, clientHttpResponse);
+    public final <ResponseBody> ResponseEntity<ResponseBody> responseHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, HttpGatewayMessageConverters httpGatewayMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException,
+            IOException {
+        ResponseBody responseBody = this.responseBodyHandler(customResponseContentType, responseBodyClass, httpGatewayMessageConverters, clientHttpResponse);
         HttpStatus httpStatus = this.responseHttpStatusHandler(clientHttpResponse);
         HttpHeaders httpHeaders = this.responseHttpHeadersHandler(customResponseContentType, clientHttpResponse);
         ResponseEntity<ResponseBody> responseEntity = this.responseEntityHandler(httpStatus, httpHeaders, responseBody);
@@ -61,7 +61,7 @@ public abstract class AbstractHttpGatewayResponse implements HttpGatewayResponse
 
     protected abstract HttpHeaders responseHttpHeadersHandler(MediaType customResponseContentType, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException;
 
-    protected abstract <ResponseBody> ResponseBody responseBodyHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException;
+    protected abstract <ResponseBody> ResponseBody responseBodyHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, HttpGatewayMessageConverters httpGatewayMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException;
 
     protected abstract <ResponseBody> ResponseEntity<ResponseBody> responseEntityHandler(HttpStatus httpStatus, HttpHeaders httpHeaders, ResponseBody responseBody) throws HttpGatewayException, IOException;
 

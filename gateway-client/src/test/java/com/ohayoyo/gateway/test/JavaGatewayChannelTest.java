@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.test;
 
 import com.ohayoyo.gateway.client.channel.GatewayChannel;
 import com.ohayoyo.gateway.client.restful.builder.RestfulRequestBuilder;
-import com.ohayoyo.gateway.client.spring.SpringClientConfiguration;
+import com.ohayoyo.gateway.client.spring.BeanClientConfiguration;
 import com.ohayoyo.gateway.define.core.DefineBuilders;
 import com.ohayoyo.gateway.define.http.InterfaceDefine;
 import com.ohayoyo.gateway.test.model.TestPack;
@@ -18,7 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration(classes = {
-        SpringClientConfiguration.class,
+        BeanClientConfiguration.class,
         JavaGatewayChannelTest.TestConfig.class
 })
 @RunWith(SpringJUnit4ClassRunner.class)

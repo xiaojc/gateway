@@ -1,6 +1,7 @@
 package com.ohayoyo.gateway.http.response;
 
 import com.ohayoyo.gateway.http.builder.HttpGatewayResponseEntityBuilder;
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author 蓝明乐
@@ -24,11 +24,13 @@ public class HttpGatewayResponseHandler extends AbstractHttpGatewayResponse {
     public static final Logger LOGGER = LoggerFactory.getLogger(HttpGatewayResponseHandler.class);
 
     @Override
-    protected <ResponseBody> ResponseBody responseBodyHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpResponse clientHttpResponse) throws HttpGatewayException, IOException {
+    @SuppressWarnings("unchecked")
+    protected <ResponseBody> ResponseBody responseBodyHandler(MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, HttpGatewayMessageConverters httpGatewayMessageConverters, ClientHttpResponse clientHttpResponse) throws
+            HttpGatewayException, IOException {
         HttpGatewayResponseWrapper httpGatewayResponseWrapper = new HttpGatewayResponseWrapper(clientHttpResponse);
         if (httpGatewayResponseWrapper.hasMessageBody() && (!httpGatewayResponseWrapper.hasEmptyMessageBody())) {
             MediaType contentType = resolveCustomResponseContentType(customResponseContentType, httpGatewayResponseWrapper);
-            for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
+            for (HttpMessageConverter<?> httpMessageConverter : httpGatewayMessageConverters) {
                 if ((httpMessageConverter instanceof GenericHttpMessageConverter) && (!ObjectUtils.isEmpty(responseBodyClass))) {
                     GenericHttpMessageConverter<?> genericHttpMessageConverter = (GenericHttpMessageConverter<?>) httpMessageConverter;
                     if (genericHttpMessageConverter.canRead(responseBodyClass, responseBodyClass, contentType)) {
@@ -80,6 +82,7 @@ public class HttpGatewayResponseHandler extends AbstractHttpGatewayResponse {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected <ResponseBody> ResponseEntity<ResponseBody> responseEntityHandler(HttpStatus httpStatus, HttpHeaders httpHeaders, ResponseBody responseBody) throws HttpGatewayException, IOException {
         return (ResponseEntity<ResponseBody>) HttpGatewayResponseEntityBuilder.newInstance().httpStatus(httpStatus).headers(httpHeaders).body(responseBody).build();
     }

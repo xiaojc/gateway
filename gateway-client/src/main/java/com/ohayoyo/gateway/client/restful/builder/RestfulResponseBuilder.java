@@ -98,6 +98,7 @@ public class RestfulResponseBuilder {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public <ResponseBody> RestfulResponse<ResponseBody> build() {
         return new RestfulResponse<ResponseBody>()
                 .setStatusCode(this.statusCode)

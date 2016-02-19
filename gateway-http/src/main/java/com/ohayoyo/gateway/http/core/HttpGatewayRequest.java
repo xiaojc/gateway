@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.http.core;
 
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -18,7 +19,7 @@ public interface HttpGatewayRequest {
 
     String DEFAULT_REQUEST_CONTENT_TYPE = "Default-Request-Content-Type";
 
-    <RequestBody> void requestHandler(MediaType requestContentType, RequestEntity<RequestBody> requestEntity, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException;
+    <RequestBody> void requestHandler(MediaType requestContentType, RequestEntity<RequestBody> requestEntity, HttpGatewayMessageConverters httpGatewayMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException;
 
     <RequestBody> void requestCallback(MediaType requestContentType, RequestEntity<RequestBody> requestEntity, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException;
 

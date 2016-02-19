@@ -1,11 +1,11 @@
 package com.ohayoyo.gateway.test.converter;
 
-import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
-import org.springframework.core.convert.ConversionService;
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConvertersHandler;
 
-public class DDQHttpGatewayMessageConverters extends HttpGatewayMessageConverters {
+public class DDQHttpGatewayMessageConverters extends HttpGatewayMessageConvertersHandler {
 
     public DDQHttpGatewayMessageConverters() {
+        super();
         this.add(new DDQHttpMessageConverter());
     }
 

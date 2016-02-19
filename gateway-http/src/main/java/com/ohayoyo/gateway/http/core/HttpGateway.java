@@ -1,21 +1,20 @@
 package com.ohayoyo.gateway.http.core;
 
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
+import com.ohayoyo.gateway.http.interceptor.HttpGatewayRequestIntercepting;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-
-import java.util.List;
 
 /**
  * @author 蓝明乐
  */
-public interface HttpGateway extends HttpGatewayAccessor, HttpGatewayRequestIntercepting {
+public interface HttpGateway extends HttpGatewayAccessor {
 
-    List<HttpMessageConverter<?>> getHttpMessageConverters();
+    HttpGatewayMessageConverters getHttpGatewayMessageConverters();
 
-    HttpGateway setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters);
+    HttpGateway setHttpGatewayMessageConverters(HttpGatewayMessageConverters httpGatewayMessageConverters);
 
     HttpGatewayRequest getHttpGatewayRequest();
 
@@ -24,6 +23,10 @@ public interface HttpGateway extends HttpGatewayAccessor, HttpGatewayRequestInte
     HttpGatewayResponse getHttpGatewayResponse();
 
     HttpGateway setHttpGatewayResponse(HttpGatewayResponse httpGatewayResponse);
+
+    HttpGatewayRequestIntercepting getHttpGatewayRequestIntercepting();
+
+    HttpGateway setHttpGatewayRequestIntercepting(HttpGatewayRequestIntercepting httpGatewayRequestIntercepting);
 
     <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws HttpGatewayException;
 

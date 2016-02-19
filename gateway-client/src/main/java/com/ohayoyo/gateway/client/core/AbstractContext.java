@@ -7,18 +7,16 @@ import com.ohayoyo.gateway.client.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
 import com.ohayoyo.gateway.client.validator.GatewayResultValidator;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.core.HttpGateway;
 import com.ohayoyo.gateway.http.core.HttpGatewayRequest;
 import com.ohayoyo.gateway.http.core.HttpGatewayResponse;
+import com.ohayoyo.gateway.http.interceptor.HttpGatewayRequestIntercepting;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.ObjectUtils;
-
-import java.util.List;
 
 /**
  * @author 蓝明乐
@@ -27,13 +25,13 @@ public abstract class AbstractContext implements GatewayContext {
 
     private ConversionService conversionService;
 
-    private List<HttpMessageConverter<?>> httpMessageConverters;
+    private HttpGatewayMessageConverters httpGatewayMessageConverters;
 
     private HttpGatewayRequest httpGatewayRequest;
 
     private HttpGatewayResponse httpGatewayResponse;
 
-    private List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors;
+    private HttpGatewayRequestIntercepting httpGatewayRequestIntercepting;
 
     private ClientHttpRequestFactory clientHttpRequestFactory;
 
@@ -63,19 +61,25 @@ public abstract class AbstractContext implements GatewayContext {
     @Override
     public AbstractContext setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
+        if (!ObjectUtils.isEmpty(this.httpGatewayMessageConverters)) {
+            this.httpGatewayMessageConverters.setConversionService(this.conversionService);
+        }
         return this;
     }
 
     @Override
-    public List<HttpMessageConverter<?>> getHttpMessageConverters() {
-        return httpMessageConverters;
+    public HttpGatewayMessageConverters getHttpGatewayMessageConverters() {
+        return httpGatewayMessageConverters;
     }
 
     @Override
-    public AbstractContext setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters) {
-        this.httpMessageConverters = httpMessageConverters;
+    public AbstractContext setHttpGatewayMessageConverters(HttpGatewayMessageConverters httpGatewayMessageConverters) {
+        this.httpGatewayMessageConverters = httpGatewayMessageConverters;
         if (!ObjectUtils.isEmpty(this.httpGateway)) {
-            this.httpGateway.setHttpMessageConverters(this.httpMessageConverters);
+            this.httpGateway.setHttpGatewayMessageConverters(this.httpGatewayMessageConverters);
+        }
+        if (!ObjectUtils.isEmpty(this.httpGatewayMessageConverters)) {
+            this.httpGatewayMessageConverters.setConversionService(this.conversionService);
         }
         return this;
     }
@@ -109,15 +113,15 @@ public abstract class AbstractContext implements GatewayContext {
     }
 
     @Override
-    public List<ClientHttpRequestInterceptor> getClientHttpRequestInterceptors() {
-        return clientHttpRequestInterceptors;
+    public HttpGatewayRequestIntercepting getHttpGatewayRequestIntercepting() {
+        return httpGatewayRequestIntercepting;
     }
 
     @Override
-    public AbstractContext setClientHttpRequestInterceptors(List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors) {
-        this.clientHttpRequestInterceptors = clientHttpRequestInterceptors;
+    public AbstractContext setHttpGatewayRequestIntercepting(HttpGatewayRequestIntercepting httpGatewayRequestIntercepting) {
+        this.httpGatewayRequestIntercepting = httpGatewayRequestIntercepting;
         if (!ObjectUtils.isEmpty(this.httpGateway)) {
-            this.httpGateway.setClientHttpRequestInterceptors(this.clientHttpRequestInterceptors);
+            this.httpGateway.setHttpGatewayRequestIntercepting(this.httpGatewayRequestIntercepting);
         }
         return this;
     }
@@ -144,11 +148,13 @@ public abstract class AbstractContext implements GatewayContext {
     @Override
     public AbstractContext setHttpGateway(HttpGateway httpGateway) {
         this.httpGateway = httpGateway;
-        this.httpGateway.setHttpGatewayRequest(this.httpGatewayRequest);
-        this.httpGateway.setHttpGatewayResponse(this.httpGatewayResponse);
-        this.httpGateway.setHttpMessageConverters(this.httpMessageConverters);
-        this.httpGateway.setClientHttpRequestInterceptors(this.clientHttpRequestInterceptors);
-        this.httpGateway.setClientHttpRequestFactory(this.clientHttpRequestFactory);
+        if (!ObjectUtils.isEmpty(this.httpGateway)) {
+            this.httpGateway.setHttpGatewayRequest(this.httpGatewayRequest);
+            this.httpGateway.setHttpGatewayResponse(this.httpGatewayResponse);
+            this.httpGateway.setHttpGatewayMessageConverters(this.httpGatewayMessageConverters);
+            this.httpGateway.setHttpGatewayRequestIntercepting(this.httpGatewayRequestIntercepting);
+            this.httpGateway.setClientHttpRequestFactory(this.clientHttpRequestFactory);
+        }
         return this;
     }
 

@@ -179,6 +179,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public <RequestBody> RestfulRequest<RequestBody> build() {
         return new RestfulRequest<RequestBody>()
                 .setSelect(this.select)

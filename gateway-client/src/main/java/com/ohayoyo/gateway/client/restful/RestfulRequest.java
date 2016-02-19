@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  * @author 蓝明乐
  */
+@SuppressWarnings("unchecked")
 public class RestfulRequest<RequestBody> implements GatewayRequest<RequestBody> {
 
     private String select;

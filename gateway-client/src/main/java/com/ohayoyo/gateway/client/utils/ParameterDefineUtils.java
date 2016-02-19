@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class ParameterDefineUtils {
+public final class ParameterDefineUtils {
 
     public static boolean isExistEmptyParameterName(Set<Parameter> parameters) {
         if (!CollectionUtils.isEmpty(parameters)) {

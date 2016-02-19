@@ -7,17 +7,15 @@ import com.ohayoyo.gateway.client.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.client.validator.GatewayDefineValidator;
 import com.ohayoyo.gateway.client.validator.GatewayResultValidator;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.core.HttpGateway;
 import com.ohayoyo.gateway.http.core.HttpGatewayRequest;
 import com.ohayoyo.gateway.http.core.HttpGatewayResponse;
+import com.ohayoyo.gateway.http.interceptor.HttpGatewayRequestIntercepting;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.converter.HttpMessageConverter;
-
-import java.util.List;
 
 /**
  * @author 蓝明乐
@@ -28,9 +26,9 @@ public interface GatewayContext {
 
     GatewayContext setConversionService(ConversionService conversionService);
 
-    List<HttpMessageConverter<?>> getHttpMessageConverters();
+    HttpGatewayMessageConverters getHttpGatewayMessageConverters();
 
-    GatewayContext setHttpMessageConverters(List<HttpMessageConverter<?>> httpMessageConverters);
+    GatewayContext setHttpGatewayMessageConverters(HttpGatewayMessageConverters httpGatewayMessageConverters);
 
     HttpGatewayRequest getHttpGatewayRequest();
 
@@ -44,9 +42,9 @@ public interface GatewayContext {
 
     GatewayContext setClientHttpRequestFactory(ClientHttpRequestFactory clientHttpRequestFactory);
 
-    List<ClientHttpRequestInterceptor> getClientHttpRequestInterceptors();
+    HttpGatewayRequestIntercepting getHttpGatewayRequestIntercepting();
 
-    GatewayContext setClientHttpRequestInterceptors(List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors);
+    GatewayContext setHttpGatewayRequestIntercepting(HttpGatewayRequestIntercepting httpGatewayRequestIntercepting);
 
     HttpGateway getHttpGateway();
 

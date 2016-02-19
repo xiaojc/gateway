@@ -14,11 +14,9 @@ import org.springframework.util.ObjectUtils;
 /**
  * @author 蓝明乐
  */
-public abstract class AbstractChannel implements GatewayChannel {
+public abstract class AbstractChannel extends AbstractContextAccessor implements GatewayChannel {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(AbstractChannel.class);
-
-    private GatewayContext gatewayContext;
 
     @Override
     public String channel(String interfaceDefineKey) throws GatewayException {
@@ -40,6 +38,7 @@ public abstract class AbstractChannel implements GatewayChannel {
         Assert.notNull(responseType);
         Assert.notNull(interfaceDefineKey);
         Result result = null;
+        GatewayContext gatewayContext = this.getGatewayContext() ;
         GatewayContainer gatewayContainer = gatewayContext.getGatewayContainer();
         GatewayClient gatewayClient = gatewayContext.getGatewayClient();
         InterfaceDefine interfaceDefine = gatewayContainer.query(interfaceDefineKey);
@@ -54,6 +53,7 @@ public abstract class AbstractChannel implements GatewayChannel {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     protected <ResponseBody, Result> Class<ResponseBody> resolveResponseType(Class<Result> responseType, InterfaceDefine interfaceDefine) {
         return (Class<ResponseBody>) responseType;
     }
@@ -63,16 +63,5 @@ public abstract class AbstractChannel implements GatewayChannel {
     }
 
     protected abstract <Result> Result resolveGatewayResult(Class<Result> responseType, InterfaceDefine interfaceDefine, GatewayResponse<?> gatewayResponse);
-
-    @Override
-    public GatewayContext getGatewayContext() {
-        return gatewayContext;
-    }
-
-    @Override
-    public AbstractChannel setGatewayContext(GatewayContext gatewayContext) {
-        this.gatewayContext = gatewayContext;
-        return this;
-    }
 
 }

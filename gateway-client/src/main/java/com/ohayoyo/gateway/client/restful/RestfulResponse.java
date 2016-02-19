@@ -6,6 +6,7 @@ import org.springframework.util.MultiValueMap;
 /**
  * @author 蓝明乐
  */
+@SuppressWarnings("unchecked")
 public class RestfulResponse<ResponseBody> implements GatewayResponse<ResponseBody> {
 
     private Integer statusCode;

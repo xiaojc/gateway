@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.client.autofill;
 
+import com.ohayoyo.gateway.client.core.AbstractContextAccessor;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
 import com.ohayoyo.gateway.client.utils.ParameterDefineUtils;
 import com.ohayoyo.gateway.define.core.Parameter;
@@ -17,7 +18,7 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class ClientAutofill extends AbstractAutofill {
+public class ClientAutofill extends AbstractContextAccessor implements GatewayAutofill {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ClientAutofill.class);
 
@@ -48,6 +49,21 @@ public class ClientAutofill extends AbstractAutofill {
                 continue;
             }
             String parameterName = parameter.getName();
+//            Boolean parameterNullable = parameter.getNullable();
+//            if (ObjectUtils.isEmpty(parameterNullable)) {
+//                parameterNullable = true;
+//            }
+//            if ((!parameterNullable) && (null != singleValueData) && (!singleValueData.containsKey(parameterName))) {
+//                String valueString = ParameterDefineUtils.resolveParameterDefaultValueToString(parameter, conversionService);
+//                if (!StringUtils.isEmpty(valueString)) {
+//                    singleValueData.put(parameterName, valueString);
+//                }
+//            } else if ((!parameterNullable) && (null != multiValueData) && (!multiValueData.containsKey(parameterName))) {
+//                String valueString = ParameterDefineUtils.resolveParameterDefaultValueToString(parameter, conversionService);
+//                if (!StringUtils.isEmpty(valueString)) {
+//                    multiValueData.add(parameterName, valueString);
+//                }
+//            }
             if ((null != singleValueData) && (!singleValueData.containsKey(parameterName))) {
                 String valueString = ParameterDefineUtils.resolveParameterDefaultValueToString(parameter, conversionService);
                 if (!StringUtils.isEmpty(valueString)) {

@@ -18,9 +18,9 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class ScanConfigurationContainerBean extends MemoryGatewayContainer implements InitializingBean, ApplicationContextAware {
+public class ScanConfigurationContainer extends MemoryGatewayContainer implements InitializingBean, ApplicationContextAware {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ClientChannelBean.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(ScanConfigurationChannel.class);
 
     @Autowired
     private ApplicationContext applicationContext;

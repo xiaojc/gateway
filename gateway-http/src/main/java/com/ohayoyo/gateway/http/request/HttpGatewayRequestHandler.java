@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.http.request;
 
+import com.ohayoyo.gateway.http.converter.HttpGatewayMessageConverters;
 import com.ohayoyo.gateway.http.exception.HttpGatewayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,12 +55,12 @@ public class HttpGatewayRequestHandler extends AbstractHttpGatewayRequest {
     }
 
     @Override
-    protected void requestAcceptHeaderHandler(List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequest clientHttpRequest) {
+    protected void requestAcceptHeaderHandler(HttpGatewayMessageConverters httpGatewayMessageConverters, ClientHttpRequest clientHttpRequest) {
         HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
         List<MediaType> acceptHeader = httpHeaders.getAccept();
         if (CollectionUtils.isEmpty(acceptHeader)) {
             Set<MediaType> supportedMediaTypes = new HashSet<MediaType>();
-            for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
+            for (HttpMessageConverter<?> httpMessageConverter : httpGatewayMessageConverters) {
                 List<MediaType> mediaTypes = httpMessageConverter.getSupportedMediaTypes();
                 if (!CollectionUtils.isEmpty(mediaTypes)) {
                     for (MediaType mediaType : mediaTypes) {
@@ -77,13 +78,14 @@ public class HttpGatewayRequestHandler extends AbstractHttpGatewayRequest {
     }
 
     @Override
-    protected <RequestBody> void requestBodyHandler(RequestEntity<RequestBody> requestEntity, List<HttpMessageConverter<?>> httpMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException {
+    @SuppressWarnings("unchecked")
+    protected <RequestBody> void requestBodyHandler(RequestEntity<RequestBody> requestEntity, HttpGatewayMessageConverters httpGatewayMessageConverters, ClientHttpRequest clientHttpRequest) throws HttpGatewayException, IOException {
         if ((!ObjectUtils.isEmpty(requestEntity)) && requestEntity.hasBody()) {
             RequestBody requestBody = requestEntity.getBody();
             Class<RequestBody> requestBodyClass = (Class<RequestBody>) requestBody.getClass();
             HttpHeaders requestHeaders = clientHttpRequest.getHeaders();
             MediaType contentType = requestHeaders.getContentType();
-            for (HttpMessageConverter<?> httpMessageConverter : httpMessageConverters) {
+            for (HttpMessageConverter<?> httpMessageConverter : httpGatewayMessageConverters) {
                 if (httpMessageConverter.canWrite(requestBodyClass, contentType)) {
                     ((HttpMessageConverter<RequestBody>) httpMessageConverter).write(requestBody, contentType, clientHttpRequest);
                     return;

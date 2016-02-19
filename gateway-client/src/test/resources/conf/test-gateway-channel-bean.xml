@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean class="com.ohayoyo.gateway.client.spring.SpringClientConfiguration"/>
+    <bean class="com.ohayoyo.gateway.client.spring.BeanClientConfiguration"/>
 
     <bean id="defaultFormattingConversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
 

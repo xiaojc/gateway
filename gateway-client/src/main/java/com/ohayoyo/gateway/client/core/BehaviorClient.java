@@ -105,9 +105,11 @@ public abstract class BehaviorClient extends AbstractClient {
             uriComponents = uriComponentsBuilder.build();
         }
         URI uri = uriComponents.encode().toUri();
+        LOGGER.info("构建的URL:{}",uri);
         return uri;
     }
 
+    @SuppressWarnings("unchecked")
     protected final <RequestBody> RequestEntity<RequestBody> resolveRequestEntity(GatewayDefine gatewayDefine, GatewayRequest<RequestBody> gatewayRequest) {
         URI uri = this.resolveRequestUri(gatewayDefine, gatewayRequest);
         HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayDefine, gatewayRequest);

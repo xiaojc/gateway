@@ -1,5 +1,6 @@
 package com.ohayoyo.gateway.client.validator;
 
+import com.ohayoyo.gateway.client.core.AbstractContextAccessor;
 import com.ohayoyo.gateway.client.core.GatewayContext;
 import com.ohayoyo.gateway.client.core.GatewayDefine;
 import com.ohayoyo.gateway.client.core.GatewayRequest;
@@ -20,9 +21,7 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class ClientDataValidator implements GatewayDataValidator {
-
-    private GatewayContext gatewayContext;
+public class ClientDataValidator extends AbstractContextAccessor implements GatewayDataValidator {
 
     protected Map<String, String> validateRequiredRequestData(Set<Parameter> parameters, Map<String, ?> requestData, ConversionService conversionService) {
         Map<String, String> requiredRequestData = new HashMap<String, String>();
@@ -108,20 +107,11 @@ public class ClientDataValidator implements GatewayDataValidator {
 
     @Override
     public void validate(GatewayDefine gatewayDefine, GatewayRequest<?> gatewayRequest) throws ValidatorException {
+        GatewayContext gatewayContext = this.getGatewayContext();
         ConversionService conversionService = gatewayContext.getConversionService();
         validateRequestPathVariablesData(gatewayDefine, gatewayRequest, conversionService);
         validateRequestQueriesData(gatewayDefine, gatewayRequest, conversionService);
         validateRequestHeadersData(gatewayDefine, gatewayRequest, conversionService);
     }
 
-    @Override
-    public GatewayContext getGatewayContext() {
-        return gatewayContext;
-    }
-
-    @Override
-    public ClientDataValidator setGatewayContext(GatewayContext gatewayContext) {
-        this.gatewayContext = gatewayContext;
-        return this;
-    }
 }
