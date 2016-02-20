@@ -8,8 +8,6 @@
 
     <bean id="defaultFormattingConversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
 
-    <bean id="ddqGatewayHttpMessageConverters" class="com.ohayoyo.gateway.test.converter.DDQHttpGatewayMessageConverters"/>
-
     <bean class="org.springframework.http.client.OkHttpClientHttpRequestFactory" />
 
 </beans>
