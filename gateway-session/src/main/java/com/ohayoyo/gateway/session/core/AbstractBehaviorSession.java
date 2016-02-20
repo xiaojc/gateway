@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.session.core;
 
 import com.ohayoyo.gateway.define.http.*;
 import com.ohayoyo.gateway.http.builder.GatewayHttpRequestEntityBuilder;
-import com.ohayoyo.gateway.session.autofill.GatewayDataAutofill;
+import com.ohayoyo.gateway.session.autofill.GatewayDataAutoFill;
 import com.ohayoyo.gateway.session.exception.GatewaySessionException;
 import com.ohayoyo.gateway.session.utils.GatewayPathUtils;
 import com.ohayoyo.gateway.session.utils.GatewaySelectorUtils;
@@ -50,9 +50,9 @@ public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
     @Override
     protected <RequestBody> void gatewayDataAutofill(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) throws GatewaySessionException {
         GatewayContext gatewayContext = this.getGatewayContext();
-        GatewayDataAutofill gatewayDataAutofill = gatewayContext.getGatewayDataAutofill();
-        if (!ObjectUtils.isEmpty(gatewayDataAutofill)) {
-            gatewayDataAutofill.autofill(gatewayInterface.getRequest(), gatewaySessionRequest);
+        GatewayDataAutoFill gatewayDataAutoFill = gatewayContext.getGatewayDataAutoFill();
+        if (!ObjectUtils.isEmpty(gatewayDataAutoFill)) {
+            gatewayDataAutoFill.dataAutoFill(gatewayInterface.getRequest(), gatewaySessionRequest);
         }
     }
 

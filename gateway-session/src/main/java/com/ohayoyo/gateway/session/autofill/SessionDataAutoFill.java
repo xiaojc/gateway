@@ -21,28 +21,28 @@ import java.util.Set;
  * @author 蓝明乐
  */
 @SuppressWarnings("unchecked")
-public class SessionDataAutofill extends AbstractGatewayAccessor implements GatewayDataAutofill {
+public class SessionDataAutoFill extends AbstractGatewayAccessor implements GatewayDataAutoFill {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(SessionDataAutofill.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(SessionDataAutoFill.class);
 
     private static String ENVIRONMENT_SELECT = null;
 
     protected String contextEnvironmentSelect() {
         if (StringUtils.isEmpty(ENVIRONMENT_SELECT)) {
             Environment environment = this.getGatewayContext().getEnvironment();
-            ENVIRONMENT_SELECT = environment.getProperty(CLIENT_AUTOFILL_SELECT_ENVIRONMENT);
+            ENVIRONMENT_SELECT = environment.getProperty(GATEWAY_AUTO_FILL_SELECT_ENVIRONMENT);
         }
         return ENVIRONMENT_SELECT;
     }
 
-    protected void autofillRequestSelectData(GatewaySessionRequest gatewaySessionRequest) {
+    protected void autoFillRequestSelectData(GatewaySessionRequest gatewaySessionRequest) {
         String select = gatewaySessionRequest.getSelect();
         if (StringUtils.isEmpty(select)) {
             gatewaySessionRequest.setSelect(contextEnvironmentSelect());
         }
     }
 
-    protected void autofillRequestDataValues(ConversionService conversionService, GatewayContainer container, Set<GatewayField> fields, Map<String, String> singleValueData, MultiValueMap<String, String> multiValueData) {
+    protected void autoFillRequestDataValues(ConversionService conversionService, GatewayContainer container, Set<GatewayField> fields, Map<String, String> singleValueData, MultiValueMap<String, String> multiValueData) {
         if (CollectionUtils.isEmpty(fields)) {
             return;
         }
@@ -66,7 +66,7 @@ public class SessionDataAutofill extends AbstractGatewayAccessor implements Gate
         }
     }
 
-    protected void autofillRequestPathData(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
+    protected void autoFillRequestPathData(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
         GatewayPath path = requestDefine.getPath();
         if (ObjectUtils.isEmpty(path)) {
             return;
@@ -84,10 +84,10 @@ public class SessionDataAutofill extends AbstractGatewayAccessor implements Gate
             requestPathVariables = new HashMap<String, String>();
             gatewaySessionRequest.setRequestPathVariables(requestPathVariables);
         }
-        autofillRequestDataValues(conversionService, container, fields, requestPathVariables, null);
+        autoFillRequestDataValues(conversionService, container, fields, requestPathVariables, null);
     }
 
-    protected void autofillRequestQueriesData(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
+    protected void autoFillRequestQueriesData(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
         GatewayQueries queries = requestDefine.getQueries();
         if (ObjectUtils.isEmpty(queries)) {
             return;
@@ -101,10 +101,10 @@ public class SessionDataAutofill extends AbstractGatewayAccessor implements Gate
             requestQueries = new LinkedMultiValueMap<String, String>();
             gatewaySessionRequest.setRequestQueries(requestQueries);
         }
-        autofillRequestDataValues(conversionService, container, fields, null, requestQueries);
+        autoFillRequestDataValues(conversionService, container, fields, null, requestQueries);
     }
 
-    protected void autofillRequestHeaders(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
+    protected void autoFillRequestHeaders(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
         GatewayHeaders headers = requestDefine.getHeaders();
         if (ObjectUtils.isEmpty(headers)) {
             return;
@@ -118,21 +118,21 @@ public class SessionDataAutofill extends AbstractGatewayAccessor implements Gate
             requestHeaders = new LinkedMultiValueMap<String, String>();
             gatewaySessionRequest.setRequestHeaders(requestHeaders);
         }
-        autofillRequestDataValues(conversionService, container, fields, null, requestHeaders);
+        autoFillRequestDataValues(conversionService, container, fields, null, requestHeaders);
     }
 
     @Override
-    public <RequestBody> void autofill(GatewayRequest request, GatewaySessionRequest gatewaySessionRequest) {
+    public <RequestBody> void dataAutoFill(GatewayRequest request, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
         if (ObjectUtils.isEmpty(gatewaySessionRequest)) {
             return;
         }
         GatewayContext gatewayContext = this.getGatewayContext();
         ConversionService conversionService = gatewayContext.getConversionService();
         GatewayContainer container = gatewayContext.getGatewayContainer();
-        autofillRequestSelectData(gatewaySessionRequest);
-        autofillRequestPathData(conversionService, request, gatewaySessionRequest, container);
-        autofillRequestQueriesData(conversionService, request, gatewaySessionRequest, container);
-        autofillRequestHeaders(conversionService, request, gatewaySessionRequest, container);
+        autoFillRequestSelectData(gatewaySessionRequest);
+        autoFillRequestPathData(conversionService, request, gatewaySessionRequest, container);
+        autoFillRequestQueriesData(conversionService, request, gatewaySessionRequest, container);
+        autoFillRequestHeaders(conversionService, request, gatewaySessionRequest, container);
     }
 
 }

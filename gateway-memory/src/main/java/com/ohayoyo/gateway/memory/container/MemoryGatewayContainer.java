@@ -41,21 +41,21 @@ public class MemoryGatewayContainer implements GatewayContainer<MemoryGatewayInt
         return null;
     }
 
-    public void save(MemoryGatewayInterface interfaces) {
+    public void save(MemoryGatewayInterface anInterface) {
         checkMemoryGatewayInterfaceMap();
-        if (!ObjectUtils.isEmpty(interfaces)) {
-            String key = interfaces.getKey();
+        if (!ObjectUtils.isEmpty(anInterface)) {
+            String key = anInterface.getKey();
             if (!StringUtils.isEmpty(key)) {
-                this.memoryGatewayInterfaceMap.put(key, interfaces);
+                this.memoryGatewayInterfaceMap.put(key, anInterface);
             }
         }
     }
 
     @Override
-    public void remove(MemoryGatewayInterface interfaces) {
+    public void remove(MemoryGatewayInterface anInterface) {
         checkMemoryGatewayInterfaceMap();
-        if (!ObjectUtils.isEmpty(interfaces)) {
-            String key = interfaces.getKey();
+        if (!ObjectUtils.isEmpty(anInterface)) {
+            String key = anInterface.getKey();
             if (!StringUtils.isEmpty(key)) {
                 if (this.memoryGatewayInterfaceMap.containsKey(key)) {
                     this.memoryGatewayInterfaceMap.remove(key);
@@ -65,7 +65,7 @@ public class MemoryGatewayContainer implements GatewayContainer<MemoryGatewayInt
     }
 
     @Override
-    public GatewayTypeResolver getGatewayTypeResolver() {
+    public GatewayTypeResolver getTypeResolver() {
         return this.memoryGatewayTypeResolver;
     }
 

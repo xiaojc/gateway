@@ -8,8 +8,8 @@ import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConverters;
 import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConvertersHandler;
 import com.ohayoyo.gateway.http.request.GatewayHttpRequestHandler;
 import com.ohayoyo.gateway.http.response.GatewayHttpResponseHandler;
-import com.ohayoyo.gateway.session.autofill.GatewayDataAutofill;
-import com.ohayoyo.gateway.session.autofill.SessionDataAutofill;
+import com.ohayoyo.gateway.session.autofill.GatewayDataAutoFill;
+import com.ohayoyo.gateway.session.autofill.SessionDataAutoFill;
 import com.ohayoyo.gateway.session.core.AbstractGatewayContext;
 import com.ohayoyo.gateway.session.core.GatewaySession;
 import com.ohayoyo.gateway.session.restful.RestfulGatewaySession;
@@ -121,10 +121,10 @@ class ConfigurableGatewayContext extends AbstractGatewayContext {
     }
 
     private void configDefaultGatewayDataAutofill() {
-        if (ObjectUtils.isEmpty(this.getGatewayDataAutofill())) {
-            GatewayDataAutofill gatewayDataAutofill = new SessionDataAutofill();
-            gatewayDataAutofill.setGatewayContext(this);
-            this.setGatewayDataAutofill(gatewayDataAutofill);
+        if (ObjectUtils.isEmpty(this.getGatewayDataAutoFill())) {
+            GatewayDataAutoFill gatewayDataAutoFill = new SessionDataAutoFill();
+            gatewayDataAutoFill.setGatewayContext(this);
+            this.setGatewayDataAutoFill(gatewayDataAutoFill);
         }
     }
 

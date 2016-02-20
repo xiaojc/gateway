@@ -65,6 +65,18 @@ public abstract class AbstractGatewayHttpResponse implements GatewayHttpResponse
 
     protected abstract <ResponseBody> ResponseEntity<ResponseBody> responseEntityHandler(HttpStatus httpStatus, HttpHeaders httpHeaders, ResponseBody responseBody) throws GatewayHttpException, IOException;
 
+    protected MediaType resolveCustomResponseContentType(MediaType customResponseContentType, ClientHttpResponse clientHttpResponse) {
+        if (!ObjectUtils.isEmpty(customResponseContentType)) {
+            return customResponseContentType;
+        }
+        HttpHeaders httpHeaders = clientHttpResponse.getHeaders();
+        MediaType contentType = httpHeaders.getContentType();
+        if (ObjectUtils.isEmpty(contentType)) {
+            contentType = MediaType.APPLICATION_OCTET_STREAM;
+        }
+        return contentType;
+    }
+
     @Override
     public <ResponseBody> void responseCallback(MediaType customResponseContentType, ResponseEntity<ResponseBody> responseEntity, ClientHttpResponse clientHttpResponse) throws GatewayHttpException, IOException {
     }
@@ -80,4 +92,5 @@ public abstract class AbstractGatewayHttpResponse implements GatewayHttpResponse
         this.responseErrorHandler = responseErrorHandler;
         return this;
     }
+
 }

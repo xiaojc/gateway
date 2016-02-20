@@ -6,14 +6,14 @@ import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
 /**
  * @author 蓝明乐
  */
-public interface GatewayContainer<Interfaces extends GatewayInterface> {
+public interface GatewayContainer<Interface extends GatewayInterface> {
 
-    Interfaces query(String key);
+    Interface query(String key);
 
-    void save(Interfaces interfaces);
+    void save(Interface anInterface);
 
-    void remove(Interfaces interfaces);
+    void remove(Interface anInterface);
 
-    GatewayTypeResolver getGatewayTypeResolver();
+    GatewayTypeResolver getTypeResolver();
 
 }

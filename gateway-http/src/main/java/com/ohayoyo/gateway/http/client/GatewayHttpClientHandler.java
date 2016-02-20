@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.http.client;
 
 import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConverters;
 import com.ohayoyo.gateway.http.exception.GatewayHttpException;
-import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestIntercepting;
+import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestInterceptors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -28,11 +28,11 @@ public class GatewayHttpClientHandler extends AbstractGatewayHttpClient {
         GatewayHttpResponse gatewayHttpResponse = this.getGatewayHttpResponse();
         GatewayHttpMessageConverters gatewayHttpMessageConverters = this.getGatewayHttpMessageConverters();
         ClientHttpRequestFactory clientHttpRequestFactory = this.getClientHttpRequestFactory();
-        GatewayHttpRequestIntercepting gatewayHttpRequestIntercepting = this.getGatewayHttpRequestIntercepting();
+        GatewayHttpRequestInterceptors gatewayHttpRequestInterceptors = this.getGatewayHttpRequestInterceptors();
         ClientHttpResponse clientHttpResponse = null;
         ResponseEntity<ResponseBody> responseEntity = null;
         try {
-            ClientHttpRequest clientHttpRequest = createClientHttpRequest(requestEntity, clientHttpRequestFactory, gatewayHttpRequestIntercepting);
+            ClientHttpRequest clientHttpRequest = createClientHttpRequest(requestEntity, clientHttpRequestFactory, gatewayHttpRequestInterceptors);
             gatewayHttpRequest.requestHandler(customRequestContentType, requestEntity, gatewayHttpMessageConverters, clientHttpRequest);
             gatewayHttpRequest.requestCallback(customRequestContentType, requestEntity, clientHttpRequest);
             clientHttpResponse = clientHttpRequest.execute();

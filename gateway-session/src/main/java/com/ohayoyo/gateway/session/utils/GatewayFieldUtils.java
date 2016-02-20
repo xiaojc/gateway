@@ -59,7 +59,7 @@ public final class GatewayFieldUtils {
         if (!ObjectUtils.isEmpty(defaultValue)) {
             Object result = null;
             GatewayType type = field.getType();
-            GatewayTypeResolver typeResolver = container.getGatewayTypeResolver();
+            GatewayTypeResolver typeResolver = container.getTypeResolver();
             Class<?> sourceType = defaultValue.getClass();
             Class<?> targetType = typeResolver.resolve(type);
             if (conversionService.canConvert(sourceType, targetType)) {

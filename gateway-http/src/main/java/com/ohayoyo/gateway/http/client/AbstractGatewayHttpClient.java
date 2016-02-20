@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.http.client;
 
 import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConverters;
 import com.ohayoyo.gateway.http.exception.GatewayHttpException;
-import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestIntercepting;
+import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestInterceptors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -31,7 +31,7 @@ public abstract class AbstractGatewayHttpClient implements GatewayHttpClient {
 
     private GatewayHttpResponse gatewayHttpResponse;
 
-    private GatewayHttpRequestIntercepting gatewayHttpRequestIntercepting;
+    private GatewayHttpRequestInterceptors gatewayHttpRequestInterceptors;
 
     private ClientHttpRequestFactory clientHttpRequestFactory;
 
@@ -76,12 +76,12 @@ public abstract class AbstractGatewayHttpClient implements GatewayHttpClient {
         this.gatewayHttpResponse = gatewayHttpResponse;
     }
 
-    public GatewayHttpRequestIntercepting getGatewayHttpRequestIntercepting() {
-        return gatewayHttpRequestIntercepting;
+    public GatewayHttpRequestInterceptors getGatewayHttpRequestInterceptors() {
+        return gatewayHttpRequestInterceptors;
     }
 
-    public void setGatewayHttpRequestIntercepting(GatewayHttpRequestIntercepting gatewayHttpRequestIntercepting) {
-        this.gatewayHttpRequestIntercepting = gatewayHttpRequestIntercepting;
+    public void setGatewayHttpRequestInterceptors(GatewayHttpRequestInterceptors gatewayHttpRequestInterceptors) {
+        this.gatewayHttpRequestInterceptors = gatewayHttpRequestInterceptors;
     }
 
     @Override
@@ -95,11 +95,11 @@ public abstract class AbstractGatewayHttpClient implements GatewayHttpClient {
         this.clientHttpRequestFactory = clientHttpRequestFactory;
     }
 
-    protected <RequestBody> ClientHttpRequest createClientHttpRequest(RequestEntity<RequestBody> requestEntity, ClientHttpRequestFactory clientHttpRequestFactory, GatewayHttpRequestIntercepting gatewayHttpRequestIntercepting) throws GatewayHttpException, IOException {
+    protected <RequestBody> ClientHttpRequest createClientHttpRequest(RequestEntity<RequestBody> requestEntity, ClientHttpRequestFactory clientHttpRequestFactory, GatewayHttpRequestInterceptors gatewayHttpRequestInterceptors) throws GatewayHttpException, IOException {
         URI uri = requestEntity.getUrl();
         HttpMethod httpMethod = requestEntity.getMethod();
-        if (!CollectionUtils.isEmpty(gatewayHttpRequestIntercepting)) {
-            clientHttpRequestFactory = new InterceptingClientHttpRequestFactory(clientHttpRequestFactory, gatewayHttpRequestIntercepting);
+        if (!CollectionUtils.isEmpty(gatewayHttpRequestInterceptors)) {
+            clientHttpRequestFactory = new InterceptingClientHttpRequestFactory(clientHttpRequestFactory, gatewayHttpRequestInterceptors);
         }
         return clientHttpRequestFactory.createRequest(uri, httpMethod);
     }

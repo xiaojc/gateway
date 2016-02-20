@@ -69,18 +69,6 @@ public class GatewayHttpResponseHandler extends AbstractGatewayHttpResponse {
         return newHttpHeaders;
     }
 
-    private MediaType resolveCustomResponseContentType(MediaType customResponseContentType, ClientHttpResponse clientHttpResponse) {
-        if (!ObjectUtils.isEmpty(customResponseContentType)) {
-            return customResponseContentType;
-        }
-        HttpHeaders httpHeaders = clientHttpResponse.getHeaders();
-        MediaType contentType = httpHeaders.getContentType();
-        if (ObjectUtils.isEmpty(contentType)) {
-            contentType = MediaType.APPLICATION_OCTET_STREAM;
-        }
-        return contentType;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     protected <ResponseBody> ResponseEntity<ResponseBody> responseEntityHandler(HttpStatus httpStatus, HttpHeaders httpHeaders, ResponseBody responseBody) throws GatewayHttpException, IOException {

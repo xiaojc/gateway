@@ -5,8 +5,8 @@ import com.ohayoyo.gateway.http.client.GatewayHttpClient;
 import com.ohayoyo.gateway.http.client.GatewayHttpRequest;
 import com.ohayoyo.gateway.http.client.GatewayHttpResponse;
 import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConverters;
-import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestIntercepting;
-import com.ohayoyo.gateway.session.autofill.GatewayDataAutofill;
+import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestInterceptors;
+import com.ohayoyo.gateway.session.autofill.GatewayDataAutoFill;
 import com.ohayoyo.gateway.session.core.GatewaySession;
 import com.ohayoyo.gateway.session.utils.ApplicationContextUtils;
 import com.ohayoyo.gateway.session.validator.GatewayDataValidator;
@@ -84,8 +84,8 @@ public class AutoScanGatewayContext extends ConfigurableGatewayContext implement
     }
 
     protected void autoScanHttpRequestIntercepting(ApplicationContext applicationContext) {
-        if (ObjectUtils.isEmpty(this.getGatewayHttpRequestIntercepting())) {
-            this.setGatewayHttpRequestIntercepting(ApplicationContextUtils.tryScanFirstBean(applicationContext, GatewayHttpRequestIntercepting.class));
+        if (ObjectUtils.isEmpty(this.getGatewayHttpRequestInterceptors())) {
+            this.setGatewayHttpRequestInterceptors(ApplicationContextUtils.tryScanFirstBean(applicationContext, GatewayHttpRequestInterceptors.class));
         }
     }
 
@@ -126,8 +126,8 @@ public class AutoScanGatewayContext extends ConfigurableGatewayContext implement
     }
 
     protected void autoScanGatewayDataAutofill(ApplicationContext applicationContext) {
-        if (ObjectUtils.isEmpty(this.getGatewayDataAutofill())) {
-            this.setGatewayDataAutofill(ApplicationContextUtils.tryScanFirstBean(applicationContext, GatewayDataAutofill.class));
+        if (ObjectUtils.isEmpty(this.getGatewayDataAutoFill())) {
+            this.setGatewayDataAutoFill(ApplicationContextUtils.tryScanFirstBean(applicationContext, GatewayDataAutoFill.class));
         }
     }
 

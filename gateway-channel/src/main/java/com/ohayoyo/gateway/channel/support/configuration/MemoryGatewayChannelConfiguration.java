@@ -13,15 +13,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MemoryGatewayChannelConfiguration {
 
-    @Bean
-    public GatewayContainer container() {
-        AutoScanMemoryGatewayContainer autoScanMemoryGatewayContainer = new AutoScanMemoryGatewayContainer();
-        return autoScanMemoryGatewayContainer;
+    @Bean(name = "gatewayContainer")
+    public GatewayContainer gatewayContainer() {
+        return new AutoScanMemoryGatewayContainer();
     }
 
     @Bean(name = "gatewayContext")
-    public GatewayContext gatewayContext() {
+    public GatewayContext gatewayContext(@Qualifier("gatewayContainer") GatewayContainer gatewayContainer) {
         AutoScanGatewayContext autoScanGatewayContext = new AutoScanGatewayContext();
+        autoScanGatewayContext.setGatewayContainer(gatewayContainer);
         return autoScanGatewayContext;
     }
 

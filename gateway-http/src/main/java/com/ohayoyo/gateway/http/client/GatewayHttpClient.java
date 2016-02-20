@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.http.client;
 
 import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConverters;
 import com.ohayoyo.gateway.http.exception.GatewayHttpException;
-import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestIntercepting;
+import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestInterceptors;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +24,9 @@ public interface GatewayHttpClient extends GatewayHttpAccessor {
 
     void setGatewayHttpResponse(GatewayHttpResponse gatewayHttpResponse);
 
-    GatewayHttpRequestIntercepting getGatewayHttpRequestIntercepting();
+    GatewayHttpRequestInterceptors getGatewayHttpRequestInterceptors();
 
-    void setGatewayHttpRequestIntercepting(GatewayHttpRequestIntercepting gatewayHttpRequestIntercepting);
+    void setGatewayHttpRequestInterceptors(GatewayHttpRequestInterceptors gatewayHttpRequestInterceptors);
 
     <RequestBody, ResponseBody> ResponseEntity<ResponseBody> handler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws GatewayHttpException;
 

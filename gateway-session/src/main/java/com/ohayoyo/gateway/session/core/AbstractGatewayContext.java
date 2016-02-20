@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.session.core;
 
-import com.ohayoyo.gateway.session.autofill.GatewayDataAutofill;
+import com.ohayoyo.gateway.session.autofill.GatewayDataAutoFill;
 import com.ohayoyo.gateway.session.builder.RestfulRequestBuilder;
 import com.ohayoyo.gateway.session.builder.RestfulResponseBuilder;
 import com.ohayoyo.gateway.session.validator.GatewayDataValidator;
@@ -11,7 +11,7 @@ import com.ohayoyo.gateway.http.client.GatewayHttpClient;
 import com.ohayoyo.gateway.http.client.GatewayHttpRequest;
 import com.ohayoyo.gateway.http.client.GatewayHttpResponse;
 import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConverters;
-import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestIntercepting;
+import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestInterceptors;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -31,7 +31,7 @@ public abstract class AbstractGatewayContext implements GatewayContext {
 
     private GatewayHttpResponse gatewayHttpResponse;
 
-    private GatewayHttpRequestIntercepting gatewayHttpRequestIntercepting;
+    private GatewayHttpRequestInterceptors gatewayHttpRequestInterceptors;
 
     private ClientHttpRequestFactory clientHttpRequestFactory;
 
@@ -47,7 +47,7 @@ public abstract class AbstractGatewayContext implements GatewayContext {
 
     private GatewayResultValidator gatewayResultValidator;
 
-    private GatewayDataAutofill gatewayDataAutofill;
+    private GatewayDataAutoFill gatewayDataAutoFill;
 
     private Environment environment;
 
@@ -102,14 +102,14 @@ public abstract class AbstractGatewayContext implements GatewayContext {
         }
     }
 
-    public GatewayHttpRequestIntercepting getGatewayHttpRequestIntercepting() {
-        return gatewayHttpRequestIntercepting;
+    public GatewayHttpRequestInterceptors getGatewayHttpRequestInterceptors() {
+        return gatewayHttpRequestInterceptors;
     }
 
-    public void setGatewayHttpRequestIntercepting(GatewayHttpRequestIntercepting gatewayHttpRequestIntercepting) {
-        this.gatewayHttpRequestIntercepting = gatewayHttpRequestIntercepting;
+    public void setGatewayHttpRequestInterceptors(GatewayHttpRequestInterceptors gatewayHttpRequestInterceptors) {
+        this.gatewayHttpRequestInterceptors = gatewayHttpRequestInterceptors;
         if (!ObjectUtils.isEmpty(this.gatewayHttpClient)) {
-            this.gatewayHttpClient.setGatewayHttpRequestIntercepting(this.gatewayHttpRequestIntercepting);
+            this.gatewayHttpClient.setGatewayHttpRequestInterceptors(this.gatewayHttpRequestInterceptors);
         }
     }
 
@@ -136,7 +136,7 @@ public abstract class AbstractGatewayContext implements GatewayContext {
             this.gatewayHttpClient.setGatewayHttpRequest(this.gatewayHttpRequest);
             this.gatewayHttpClient.setGatewayHttpResponse(this.gatewayHttpResponse);
             this.gatewayHttpClient.setGatewayHttpMessageConverters(this.gatewayHttpMessageConverters);
-            this.gatewayHttpClient.setGatewayHttpRequestIntercepting(this.gatewayHttpRequestIntercepting);
+            this.gatewayHttpClient.setGatewayHttpRequestInterceptors(this.gatewayHttpRequestInterceptors);
             this.gatewayHttpClient.setClientHttpRequestFactory(this.clientHttpRequestFactory);
         }
     }
@@ -185,12 +185,12 @@ public abstract class AbstractGatewayContext implements GatewayContext {
         this.gatewayResultValidator = gatewayResultValidator;
     }
 
-    public GatewayDataAutofill getGatewayDataAutofill() {
-        return gatewayDataAutofill;
+    public GatewayDataAutoFill getGatewayDataAutoFill() {
+        return gatewayDataAutoFill;
     }
 
-    public void setGatewayDataAutofill(GatewayDataAutofill gatewayDataAutofill) {
-        this.gatewayDataAutofill = gatewayDataAutofill;
+    public void setGatewayDataAutoFill(GatewayDataAutoFill gatewayDataAutoFill) {
+        this.gatewayDataAutoFill = gatewayDataAutoFill;
     }
 
     @Override

@@ -7,10 +7,10 @@ import com.ohayoyo.gateway.session.core.GatewaySessionRequest;
 /**
  * @author 蓝明乐
  */
-public interface GatewayDataAutofill extends GatewayAccessor {
+public interface GatewayDataAutoFill extends GatewayAccessor {
 
-    String CLIENT_AUTOFILL_SELECT_ENVIRONMENT = "gateway.ohayoyo.com";
+    String GATEWAY_AUTO_FILL_SELECT_ENVIRONMENT = "gateway.ohayoyo.com";
 
-    <RequestBody> void autofill(GatewayRequest request, GatewaySessionRequest gatewaySessionRequest);
+    <RequestBody> void dataAutoFill(GatewayRequest request, GatewaySessionRequest<RequestBody> gatewaySessionRequest);
 
 }

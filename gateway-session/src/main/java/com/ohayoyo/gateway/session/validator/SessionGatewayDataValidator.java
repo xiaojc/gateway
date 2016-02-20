@@ -34,7 +34,7 @@ public class SessionGatewayDataValidator extends AbstractGatewayAccessor impleme
             String name = field.getName();
             if (!nullable) {
                 GatewayType type = field.getType();
-                GatewayTypeResolver typeResolver = container.getGatewayTypeResolver();
+                GatewayTypeResolver typeResolver = container.getTypeResolver();
                 if (requestData.containsKey(name)) {
                     Class<?> defineDataTye = typeResolver.resolve(type);
                     Object dataValue = requestData.get(name);

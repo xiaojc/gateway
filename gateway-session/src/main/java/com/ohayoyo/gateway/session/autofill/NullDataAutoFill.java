@@ -8,10 +8,10 @@ import com.ohayoyo.gateway.session.core.GatewaySessionRequest;
 /**
  * @author 蓝明乐
  */
-public class NullDataAutofill extends AbstractGatewayAccessor implements GatewayDataAutofill {
+public class NullDataAutoFill extends AbstractGatewayAccessor implements GatewayDataAutoFill {
 
     @Override
-    public <RequestBody> void autofill(GatewayRequest request, GatewaySessionRequest gatewaySessionRequest) {
+    public <RequestBody> void dataAutoFill(GatewayRequest request, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
 
     }
 
