@@ -1,0 +1,37 @@
+package com.ohayoyo.gateway.define.core;
+
+public interface GatewayField<Type extends GatewayType> {
+
+    String getName();
+
+    void setName(String name);
+
+    String getOverview();
+
+    void setOverview(String overview);
+
+    String getComment();
+
+    void setComment(String comment);
+
+    String getDescription();
+
+    void setDescription(String description);
+
+    Type getType();
+
+    void setType(Type type);
+
+    Integer getLength();
+
+    void setLength(Integer length);
+
+    Boolean getNullable();
+
+    void setNullable(Boolean nullable);
+
+    Object getDefaultValue();
+
+    void setDefaultValue(Object defaultValue);
+
+}

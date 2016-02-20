@@ -1,16 +1,19 @@
 package com.ohayoyo.gateway.define.container;
 
-import com.ohayoyo.gateway.define.http.InterfaceDefine;
+import com.ohayoyo.gateway.define.http.GatewayInterface;
+import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
 
 /**
  * @author 蓝明乐
  */
-public interface GatewayContainer {
+public interface GatewayContainer<Interfaces extends GatewayInterface> {
 
-    InterfaceDefine query(String interfaceDefineKey);
+    Interfaces query(String key);
 
-    GatewayContainer save(InterfaceDefine interfaceDefine);
+    void save(Interfaces interfaces);
 
-    GatewayContainer remove(InterfaceDefine interfaceDefine);
+    void remove(Interfaces interfaces);
+
+    GatewayTypeResolver getGatewayTypeResolver();
 
 }

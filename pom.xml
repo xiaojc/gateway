@@ -133,9 +133,9 @@
     <modules>
         <module>gateway-define</module>
         <module>gateway-http</module>
-        <module>gateway-client</module>
-        <module>gateway-mongo</module>
-        <module>gateway-jpa</module>
+        <module>gateway-session</module>
+        <module>gateway-channel</module>
+        <module>gateway-memory</module>
     </modules>
     <profiles>
         <profile>
