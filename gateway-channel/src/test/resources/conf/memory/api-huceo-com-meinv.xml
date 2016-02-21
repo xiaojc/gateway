@@ -37,55 +37,35 @@
 
                                 <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
                                     <property name="name" value="key"/>
-                                    <property name="type">
-                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
-                                            <property name="name" value="string"/>
-                                        </bean>
-                                    </property>
+                                    <property name="type" value="string"/>
                                     <property name="nullable" value="false"/>
                                     <property name="defaultValue" value="29e069ec39101eb669121554bf67024f"/>
                                 </bean>
 
                                 <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
                                     <property name="name" value="num"/>
-                                    <property name="type">
-                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
-                                            <property name="name" value="int"/>
-                                        </bean>
-                                    </property>
+                                    <property name="type" value="int"/>
                                     <property name="nullable" value="false"/>
                                     <property name="defaultValue" value="10"/>
                                 </bean>
 
                                 <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
                                     <property name="name" value="rand"/>
-                                    <property name="type">
-                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
-                                            <property name="name" value="int"/>
-                                        </bean>
-                                    </property>
+                                    <property name="type" value="int"/>
                                     <property name="nullable" value="true"/>
                                     <property name="defaultValue" value="1"/>
                                 </bean>
 
                                 <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
                                     <property name="name" value="word"/>
-                                    <property name="type">
-                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
-                                            <property name="name" value="string"/>
-                                        </bean>
-                                    </property>
+                                    <property name="type" value="string"/>
                                     <property name="nullable" value="true"/>
                                     <property name="defaultValue" value="上海"/>
                                 </bean>
 
                                 <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
                                     <property name="name" value="page"/>
-                                    <property name="type">
-                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
-                                            <property name="name" value="int"/>
-                                        </bean>
-                                    </property>
+                                    <property name="type" value="int"/>
                                     <property name="nullable" value="true"/>
                                     <property name="defaultValue" value="1"/>
                                 </bean>

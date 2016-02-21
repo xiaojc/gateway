@@ -128,6 +128,11 @@
                 <artifactId>spring-audit-mongo</artifactId>
                 <version>${com.ohayoyo.spring.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ohayoyo.spring</groupId>
+                <artifactId>spring-configure-mongo</artifactId>
+                <version>${com.ohayoyo.spring.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <modules>
@@ -136,6 +141,7 @@
         <module>gateway-session</module>
         <module>gateway-channel</module>
         <module>gateway-memory</module>
+        <module>gateway-mongo</module>
     </modules>
     <profiles>
         <profile>

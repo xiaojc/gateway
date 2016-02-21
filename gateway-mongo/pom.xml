@@ -8,32 +8,12 @@
         <version>1.0.0.DEV-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>gateway-channel</artifactId>
+    <artifactId>gateway-mongo</artifactId>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.ohayoyo.gateway</groupId>
                 <artifactId>gateway-define</artifactId>
-                <version>1.0.0.DEV-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ohayoyo.gateway</groupId>
-                <artifactId>gateway-http</artifactId>
-                <version>1.0.0.DEV-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ohayoyo.gateway</groupId>
-                <artifactId>gateway-session</artifactId>
-                <version>1.0.0.DEV-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ohayoyo.gateway</groupId>
-                <artifactId>gateway-memory</artifactId>
-                <version>1.0.0.DEV-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ohayoyo.gateway</groupId>
-                <artifactId>gateway-mongo</artifactId>
                 <version>1.0.0.DEV-SNAPSHOT</version>
             </dependency>
         </dependencies>
@@ -45,32 +25,19 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.ohayoyo.gateway</groupId>
-            <artifactId>gateway-http</artifactId>
+            <groupId>com.ohayoyo.spring</groupId>
+            <artifactId>spring-audit-core</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ohayoyo.gateway</groupId>
-            <artifactId>gateway-session</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ohayoyo.gateway</groupId>
-            <artifactId>gateway-memory</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.ohayoyo.gateway</groupId>
-            <artifactId>gateway-mongo</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.ohayoyo.spring</groupId>
-            <artifactId>spring-configure-mongo</artifactId>
+            <artifactId>spring-audit-mongo</artifactId>
             <scope>compile</scope>
-            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -89,34 +56,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
             <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.rometools</groupId>
-            <artifactId>rome</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp</groupId>
-            <artifactId>okhttp</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -151,19 +93,23 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <artifactId>spring-tx</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.ohayoyo.spring</groupId>
-            <artifactId>spring-test-junit4</artifactId>
-            <version>1.0.0.BUILD-SNAPSHOT</version>
-            <scope>test</scope>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

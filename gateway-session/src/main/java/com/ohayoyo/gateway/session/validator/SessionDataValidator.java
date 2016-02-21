@@ -2,7 +2,6 @@ package com.ohayoyo.gateway.session.validator;
 
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.define.core.GatewayField;
-import com.ohayoyo.gateway.define.core.GatewayType;
 import com.ohayoyo.gateway.define.http.*;
 import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
 import com.ohayoyo.gateway.session.core.AbstractGatewayAccessor;
@@ -28,8 +27,8 @@ public class SessionDataValidator extends AbstractGatewayAccessor implements Gat
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionDataValidator.class);
 
-    protected Map<String, GatewayType> validateRequiredRequestData(Set<GatewayField> fields, Map<String, ?> requestData, ConversionService conversionService, GatewayContainer container) {
-        Map<String, GatewayType> requiredRequestData = new HashMap<String, GatewayType>();
+    protected Map<String, String> validateRequiredRequestData(Set<GatewayField> fields, Map<String, ?> requestData, ConversionService conversionService, GatewayContainer container) {
+        Map<String, String> requiredRequestData = new HashMap<String, String>();
         for (GatewayField field : fields) {
             Boolean nullable = field.getNullable();
             if (ObjectUtils.isEmpty(nullable)) {
@@ -37,7 +36,7 @@ public class SessionDataValidator extends AbstractGatewayAccessor implements Gat
             }
             String name = field.getName();
             if (!nullable) {
-                GatewayType type = field.getType();
+                String type = field.getType();
                 GatewayTypeResolver typeResolver = container.getTypeResolver();
                 if (requestData.containsKey(name)) {
                     Class<?> defineDataTye = typeResolver.resolve(type);
@@ -70,7 +69,7 @@ public class SessionDataValidator extends AbstractGatewayAccessor implements Gat
             return;
         }
         Map<String, String> requestPathVariables = sessionRequest.getRequestPathVariables();
-        Map<String, GatewayType> requiredRequestData = validateRequiredRequestData(fields, requestPathVariables, conversionService, container);
+        Map<String, String> requiredRequestData = validateRequiredRequestData(fields, requestPathVariables, conversionService, container);
         if (!CollectionUtils.isEmpty(requiredRequestData)) {
             VerifySessionException.exception("请求路径值的必须数据不完全,信息:%s", requiredRequestData);
         }
@@ -87,7 +86,7 @@ public class SessionDataValidator extends AbstractGatewayAccessor implements Gat
             return;
         }
         MultiValueMap<String, String> requestQueries = sessionRequest.getRequestQueries();
-        Map<String, GatewayType> requiredRequestData = validateRequiredRequestData(fields, requestQueries, conversionService, container);
+        Map<String, String> requiredRequestData = validateRequiredRequestData(fields, requestQueries, conversionService, container);
         if (!CollectionUtils.isEmpty(requiredRequestData)) {
             VerifySessionException.exception("请求查询参数的必须数据不完全,信息:%s", requiredRequestData);
         }
@@ -104,7 +103,7 @@ public class SessionDataValidator extends AbstractGatewayAccessor implements Gat
             return;
         }
         MultiValueMap<String, String> requestHeaders = sessionRequest.getRequestHeaders();
-        Map<String, GatewayType> requiredRequestData = validateRequiredRequestData(fields, requestHeaders, conversionService, container);
+        Map<String, String> requiredRequestData = validateRequiredRequestData(fields, requestHeaders, conversionService, container);
         if (!CollectionUtils.isEmpty(requiredRequestData)) {
             VerifySessionException.exception("请求头参数的必须数据不完全,信息:%s", requiredRequestData);
         }

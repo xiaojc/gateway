@@ -1,11 +1,9 @@
 package com.ohayoyo.gateway.define.resolver;
 
-import com.ohayoyo.gateway.define.core.GatewayType;
-
 /**
  * @author 蓝明乐
  */
-public interface GatewayTypeResolver<Type extends GatewayType> {
+public interface GatewayTypeResolver {
 
     String BYTE = "byte";
 
@@ -33,6 +31,6 @@ public interface GatewayTypeResolver<Type extends GatewayType> {
 
     String FILE = "file";
 
-    Class<?> resolve(Type type);
+    Class<?> resolve(String type);
 
 }

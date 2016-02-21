@@ -1,9 +1,7 @@
 package com.ohayoyo.gateway.memory.container;
 
-import com.ohayoyo.gateway.define.container.GatewayContainer;
-import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
+import com.ohayoyo.gateway.define.container.AbstractGatewayContainer;
 import com.ohayoyo.gateway.memory.http.MemoryGatewayInterface;
-import com.ohayoyo.gateway.memory.resolver.MemoryGatewayTypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -13,17 +11,11 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MemoryGatewayContainer implements GatewayContainer<MemoryGatewayInterface> {
+public class MemoryGatewayContainer extends AbstractGatewayContainer<MemoryGatewayInterface> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MemoryGatewayContainer.class);
 
     private Map<String, MemoryGatewayInterface> memoryGatewayInterfaceMap;
-
-    private MemoryGatewayTypeResolver memoryGatewayTypeResolver = new MemoryGatewayTypeResolver();
-
-    public Map<String, MemoryGatewayInterface> getMemoryGatewayInterfaceMap() {
-        return memoryGatewayInterfaceMap;
-    }
 
     public void setMemoryGatewayInterfaceMap(Map<String, MemoryGatewayInterface> memoryGatewayInterfaceMap) {
         this.memoryGatewayInterfaceMap = memoryGatewayInterfaceMap;
@@ -66,11 +58,6 @@ public class MemoryGatewayContainer implements GatewayContainer<MemoryGatewayInt
                 }
             }
         }
-    }
-
-    @Override
-    public GatewayTypeResolver getTypeResolver() {
-        return this.memoryGatewayTypeResolver;
     }
 
 }

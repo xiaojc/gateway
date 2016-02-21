@@ -13,11 +13,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration(locations = {
         "classpath:/conf/gateway-channel-memory.xml",
-        "classpath:/conf/interfaces/**/*.xml"
+        "classpath:/conf/memory/**/*.xml"
 })
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class GatewayChannelTest {
+public class MemoryGatewayChannelTest {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

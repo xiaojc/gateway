@@ -2,7 +2,6 @@ package com.ohayoyo.gateway.session.utils;
 
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.define.core.GatewayField;
-import com.ohayoyo.gateway.define.core.GatewayType;
 import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +61,7 @@ public final class GatewayFieldUtils {
         Object defaultValue = field.getDefaultValue();
         if (!ObjectUtils.isEmpty(defaultValue)) {
             Object result = null;
-            GatewayType type = field.getType();
+            String type = field.getType();
             GatewayTypeResolver typeResolver = container.getTypeResolver();
             Class<?> sourceType = defaultValue.getClass();
             Class<?> targetType = typeResolver.resolve(type);

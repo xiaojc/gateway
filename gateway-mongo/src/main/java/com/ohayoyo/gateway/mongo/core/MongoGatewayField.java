@@ -1,23 +1,32 @@
-package com.ohayoyo.gateway.memory.core;
+package com.ohayoyo.gateway.mongo.core;
 
 import com.ohayoyo.gateway.define.core.GatewayField;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-public class MemoryGatewayField implements GatewayField {
+public class MongoGatewayField implements GatewayField {
 
+    @Field("name")
     private String name;
 
+    @Field("overview")
     private String overview;
 
+    @Field("comment")
     private String comment;
 
+    @Field("description")
     private String description;
 
+    @Field("type")
     private String type;
 
+    @Field("length")
     private Integer length;
 
+    @Field("nullable")
     private Boolean nullable;
 
+    @Field("defaultValue")
     private Object defaultValue;
 
     @Override
@@ -103,8 +112,8 @@ public class MemoryGatewayField implements GatewayField {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MemoryGatewayField)) return false;
-        MemoryGatewayField that = (MemoryGatewayField) o;
+        if (!(o instanceof MongoGatewayField)) return false;
+        MongoGatewayField that = (MongoGatewayField) o;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         return type != null ? type.equals(that.type) : that.type == null;
     }
@@ -115,4 +124,5 @@ public class MemoryGatewayField implements GatewayField {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
+
 }

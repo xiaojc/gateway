@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.define.core;
 
-public interface GatewayField<Type extends GatewayType> {
+public interface GatewayField {
 
     String getName();
 
@@ -18,9 +18,9 @@ public interface GatewayField<Type extends GatewayType> {
 
     void setDescription(String description);
 
-    Type getType();
+    String getType();
 
-    void setType(Type type);
+    void setType(String type);
 
     Integer getLength();
 
