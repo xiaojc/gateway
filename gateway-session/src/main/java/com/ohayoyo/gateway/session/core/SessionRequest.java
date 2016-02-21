@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author 蓝明乐
  */
-public interface GatewaySessionRequest<RequestBody> {
+public interface SessionRequest<RequestBody> {
 
     String getSelect();
 

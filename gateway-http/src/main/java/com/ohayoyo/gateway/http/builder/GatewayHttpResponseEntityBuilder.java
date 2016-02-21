@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class GatewayHttpResponseEntityBuilder<ResponseBody> extends GatewayHttpEntityBuilder<ResponseBody, ResponseEntity<ResponseBody>> {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpResponseEntityBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpResponseEntityBuilder.class);
 
     private HttpStatus httpStatus;
 

@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class AutoScanMemoryGatewayContainer extends MemoryGatewayContainer implements AutoScanGatewayContainer<MemoryGatewayInterface> {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(AutoScanMemoryGatewayContainer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AutoScanMemoryGatewayContainer.class);
 
     private ApplicationContext applicationContext;
 

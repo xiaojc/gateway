@@ -4,6 +4,8 @@ import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.define.core.GatewayField;
 import com.ohayoyo.gateway.define.core.GatewayType;
 import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -17,6 +19,8 @@ import java.util.Set;
  */
 @SuppressWarnings("unchecked")
 public final class GatewayFieldUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayFieldUtils.class);
 
     public static boolean isExistEmptyFieldName(Set<GatewayField> fields) {
         if (!CollectionUtils.isEmpty(fields)) {

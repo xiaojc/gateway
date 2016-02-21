@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.channel.support;
 
-import com.ohayoyo.gateway.channel.core.ResultTypeGatewayChannel;
+import com.ohayoyo.gateway.channel.core.AbstractGatewayChannel;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.session.core.GatewayContext;
 import com.ohayoyo.gateway.session.utils.ApplicationContextUtils;
@@ -16,9 +16,9 @@ import org.springframework.util.ObjectUtils;
 /**
  * @author 蓝明乐
  */
-abstract class ConfigurableGatewayChannel extends ResultTypeGatewayChannel implements InitializingBean, ApplicationContextAware {
+abstract class ConfigurableGatewayChannel extends AbstractGatewayChannel implements InitializingBean, ApplicationContextAware {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ConfigurableGatewayChannel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurableGatewayChannel.class);
 
     private ApplicationContext applicationContext;
 
@@ -37,13 +37,13 @@ abstract class ConfigurableGatewayChannel extends ResultTypeGatewayChannel imple
         GatewayContext configGatewayContext = this.getGatewayContext();
         GatewayContainer container = configGatewayContext.getGatewayContainer();
         if (ObjectUtils.isEmpty(container)) {
-            configDefaultContainer();
+            configDefaultGatewayContainer();
         }
     }
 
     protected abstract void configDefaultGatewayContext() throws Exception;
 
-    protected abstract void configDefaultContainer() throws Exception;
+    protected abstract void configDefaultGatewayContainer() throws Exception;
 
     @Override
     public final void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

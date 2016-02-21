@@ -12,7 +12,7 @@ public class MemoryGatewayField implements GatewayField<MemoryGatewayType> {
 
     private String description;
 
-    private MemoryGatewayType type;
+    private MemoryGatewayType type = MemoryGatewayType.STRING_MEMORY_GATEWAY_TYPE;
 
     private Integer length;
 

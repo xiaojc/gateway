@@ -1,6 +1,8 @@
 package com.ohayoyo.gateway.session.restful;
 
-import com.ohayoyo.gateway.session.core.GatewaySessionRequest;
+import com.ohayoyo.gateway.session.core.SessionRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Map;
@@ -8,7 +10,9 @@ import java.util.Map;
 /**
  * @author 蓝明乐
  */
-public class RestfulGatewaySessionRequest<RequestBody> implements GatewaySessionRequest<RequestBody> {
+public class RestfulSessionRequest<RequestBody> implements SessionRequest<RequestBody> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestfulSessionRequest.class);
 
     private String select;
 

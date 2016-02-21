@@ -27,7 +27,7 @@ import org.springframework.util.ObjectUtils;
  */
 public class AutoScanGatewayContext extends ConfigurableGatewayContext implements InitializingBean {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(AutoScanGatewayContext.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AutoScanGatewayContext.class);
 
     public AutoScanGatewayContext() {
     }

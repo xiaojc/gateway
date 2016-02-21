@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayInterface">
+        <property name="key" value="meinv"/>
+        <property name="request">
+
+            <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayRequest">
+                <property name="protocols">
+                    <set>
+                        <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayProtocol">
+                            <property name="name" value="http"/>
+                        </bean>
+                    </set>
+                </property>
+
+                <property name="hosts">
+                    <set>
+                        <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayHost">
+                            <property name="hostname" value="api.huceo.com"/>
+                        </bean>
+                    </set>
+                </property>
+
+                <property name="path">
+                    <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayPath">
+                        <property name="module" value="meinv"/>
+                    </bean>
+                </property>
+
+                <property name="queries">
+                    <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayQueries">
+                        <property name="fields">
+                            <set>
+
+                                <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
+                                    <property name="name" value="key"/>
+                                    <property name="type">
+                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
+                                            <property name="name" value="string"/>
+                                        </bean>
+                                    </property>
+                                    <property name="nullable" value="false"/>
+                                    <property name="defaultValue" value="29e069ec39101eb669121554bf67024f"/>
+                                </bean>
+
+                                <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
+                                    <property name="name" value="num"/>
+                                    <property name="type">
+                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
+                                            <property name="name" value="int"/>
+                                        </bean>
+                                    </property>
+                                    <property name="nullable" value="false"/>
+                                    <property name="defaultValue" value="10"/>
+                                </bean>
+
+                                <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
+                                    <property name="name" value="rand"/>
+                                    <property name="type">
+                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
+                                            <property name="name" value="int"/>
+                                        </bean>
+                                    </property>
+                                    <property name="nullable" value="true"/>
+                                    <property name="defaultValue" value="1"/>
+                                </bean>
+
+                                <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
+                                    <property name="name" value="word"/>
+                                    <property name="type">
+                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
+                                            <property name="name" value="string"/>
+                                        </bean>
+                                    </property>
+                                    <property name="nullable" value="true"/>
+                                    <property name="defaultValue" value="上海"/>
+                                </bean>
+
+                                <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayField">
+                                    <property name="name" value="page"/>
+                                    <property name="type">
+                                        <bean class="com.ohayoyo.gateway.memory.core.MemoryGatewayType">
+                                            <property name="name" value="int"/>
+                                        </bean>
+                                    </property>
+                                    <property name="nullable" value="true"/>
+                                    <property name="defaultValue" value="1"/>
+                                </bean>
+
+                            </set>
+                        </property>
+                    </bean>
+                </property>
+
+                <property name="methods">
+                    <set>
+                        <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayMethod">
+                            <property name="name" value="get"/>
+                        </bean>
+                    </set>
+                </property>
+
+                <property name="entity">
+                    <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayEntity">
+                        <property name="type" value="application/x-www-form-urlencoded"/>
+                    </bean>
+                </property>
+
+            </bean>
+        </property>
+
+        <property name="response">
+            <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayResponse">
+                <property name="entity">
+                    <bean class="com.ohayoyo.gateway.memory.http.MemoryGatewayEntity">
+                        <property name="type" value="application/json;charset=UTF-8"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+    </bean>
+
+</beans>

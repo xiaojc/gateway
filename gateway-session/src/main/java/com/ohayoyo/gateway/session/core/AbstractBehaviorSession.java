@@ -9,6 +9,8 @@ import com.ohayoyo.gateway.session.utils.GatewaySelectorUtils;
 import com.ohayoyo.gateway.session.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.session.validator.GatewayInterfaceValidator;
 import com.ohayoyo.gateway.session.validator.GatewayResultValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -29,30 +31,32 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBehaviorSession.class);
+
     @Override
-    protected <ResponseBody> void gatewayResultVerify(GatewaySessionResponse<ResponseBody> gatewaySessionResponse, Class<ResponseBody> responseBodyClass, GatewayInterface gatewayInterface) throws GatewaySessionException {
+    protected <ResponseBody> void gatewayResultVerify(SessionResponse<ResponseBody> sessionResponse, Class<ResponseBody> responseBodyClass, GatewayInterface gatewayInterface) throws GatewaySessionException {
         GatewayContext gatewayContext = this.getGatewayContext();
         GatewayResultValidator gatewayResultValidator = gatewayContext.getGatewayResultValidator();
         if (!ObjectUtils.isEmpty(gatewayResultValidator)) {
-            gatewayResultValidator.validate(gatewayInterface, responseBodyClass, gatewaySessionResponse);
+            gatewayResultValidator.validate(gatewayInterface, responseBodyClass, sessionResponse);
         }
     }
 
     @Override
-    protected <RequestBody> void gatewayDataVerify(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) throws GatewaySessionException {
+    protected <RequestBody> void gatewayDataVerify(GatewayInterface gatewayInterface, SessionRequest<RequestBody> sessionRequest) throws GatewaySessionException {
         GatewayContext gatewayContext = this.getGatewayContext();
         GatewayDataValidator gatewayDataValidator = gatewayContext.getGatewayDataValidator();
         if (!ObjectUtils.isEmpty(gatewayDataValidator)) {
-            gatewayDataValidator.validate(gatewayInterface, gatewaySessionRequest);
+            gatewayDataValidator.validate(gatewayInterface, sessionRequest);
         }
     }
 
     @Override
-    protected <RequestBody> void gatewayDataAutofill(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) throws GatewaySessionException {
+    protected <RequestBody> void gatewayDataAutofill(GatewayInterface gatewayInterface, SessionRequest<RequestBody> sessionRequest) throws GatewaySessionException {
         GatewayContext gatewayContext = this.getGatewayContext();
         GatewayDataAutoFill gatewayDataAutoFill = gatewayContext.getGatewayDataAutoFill();
         if (!ObjectUtils.isEmpty(gatewayDataAutoFill)) {
-            gatewayDataAutoFill.dataAutoFill(gatewayInterface.getRequest(), gatewaySessionRequest);
+            gatewayDataAutoFill.dataAutoFill(gatewayInterface.getRequest(), sessionRequest);
         }
     }
 
@@ -66,10 +70,10 @@ public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
     }
 
 
-    protected final <RequestBody> URI resolveRequestUri(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
-        String select = gatewaySessionRequest.getSelect();
-        Map<String, String> requestPathVariables = gatewaySessionRequest.getRequestPathVariables();
-        MultiValueMap<String, String> requestQueries = gatewaySessionRequest.getRequestQueries();
+    protected final <RequestBody> URI resolveRequestUri(GatewayInterface gatewayInterface, SessionRequest<RequestBody> sessionRequest) {
+        String select = sessionRequest.getSelect();
+        Map<String, String> requestPathVariables = sessionRequest.getRequestPathVariables();
+        MultiValueMap<String, String> requestQueries = sessionRequest.getRequestQueries();
         GatewayRequest gatewayRequest = gatewayInterface.getRequest();
         Set<GatewayProtocol> gatewayProtocols = gatewayRequest.getProtocols();
         Set<GatewayHost> gatewayHosts = gatewayRequest.getHosts();
@@ -105,21 +109,21 @@ public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
         return uri;
     }
 
-    protected final <RequestBody> RequestEntity<RequestBody> resolveRequestEntity(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
-        URI uri = this.resolveRequestUri(gatewayInterface, gatewaySessionRequest);
-        HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayInterface, gatewaySessionRequest);
-        MultiValueMap<String, String> requestHeaders = gatewaySessionRequest.getRequestHeaders();
-        RequestBody requestEntity = gatewaySessionRequest.getRequestBody();
+    protected final <RequestBody> RequestEntity<RequestBody> resolveRequestEntity(GatewayInterface gatewayInterface, SessionRequest<RequestBody> sessionRequest) {
+        URI uri = this.resolveRequestUri(gatewayInterface, sessionRequest);
+        HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayInterface, sessionRequest);
+        MultiValueMap<String, String> requestHeaders = sessionRequest.getRequestHeaders();
+        RequestBody requestEntity = sessionRequest.getRequestBody();
         return (RequestEntity<RequestBody>) GatewayHttpRequestEntityBuilder.newInstance().url(uri).headers(requestHeaders).httpMethod(httpMethod).body(requestEntity).build();
     }
 
-    protected final <RequestBody> HttpMethod resolveRequestHttpMethod(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
-        String select = gatewaySessionRequest.getSelect();
+    protected final <RequestBody> HttpMethod resolveRequestHttpMethod(GatewayInterface gatewayInterface, SessionRequest<RequestBody> sessionRequest) {
+        String select = sessionRequest.getSelect();
         GatewayRequest gatewayRequest = gatewayInterface.getRequest();
         Set<GatewayMethod> gatewayMethods = gatewayRequest.getMethods();
         GatewayMethod gatewayMethod = GatewaySelectorUtils.selectMethodDefine(select, gatewayMethods);
         String name = gatewayMethod.getName();
-        HttpMethod httpMethod = HttpMethod.resolve(name);
+        HttpMethod httpMethod = HttpMethod.resolve(name.toUpperCase());
         return httpMethod;
     }
 

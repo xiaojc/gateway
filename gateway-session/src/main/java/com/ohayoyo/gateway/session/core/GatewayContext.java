@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.session.core;
 
 import com.ohayoyo.gateway.session.autofill.GatewayDataAutoFill;
-import com.ohayoyo.gateway.session.builder.RestfulRequestBuilder;
-import com.ohayoyo.gateway.session.builder.RestfulResponseBuilder;
+import com.ohayoyo.gateway.session.builder.RestfulSessionRequestBuilder;
+import com.ohayoyo.gateway.session.builder.RestfulSessionResponseBuilder;
 import com.ohayoyo.gateway.session.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.session.validator.GatewayInterfaceValidator;
 import com.ohayoyo.gateway.session.validator.GatewayResultValidator;
@@ -82,8 +82,8 @@ public interface GatewayContext {
 
     void setApplicationContext(ApplicationContext applicationContext);
 
-    RestfulRequestBuilder newRestfulRequestBuilder();
+    RestfulSessionRequestBuilder newRestfulRequestBuilder();
 
-    RestfulResponseBuilder newRestfulResponseBuilder();
+    RestfulSessionResponseBuilder newRestfulResponseBuilder();
 
 }

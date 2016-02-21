@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class GatewayHttpMessageConvertersHandler extends ArrayList<HttpMessageConverter<?>> implements GatewayHttpMessageConverters {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpMessageConverters.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpMessageConverters.class);
 
     private ConversionService conversionService = null;
 

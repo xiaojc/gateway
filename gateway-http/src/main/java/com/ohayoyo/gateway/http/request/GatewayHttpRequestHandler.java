@@ -23,7 +23,7 @@ import java.util.Set;
  */
 public class GatewayHttpRequestHandler extends AbstractGatewayHttpRequest {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpRequestHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpRequestHandler.class);
 
     @Override
     protected <RequestBody> void requestHeadersHandler(MediaType customRequestContentType, RequestEntity<RequestBody> requestEntity, ClientHttpRequest clientHttpRequest) {

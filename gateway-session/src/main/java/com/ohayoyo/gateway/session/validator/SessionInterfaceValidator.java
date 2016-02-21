@@ -19,9 +19,9 @@ import java.util.Set;
  * @author 蓝明乐
  */
 @SuppressWarnings("unchecked")
-public class SessionGatewayInterfaceValidator extends AbstractGatewayAccessor implements GatewayInterfaceValidator {
+public class SessionInterfaceValidator extends AbstractGatewayAccessor implements GatewayInterfaceValidator {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(SessionGatewayInterfaceValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionInterfaceValidator.class);
 
     private static final Set<String> CACHE = new HashSet<String>();
 

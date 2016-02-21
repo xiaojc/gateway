@@ -3,6 +3,8 @@ package com.ohayoyo.gateway.session.utils;
 import com.ohayoyo.gateway.define.http.GatewayHost;
 import com.ohayoyo.gateway.define.http.GatewayMethod;
 import com.ohayoyo.gateway.define.http.GatewayProtocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -14,6 +16,8 @@ import java.util.Set;
  * @author 蓝明乐
  */
 public final class GatewaySelectorUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewaySelectorUtils.class);
 
     private static boolean selectCompareRule(String select, String scope) {
         if (!StringUtils.isEmpty(select) && !StringUtils.isEmpty(scope)) {

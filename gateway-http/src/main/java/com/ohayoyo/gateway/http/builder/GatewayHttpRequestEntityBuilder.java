@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class GatewayHttpRequestEntityBuilder<RequestBody> extends GatewayHttpEntityBuilder<RequestBody, RequestEntity<RequestBody>> {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpRequestEntityBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpRequestEntityBuilder.class);
 
     private URI uri;
 

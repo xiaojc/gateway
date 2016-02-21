@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class GatewayHttpClientHandler extends AbstractGatewayHttpClient {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpClientHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpClientHandler.class);
 
     @Override
     protected <ResponseBody, RequestBody> ResponseEntity<ResponseBody> doHandler(MediaType customRequestContentType, MediaType customResponseContentType, Class<ResponseBody> responseBodyClass, RequestEntity<RequestBody> requestEntity) throws GatewayHttpException, IOException {

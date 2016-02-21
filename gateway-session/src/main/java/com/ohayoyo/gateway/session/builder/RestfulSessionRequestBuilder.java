@@ -1,7 +1,9 @@
 package com.ohayoyo.gateway.session.builder;
 
 import com.ohayoyo.gateway.session.core.GatewayContext;
-import com.ohayoyo.gateway.session.restful.RestfulGatewaySessionRequest;
+import com.ohayoyo.gateway.session.restful.RestfulSessionRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.*;
 
@@ -12,7 +14,9 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class RestfulRequestBuilder {
+public class RestfulSessionRequestBuilder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestfulSessionRequestBuilder.class);
 
     private String select;
 
@@ -26,12 +30,12 @@ public class RestfulRequestBuilder {
 
     private GatewayContext gatewayContext;
 
-    public RestfulRequestBuilder select(String select) {
+    public RestfulSessionRequestBuilder select(String select) {
         this.select = select;
         return this;
     }
 
-    public RestfulRequestBuilder requestPathVariables(Map<String, String> requestPathVariables) {
+    public RestfulSessionRequestBuilder requestPathVariables(Map<String, String> requestPathVariables) {
         Assert.notEmpty(requestPathVariables);
         if (CollectionUtils.isEmpty(this.requestPathVariables)) {
             this.requestPathVariables = new HashMap<String, String>();
@@ -40,7 +44,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestPathVariables(String requestPathVariableKey, String requestPathVariableValue) {
+    public RestfulSessionRequestBuilder requestPathVariables(String requestPathVariableKey, String requestPathVariableValue) {
         Assert.notNull(requestPathVariableKey);
         if (ObjectUtils.isEmpty(this.requestPathVariables)) {
             this.requestPathVariables = new HashMap<String, String>();
@@ -49,7 +53,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestPathVariables(String requestPathVariableKey, Object requestPathVariableValueObject) {
+    public RestfulSessionRequestBuilder requestPathVariables(String requestPathVariableKey, Object requestPathVariableValueObject) {
         Assert.notNull(requestPathVariableKey);
         Assert.notNull(requestPathVariableValueObject);
         Class<?> sourceType = requestPathVariableValueObject.getClass();
@@ -62,7 +66,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestQueries(MultiValueMap<String, String> requestQueries) {
+    public RestfulSessionRequestBuilder requestQueries(MultiValueMap<String, String> requestQueries) {
         Assert.notEmpty(requestQueries);
         if (ObjectUtils.isEmpty(this.requestQueries)) {
             this.requestQueries = new LinkedMultiValueMap<String, String>();
@@ -71,7 +75,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestQueries(Map<String, Object> requestQueries) {
+    public RestfulSessionRequestBuilder requestQueries(Map<String, Object> requestQueries) {
         Assert.notEmpty(requestQueries);
         if (CollectionUtils.isEmpty(this.requestQueries)) {
             this.requestQueries = new LinkedMultiValueMap<String, String>();
@@ -93,7 +97,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestQueries(String requestQueryKey, String requestQueryValue) {
+    public RestfulSessionRequestBuilder requestQueries(String requestQueryKey, String requestQueryValue) {
         Assert.notNull(requestQueryKey);
         if (CollectionUtils.isEmpty(this.requestQueries)) {
             this.requestQueries = new LinkedMultiValueMap<String, String>();
@@ -102,7 +106,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestQueries(String requestQueryKey, Object requestQueryValueObject) {
+    public RestfulSessionRequestBuilder requestQueries(String requestQueryKey, Object requestQueryValueObject) {
         Assert.notNull(requestQueryKey);
         Assert.notNull(requestQueryValueObject);
         if (CollectionUtils.isEmpty(this.requestQueries)) {
@@ -118,7 +122,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestHeaders(MultiValueMap<String, String> requestHeaders) {
+    public RestfulSessionRequestBuilder requestHeaders(MultiValueMap<String, String> requestHeaders) {
         Assert.notEmpty(requestHeaders);
         if (ObjectUtils.isEmpty(this.requestHeaders)) {
             this.requestHeaders = new LinkedMultiValueMap<String, String>();
@@ -127,7 +131,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestHeaders(Map<String, Object> requestHeaders) {
+    public RestfulSessionRequestBuilder requestHeaders(Map<String, Object> requestHeaders) {
         Assert.notEmpty(requestHeaders);
         if (CollectionUtils.isEmpty(this.requestHeaders)) {
             this.requestHeaders = new LinkedMultiValueMap<String, String>();
@@ -149,7 +153,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestHeaders(String requestHeaderKey, String requestHeaderValue) {
+    public RestfulSessionRequestBuilder requestHeaders(String requestHeaderKey, String requestHeaderValue) {
         Assert.notNull(requestHeaderKey);
         if (CollectionUtils.isEmpty(this.requestHeaders)) {
             this.requestHeaders = new LinkedMultiValueMap<String, String>();
@@ -158,7 +162,7 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestHeaders(String requestHeaderKey, Object requestHeaderValueObject) {
+    public RestfulSessionRequestBuilder requestHeaders(String requestHeaderKey, Object requestHeaderValueObject) {
         Assert.notNull(requestHeaderKey);
         Assert.notNull(requestHeaderValueObject);
         if (CollectionUtils.isEmpty(this.requestHeaders)) {
@@ -174,14 +178,14 @@ public class RestfulRequestBuilder {
         return this;
     }
 
-    public RestfulRequestBuilder requestBody(Object requestBody) {
+    public RestfulSessionRequestBuilder requestBody(Object requestBody) {
         this.requestBody = requestBody;
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public <RequestBody> RestfulGatewaySessionRequest<RequestBody> build() {
-        RestfulGatewaySessionRequest<RequestBody> restfulRequest = new RestfulGatewaySessionRequest<RequestBody>();
+    public <RequestBody> RestfulSessionRequest<RequestBody> build() {
+        RestfulSessionRequest<RequestBody> restfulRequest = new RestfulSessionRequest<RequestBody>();
         restfulRequest.setSelect(this.select);
         restfulRequest.setRequestPathVariables(this.requestPathVariables);
         restfulRequest.setRequestQueries(this.requestQueries);
@@ -194,7 +198,7 @@ public class RestfulRequestBuilder {
         return gatewayContext;
     }
 
-    public RestfulRequestBuilder setGatewayContext(GatewayContext gatewayContext) {
+    public RestfulSessionRequestBuilder setGatewayContext(GatewayContext gatewayContext) {
         this.gatewayContext = gatewayContext;
         return this;
     }

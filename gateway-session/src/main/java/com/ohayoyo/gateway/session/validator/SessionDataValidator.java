@@ -7,8 +7,10 @@ import com.ohayoyo.gateway.define.http.*;
 import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
 import com.ohayoyo.gateway.session.core.AbstractGatewayAccessor;
 import com.ohayoyo.gateway.session.core.GatewayContext;
-import com.ohayoyo.gateway.session.core.GatewaySessionRequest;
+import com.ohayoyo.gateway.session.core.SessionRequest;
 import com.ohayoyo.gateway.session.exception.VerifySessionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
@@ -22,7 +24,9 @@ import java.util.Set;
  * @author 蓝明乐
  */
 @SuppressWarnings("unchecked")
-public class SessionGatewayDataValidator extends AbstractGatewayAccessor implements GatewayDataValidator {
+public class SessionDataValidator extends AbstractGatewayAccessor implements GatewayDataValidator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDataValidator.class);
 
     protected Map<String, GatewayType> validateRequiredRequestData(Set<GatewayField> fields, Map<String, ?> requestData, ConversionService conversionService, GatewayContainer container) {
         Map<String, GatewayType> requiredRequestData = new HashMap<String, GatewayType>();
@@ -51,7 +55,7 @@ public class SessionGatewayDataValidator extends AbstractGatewayAccessor impleme
         return requiredRequestData;
     }
 
-    protected void validateRequestPathVariablesData(GatewayInterface gatewayInterface, GatewaySessionRequest gatewaySessionRequest, ConversionService conversionService, GatewayContainer container) throws VerifySessionException {
+    protected void validateRequestPathVariablesData(GatewayInterface gatewayInterface, SessionRequest sessionRequest, ConversionService conversionService, GatewayContainer container) throws VerifySessionException {
         GatewayRequest request = gatewayInterface.getRequest();
         GatewayPath path = request.getPath();
         if (ObjectUtils.isEmpty(path)) {
@@ -65,14 +69,14 @@ public class SessionGatewayDataValidator extends AbstractGatewayAccessor impleme
         if (CollectionUtils.isEmpty(fields)) {
             return;
         }
-        Map<String, String> requestPathVariables = gatewaySessionRequest.getRequestPathVariables();
+        Map<String, String> requestPathVariables = sessionRequest.getRequestPathVariables();
         Map<String, GatewayType> requiredRequestData = validateRequiredRequestData(fields, requestPathVariables, conversionService, container);
         if (!CollectionUtils.isEmpty(requiredRequestData)) {
             VerifySessionException.exception("请求路径值的必须数据不完全,信息:%s", requiredRequestData);
         }
     }
 
-    protected void validateRequestQueriesData(GatewayInterface gatewayInterface, GatewaySessionRequest gatewaySessionRequest, ConversionService conversionService, GatewayContainer container) throws VerifySessionException {
+    protected void validateRequestQueriesData(GatewayInterface gatewayInterface, SessionRequest sessionRequest, ConversionService conversionService, GatewayContainer container) throws VerifySessionException {
         GatewayRequest request = gatewayInterface.getRequest();
         GatewayQueries queries = request.getQueries();
         if (ObjectUtils.isEmpty(queries)) {
@@ -82,14 +86,14 @@ public class SessionGatewayDataValidator extends AbstractGatewayAccessor impleme
         if (CollectionUtils.isEmpty(fields)) {
             return;
         }
-        MultiValueMap<String, String> requestQueries = gatewaySessionRequest.getRequestQueries();
+        MultiValueMap<String, String> requestQueries = sessionRequest.getRequestQueries();
         Map<String, GatewayType> requiredRequestData = validateRequiredRequestData(fields, requestQueries, conversionService, container);
         if (!CollectionUtils.isEmpty(requiredRequestData)) {
             VerifySessionException.exception("请求查询参数的必须数据不完全,信息:%s", requiredRequestData);
         }
     }
 
-    protected void validateRequestHeadersData(GatewayInterface gatewayInterface, GatewaySessionRequest gatewaySessionRequest, ConversionService conversionService, GatewayContainer container) throws VerifySessionException {
+    protected void validateRequestHeadersData(GatewayInterface gatewayInterface, SessionRequest sessionRequest, ConversionService conversionService, GatewayContainer container) throws VerifySessionException {
         GatewayRequest request = gatewayInterface.getRequest();
         GatewayHeaders headers = request.getHeaders();
         if (ObjectUtils.isEmpty(headers)) {
@@ -99,7 +103,7 @@ public class SessionGatewayDataValidator extends AbstractGatewayAccessor impleme
         if (CollectionUtils.isEmpty(fields)) {
             return;
         }
-        MultiValueMap<String, String> requestHeaders = gatewaySessionRequest.getRequestHeaders();
+        MultiValueMap<String, String> requestHeaders = sessionRequest.getRequestHeaders();
         Map<String, GatewayType> requiredRequestData = validateRequiredRequestData(fields, requestHeaders, conversionService, container);
         if (!CollectionUtils.isEmpty(requiredRequestData)) {
             VerifySessionException.exception("请求头参数的必须数据不完全,信息:%s", requiredRequestData);
@@ -107,13 +111,13 @@ public class SessionGatewayDataValidator extends AbstractGatewayAccessor impleme
     }
 
     @Override
-    public void validate(GatewayInterface gatewayInterface, GatewaySessionRequest gatewaySessionRequest) throws VerifySessionException {
+    public void validate(GatewayInterface gatewayInterface, SessionRequest sessionRequest) throws VerifySessionException {
         GatewayContext gatewayContext = this.getGatewayContext();
         ConversionService conversionService = gatewayContext.getConversionService();
         GatewayContainer container = gatewayContext.getGatewayContainer();
-        validateRequestPathVariablesData(gatewayInterface, gatewaySessionRequest, conversionService, container);
-        validateRequestQueriesData(gatewayInterface, gatewaySessionRequest, conversionService, container);
-        validateRequestHeadersData(gatewayInterface, gatewaySessionRequest, conversionService, container);
+        validateRequestPathVariablesData(gatewayInterface, sessionRequest, conversionService, container);
+        validateRequestQueriesData(gatewayInterface, sessionRequest, conversionService, container);
+        validateRequestHeadersData(gatewayInterface, sessionRequest, conversionService, container);
     }
 
 }

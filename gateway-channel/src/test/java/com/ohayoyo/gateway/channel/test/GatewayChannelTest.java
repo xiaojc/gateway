@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.channel.test;
 
 import com.ohayoyo.gateway.channel.core.GatewayChannel;
 import com.ohayoyo.gateway.channel.test.model.TestPack;
-import com.ohayoyo.gateway.session.builder.RestfulRequestBuilder;
+import com.ohayoyo.gateway.session.builder.RestfulSessionRequestBuilder;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -12,9 +12,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration(locations = {
-        "classpath:/conf/gateway-channel-bean.xml",
-        "classpath:/interfaces/**/*.xml"
+        "classpath:/conf/gateway-channel-memory.xml",
+        "classpath:/conf/interfaces/**/*.xml"
 })
+
 @RunWith(SpringJUnit4ClassRunner.class)
 public class GatewayChannelTest {
 
@@ -40,7 +41,7 @@ public class GatewayChannelTest {
     private GatewayChannel gatewayChannel;
 
     @Autowired
-    private RestfulRequestBuilder restfulRequestBuilder;
+    private RestfulSessionRequestBuilder restfulSessionRequestBuilder;
 
     @Test
     public void testGatewayChannel() {
@@ -50,7 +51,7 @@ public class GatewayChannelTest {
     @Test
     public void testApiHuceoComMeinvOther() throws Exception {
         String key = "meinv";
-        TestPack testPack = gatewayChannel.channel(TestPack.class, key, restfulRequestBuilder
+        TestPack testPack = gatewayChannel.channel(TestPack.class, key, restfulSessionRequestBuilder
                 .requestQueries("key", "29e069ec39101eb669121554bf67024f")
                 .requestQueries("num", "30")
                 .build());
@@ -72,8 +73,10 @@ public class GatewayChannelTest {
     @Test
     public void testApiHuceoComMeinvOther3() throws Exception {
         String key = "meinv";
-        TestPack testPack = gatewayChannel.channel(TestPack.class, key, restfulRequestBuilder
+        TestPack testPack = gatewayChannel.channel(TestPack.class, key, restfulSessionRequestBuilder
                 .requestQueries("num", "30")
+                .requestQueries("word","北京")
+                .requestQueries("page", "1")
                 .build());
         logger.debug("{}", testPack);
     }

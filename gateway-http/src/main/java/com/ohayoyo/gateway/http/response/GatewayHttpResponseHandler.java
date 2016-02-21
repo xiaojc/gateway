@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 public class GatewayHttpResponseHandler extends AbstractGatewayHttpResponse {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpResponseHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpResponseHandler.class);
 
     @Override
     @SuppressWarnings("unchecked")

@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.session.core;
 
 import com.ohayoyo.gateway.session.autofill.GatewayDataAutoFill;
-import com.ohayoyo.gateway.session.builder.RestfulRequestBuilder;
-import com.ohayoyo.gateway.session.builder.RestfulResponseBuilder;
+import com.ohayoyo.gateway.session.builder.RestfulSessionRequestBuilder;
+import com.ohayoyo.gateway.session.builder.RestfulSessionResponseBuilder;
 import com.ohayoyo.gateway.session.validator.GatewayDataValidator;
 import com.ohayoyo.gateway.session.validator.GatewayInterfaceValidator;
 import com.ohayoyo.gateway.session.validator.GatewayResultValidator;
@@ -12,6 +12,8 @@ import com.ohayoyo.gateway.http.client.GatewayHttpRequest;
 import com.ohayoyo.gateway.http.client.GatewayHttpResponse;
 import com.ohayoyo.gateway.http.converter.GatewayHttpMessageConverters;
 import com.ohayoyo.gateway.http.interceptor.GatewayHttpRequestInterceptors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -22,6 +24,8 @@ import org.springframework.util.ObjectUtils;
  * @author 蓝明乐
  */
 public abstract class AbstractGatewayContext implements GatewayContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayContext.class);
 
     private ConversionService conversionService;
 
@@ -214,33 +218,33 @@ public abstract class AbstractGatewayContext implements GatewayContext {
     }
 
     @Override
-    public RestfulRequestBuilder newRestfulRequestBuilder() {
-        RestfulRequestBuilder restfulRequestBuilder = null;
+    public RestfulSessionRequestBuilder newRestfulRequestBuilder() {
+        RestfulSessionRequestBuilder restfulSessionRequestBuilder = null;
         if (!ObjectUtils.isEmpty(applicationContext)) {
             try {
-                restfulRequestBuilder = applicationContext.getBean(RestfulRequestBuilder.class);
+                restfulSessionRequestBuilder = applicationContext.getBean(RestfulSessionRequestBuilder.class);
             } catch (Exception ex) {
             }
         }
         if (ObjectUtils.isEmpty(applicationContext)) {
-            restfulRequestBuilder = new RestfulRequestBuilder().setGatewayContext(this);
+            restfulSessionRequestBuilder = new RestfulSessionRequestBuilder().setGatewayContext(this);
         }
-        return restfulRequestBuilder;
+        return restfulSessionRequestBuilder;
     }
 
     @Override
-    public RestfulResponseBuilder newRestfulResponseBuilder() {
-        RestfulResponseBuilder restfulResponseBuilder = null;
+    public RestfulSessionResponseBuilder newRestfulResponseBuilder() {
+        RestfulSessionResponseBuilder restfulSessionResponseBuilder = null;
         if (!ObjectUtils.isEmpty(applicationContext)) {
             try {
-                restfulResponseBuilder = applicationContext.getBean(RestfulResponseBuilder.class);
+                restfulSessionResponseBuilder = applicationContext.getBean(RestfulSessionResponseBuilder.class);
             } catch (Exception ex) {
             }
         }
-        if (ObjectUtils.isEmpty(restfulResponseBuilder)) {
-            restfulResponseBuilder = new RestfulResponseBuilder().setGatewayContext(this);
+        if (ObjectUtils.isEmpty(restfulSessionResponseBuilder)) {
+            restfulSessionResponseBuilder = new RestfulSessionResponseBuilder().setGatewayContext(this);
         }
-        return restfulResponseBuilder;
+        return restfulSessionResponseBuilder;
     }
 
 }

@@ -1,6 +1,8 @@
 package com.ohayoyo.gateway.session.utils;
 
 import com.ohayoyo.gateway.define.http.GatewayPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -10,6 +12,8 @@ import java.util.*;
  * @author 蓝明乐
  */
 public final class GatewayPathUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayPathUtils.class);
 
     private static final String PATH_DELIMITER = "/";
 

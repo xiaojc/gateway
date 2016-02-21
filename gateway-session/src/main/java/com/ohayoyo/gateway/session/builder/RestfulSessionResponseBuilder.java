@@ -1,7 +1,9 @@
 package com.ohayoyo.gateway.session.builder;
 
 import com.ohayoyo.gateway.session.core.GatewayContext;
-import com.ohayoyo.gateway.session.restful.RestfulGatewaySessionResponse;
+import com.ohayoyo.gateway.session.restful.RestfulSessionResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.*;
 
@@ -11,7 +13,9 @@ import java.util.Set;
 /**
  * @author 蓝明乐
  */
-public class RestfulResponseBuilder {
+public class RestfulSessionResponseBuilder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestfulSessionResponseBuilder.class);
 
     private Integer statusCode;
 
@@ -24,19 +28,19 @@ public class RestfulResponseBuilder {
     private GatewayContext gatewayContext;
 
 
-    public RestfulResponseBuilder statusCode(int statusCode) {
+    public RestfulSessionResponseBuilder statusCode(int statusCode) {
         Assert.state(statusCode > 0 || statusCode < 600);
         this.statusCode = statusCode;
         return this;
     }
 
-    public RestfulResponseBuilder reasonPhrase(String reasonPhrase) {
+    public RestfulSessionResponseBuilder reasonPhrase(String reasonPhrase) {
         Assert.notNull(reasonPhrase);
         this.reasonPhrase = reasonPhrase;
         return this;
     }
 
-    public RestfulResponseBuilder responseHeaders(MultiValueMap<String, String> responseHeaders) {
+    public RestfulSessionResponseBuilder responseHeaders(MultiValueMap<String, String> responseHeaders) {
         Assert.notEmpty(responseHeaders);
         if (ObjectUtils.isEmpty(this.responseHeaders)) {
             this.responseHeaders = new LinkedMultiValueMap<String, String>();
@@ -45,7 +49,7 @@ public class RestfulResponseBuilder {
         return this;
     }
 
-    public RestfulResponseBuilder responseHeaders(Map<String, Object> responseHeaders) {
+    public RestfulSessionResponseBuilder responseHeaders(Map<String, Object> responseHeaders) {
         Assert.notEmpty(responseHeaders);
         if (CollectionUtils.isEmpty(this.responseHeaders)) {
             this.responseHeaders = new LinkedMultiValueMap<String, String>();
@@ -67,7 +71,7 @@ public class RestfulResponseBuilder {
         return this;
     }
 
-    public RestfulResponseBuilder responseHeaders(String responseHeaderKey, String responseHeaderValue) {
+    public RestfulSessionResponseBuilder responseHeaders(String responseHeaderKey, String responseHeaderValue) {
         Assert.notNull(responseHeaderKey);
         if (CollectionUtils.isEmpty(this.responseHeaders)) {
             this.responseHeaders = new LinkedMultiValueMap<String, String>();
@@ -76,7 +80,7 @@ public class RestfulResponseBuilder {
         return this;
     }
 
-    public RestfulResponseBuilder responseHeaders(String responseHeaderKey, Object responseHeaderValueObject) {
+    public RestfulSessionResponseBuilder responseHeaders(String responseHeaderKey, Object responseHeaderValueObject) {
         Assert.notNull(responseHeaderKey);
         Assert.notNull(responseHeaderValueObject);
         if (CollectionUtils.isEmpty(this.responseHeaders)) {
@@ -92,15 +96,15 @@ public class RestfulResponseBuilder {
         return this;
     }
 
-    public RestfulResponseBuilder responseBody(Object responseBody) {
+    public RestfulSessionResponseBuilder responseBody(Object responseBody) {
         Assert.notNull(responseBody);
         this.responseBody = responseBody;
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public <ResponseBody> RestfulGatewaySessionResponse<ResponseBody> build() {
-        RestfulGatewaySessionResponse<ResponseBody> restfulResponse = new RestfulGatewaySessionResponse<ResponseBody>();
+    public <ResponseBody> RestfulSessionResponse<ResponseBody> build() {
+        RestfulSessionResponse<ResponseBody> restfulResponse = new RestfulSessionResponse<ResponseBody>();
         restfulResponse.setStatusCode(this.statusCode);
         restfulResponse.setReasonPhrase(this.reasonPhrase);
         restfulResponse.setResponseHeaders(this.responseHeaders);
@@ -112,7 +116,7 @@ public class RestfulResponseBuilder {
         return gatewayContext;
     }
 
-    public RestfulResponseBuilder setGatewayContext(GatewayContext gatewayContext) {
+    public RestfulSessionResponseBuilder setGatewayContext(GatewayContext gatewayContext) {
         this.gatewayContext = gatewayContext;
         return this;
     }

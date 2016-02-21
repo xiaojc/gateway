@@ -1,8 +1,15 @@
 package com.ohayoyo.gateway.memory.core;
 
 import com.ohayoyo.gateway.define.core.GatewayType;
+import com.ohayoyo.gateway.define.resolver.GatewayTypeResolver;
 
 public class MemoryGatewayType implements GatewayType {
+
+    public static final MemoryGatewayType STRING_MEMORY_GATEWAY_TYPE = new MemoryGatewayType();
+
+    static {
+        STRING_MEMORY_GATEWAY_TYPE.setName(GatewayTypeResolver.STRING);
+    }
 
     private String name;
 

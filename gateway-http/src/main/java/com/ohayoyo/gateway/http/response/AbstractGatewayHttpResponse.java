@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 public abstract class AbstractGatewayHttpResponse implements GatewayHttpResponse {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayHttpResponse.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayHttpResponse.class);
 
     private ResponseErrorHandler responseErrorHandler;
 

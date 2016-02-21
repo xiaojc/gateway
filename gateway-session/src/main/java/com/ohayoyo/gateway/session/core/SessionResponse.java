@@ -5,7 +5,7 @@ import org.springframework.util.MultiValueMap;
 /**
  * @author 蓝明乐
  */
-public interface GatewaySessionResponse<ResponseBody> {
+public interface SessionResponse<ResponseBody> {
 
     Integer getStatusCode();
 

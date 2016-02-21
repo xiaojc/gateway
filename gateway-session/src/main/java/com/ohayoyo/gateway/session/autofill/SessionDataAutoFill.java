@@ -5,7 +5,7 @@ import com.ohayoyo.gateway.define.core.GatewayField;
 import com.ohayoyo.gateway.define.http.*;
 import com.ohayoyo.gateway.session.core.AbstractGatewayAccessor;
 import com.ohayoyo.gateway.session.core.GatewayContext;
-import com.ohayoyo.gateway.session.core.GatewaySessionRequest;
+import com.ohayoyo.gateway.session.core.SessionRequest;
 import com.ohayoyo.gateway.session.utils.GatewayFieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class SessionDataAutoFill extends AbstractGatewayAccessor implements GatewayDataAutoFill {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(SessionDataAutoFill.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDataAutoFill.class);
 
     private static String ENVIRONMENT_SELECT = null;
 
@@ -35,10 +35,10 @@ public class SessionDataAutoFill extends AbstractGatewayAccessor implements Gate
         return ENVIRONMENT_SELECT;
     }
 
-    protected void autoFillRequestSelectData(GatewaySessionRequest gatewaySessionRequest) {
-        String select = gatewaySessionRequest.getSelect();
+    protected void autoFillRequestSelectData(SessionRequest sessionRequest) {
+        String select = sessionRequest.getSelect();
         if (StringUtils.isEmpty(select)) {
-            gatewaySessionRequest.setSelect(contextEnvironmentSelect());
+            sessionRequest.setSelect(contextEnvironmentSelect());
         }
     }
 
@@ -52,12 +52,16 @@ public class SessionDataAutoFill extends AbstractGatewayAccessor implements Gate
                 continue;
             }
             String name = field.getName();
-            if ((null != singleValueData) && (!singleValueData.containsKey(name))) {
+            Boolean nullable = field.getNullable();
+            if (ObjectUtils.isEmpty(nullable)) {
+                nullable = true;
+            }
+            if ((!nullable) && (null != singleValueData) && (!singleValueData.containsKey(name))) {
                 String valueString = GatewayFieldUtils.resolveFieldDefaultValueToString(field, conversionService, container);
                 if (!StringUtils.isEmpty(valueString)) {
                     singleValueData.put(name, valueString);
                 }
-            } else if ((null != multiValueData) && (!multiValueData.containsKey(name))) {
+            } else if ((!nullable) && (null != multiValueData) && (!multiValueData.containsKey(name))) {
                 String valueString = GatewayFieldUtils.resolveFieldDefaultValueToString(field, conversionService, container);
                 if (!StringUtils.isEmpty(valueString)) {
                     multiValueData.add(name, valueString);
@@ -66,7 +70,7 @@ public class SessionDataAutoFill extends AbstractGatewayAccessor implements Gate
         }
     }
 
-    protected void autoFillRequestPathData(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
+    protected void autoFillRequestPathData(ConversionService conversionService, GatewayRequest requestDefine, SessionRequest sessionRequest, GatewayContainer container) {
         GatewayPath path = requestDefine.getPath();
         if (ObjectUtils.isEmpty(path)) {
             return;
@@ -79,15 +83,15 @@ public class SessionDataAutoFill extends AbstractGatewayAccessor implements Gate
         if (CollectionUtils.isEmpty(fields)) {
             return;
         }
-        Map<String, String> requestPathVariables = gatewaySessionRequest.getRequestPathVariables();
+        Map<String, String> requestPathVariables = sessionRequest.getRequestPathVariables();
         if (CollectionUtils.isEmpty(requestPathVariables)) {
             requestPathVariables = new HashMap<String, String>();
-            gatewaySessionRequest.setRequestPathVariables(requestPathVariables);
+            sessionRequest.setRequestPathVariables(requestPathVariables);
         }
         autoFillRequestDataValues(conversionService, container, fields, requestPathVariables, null);
     }
 
-    protected void autoFillRequestQueriesData(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
+    protected void autoFillRequestQueriesData(ConversionService conversionService, GatewayRequest requestDefine, SessionRequest sessionRequest, GatewayContainer container) {
         GatewayQueries queries = requestDefine.getQueries();
         if (ObjectUtils.isEmpty(queries)) {
             return;
@@ -96,15 +100,15 @@ public class SessionDataAutoFill extends AbstractGatewayAccessor implements Gate
         if (CollectionUtils.isEmpty(fields)) {
             return;
         }
-        MultiValueMap<String, String> requestQueries = gatewaySessionRequest.getRequestQueries();
+        MultiValueMap<String, String> requestQueries = sessionRequest.getRequestQueries();
         if (CollectionUtils.isEmpty(requestQueries)) {
             requestQueries = new LinkedMultiValueMap<String, String>();
-            gatewaySessionRequest.setRequestQueries(requestQueries);
+            sessionRequest.setRequestQueries(requestQueries);
         }
         autoFillRequestDataValues(conversionService, container, fields, null, requestQueries);
     }
 
-    protected void autoFillRequestHeaders(ConversionService conversionService, GatewayRequest requestDefine, GatewaySessionRequest gatewaySessionRequest, GatewayContainer container) {
+    protected void autoFillRequestHeaders(ConversionService conversionService, GatewayRequest requestDefine, SessionRequest sessionRequest, GatewayContainer container) {
         GatewayHeaders headers = requestDefine.getHeaders();
         if (ObjectUtils.isEmpty(headers)) {
             return;
@@ -113,26 +117,26 @@ public class SessionDataAutoFill extends AbstractGatewayAccessor implements Gate
         if (CollectionUtils.isEmpty(fields)) {
             return;
         }
-        MultiValueMap<String, String> requestHeaders = gatewaySessionRequest.getRequestHeaders();
+        MultiValueMap<String, String> requestHeaders = sessionRequest.getRequestHeaders();
         if (CollectionUtils.isEmpty(requestHeaders)) {
             requestHeaders = new LinkedMultiValueMap<String, String>();
-            gatewaySessionRequest.setRequestHeaders(requestHeaders);
+            sessionRequest.setRequestHeaders(requestHeaders);
         }
         autoFillRequestDataValues(conversionService, container, fields, null, requestHeaders);
     }
 
     @Override
-    public <RequestBody> void dataAutoFill(GatewayRequest request, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
-        if (ObjectUtils.isEmpty(gatewaySessionRequest)) {
+    public <RequestBody> void dataAutoFill(GatewayRequest request, SessionRequest<RequestBody> sessionRequest) {
+        if (ObjectUtils.isEmpty(sessionRequest)) {
             return;
         }
         GatewayContext gatewayContext = this.getGatewayContext();
         ConversionService conversionService = gatewayContext.getConversionService();
         GatewayContainer container = gatewayContext.getGatewayContainer();
-        autoFillRequestSelectData(gatewaySessionRequest);
-        autoFillRequestPathData(conversionService, request, gatewaySessionRequest, container);
-        autoFillRequestQueriesData(conversionService, request, gatewaySessionRequest, container);
-        autoFillRequestHeaders(conversionService, request, gatewaySessionRequest, container);
+        autoFillRequestSelectData(sessionRequest);
+        autoFillRequestPathData(conversionService, request, sessionRequest, container);
+        autoFillRequestQueriesData(conversionService, request, sessionRequest, container);
+        autoFillRequestHeaders(conversionService, request, sessionRequest, container);
     }
 
 }

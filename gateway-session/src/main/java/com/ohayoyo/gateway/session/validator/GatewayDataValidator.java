@@ -2,7 +2,7 @@ package com.ohayoyo.gateway.session.validator;
 
 import com.ohayoyo.gateway.define.http.GatewayInterface;
 import com.ohayoyo.gateway.session.core.GatewayAccessor;
-import com.ohayoyo.gateway.session.core.GatewaySessionRequest;
+import com.ohayoyo.gateway.session.core.SessionRequest;
 import com.ohayoyo.gateway.session.exception.VerifySessionException;
 
 /**
@@ -10,6 +10,6 @@ import com.ohayoyo.gateway.session.exception.VerifySessionException;
  */
 public interface GatewayDataValidator extends GatewayAccessor {
 
-    void validate(GatewayInterface gatewayInterface, GatewaySessionRequest<?> gatewaySessionRequest) throws VerifySessionException;
+    void validate(GatewayInterface gatewayInterface, SessionRequest<?> sessionRequest) throws VerifySessionException;
 
 }

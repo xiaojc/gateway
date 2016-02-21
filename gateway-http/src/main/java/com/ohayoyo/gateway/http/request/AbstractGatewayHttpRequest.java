@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public abstract class AbstractGatewayHttpRequest implements GatewayHttpRequest {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayHttpRequest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayHttpRequest.class);
 
     @Override
     public final <RequestBody> void requestHandler(MediaType customRequestContentType, RequestEntity<RequestBody> requestEntity, GatewayHttpMessageConverters gatewayHttpMessageConverters, ClientHttpRequest clientHttpRequest) throws GatewayHttpException, IOException {

@@ -1,6 +1,6 @@
 package com.ohayoyo.gateway.channel.core;
 
-import com.ohayoyo.gateway.channel.exception.ChannelException;
+import com.ohayoyo.gateway.channel.exception.GatewayChannelException;
 import com.ohayoyo.gateway.define.container.GatewayContainer;
 import com.ohayoyo.gateway.define.http.GatewayInterface;
 import com.ohayoyo.gateway.session.core.*;
@@ -16,48 +16,57 @@ import org.springframework.util.ObjectUtils;
 @SuppressWarnings("unchecked")
 public abstract class AbstractGatewayChannel extends AbstractGatewayAccessor implements GatewayChannel {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayChannel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayChannel.class);
 
     @Override
-    public String channel(String key) throws ChannelException {
+    public String channel(String key) throws GatewayChannelException {
         return channel(key, null);
     }
 
     @Override
-    public String channel(String interfaceDefineKey, GatewaySessionRequest<Object> gatewaySessionRequest) throws ChannelException {
-        return channel(String.class, interfaceDefineKey, gatewaySessionRequest);
+    public String channel(String interfaceDefineKey, SessionRequest<Object> sessionRequest) throws GatewayChannelException {
+        return channel(String.class, interfaceDefineKey, sessionRequest);
     }
 
     @Override
-    public <Result> Result channel(Class<Result> responseType, String key) throws ChannelException {
+    public <Result> Result channel(Class<Result> responseType, String key) throws GatewayChannelException {
         return channel(responseType, key, null);
     }
 
     @Override
-    public <Result> Result channel(Class<Result> responseType, String interfaceDefineKey, GatewaySessionRequest<Object> gatewaySessionRequest) throws ChannelException {
+    public <Result> Result channel(Class<Result> responseType, String interfaceDefineKey, SessionRequest<Object> sessionRequest) throws GatewayChannelException {
         Assert.notNull(responseType);
         Assert.notNull(interfaceDefineKey);
         Result result = null;
         try {
             GatewayContext gatewayContext = this.getGatewayContext();
-            GatewayContainer containerDefine = gatewayContext.getGatewayContainer();
-            GatewaySession gatewayClient = gatewayContext.getGatewaySession();
-            GatewayInterface GatewayInterface = containerDefine.query(interfaceDefineKey);
+            GatewayContainer gatewayContainer = gatewayContext.getGatewayContainer();
+            GatewaySession gatewaySession = gatewayContext.getGatewaySession();
+            GatewayInterface GatewayInterface = gatewayContainer.query(interfaceDefineKey);
             if (!ObjectUtils.isEmpty(GatewayInterface)) {
                 Class<?> responseBodyClass = this.resolveResponseType(responseType, GatewayInterface);
-                GatewaySessionResponse<?> gatewaySessionResponse = gatewayClient.session(responseBodyClass, GatewayInterface, gatewaySessionRequest);
-                result = this.resolveGatewayResult(responseType, GatewayInterface, gatewaySessionResponse);
+                SessionResponse<?> sessionResponse = gatewaySession.session(responseBodyClass, GatewayInterface, sessionRequest);
+                result = this.resolveGatewayResult(responseType, GatewayInterface, sessionResponse);
             } else {
-                ChannelException.exception("根据给定的接口定义键,没有找合适的接口定义,这个键是:%s", interfaceDefineKey);
+                GatewayChannelException.exception("根据给定的接口定义键,没有找合适的接口定义,这个键是:%s", interfaceDefineKey);
             }
         } catch (GatewaySessionException ex) {
-            ChannelException.exception("%s", ex.getMessage());
+            GatewayChannelException.exception("%s", ex.getMessage());
         }
         return result;
     }
 
-    protected abstract <ResponseBody, Result> Class<ResponseBody> resolveResponseType(Class<Result> responseType, GatewayInterface gatewayInterface);
 
-    protected abstract <Result> Result resolveGatewayResult(Class<Result> responseType, GatewayInterface GatewayInterface, GatewaySessionResponse<?> gatewaySessionResponse);
+    protected <ResponseBody, Result> Class<ResponseBody> resolveResponseType(Class<Result> responseType, GatewayInterface gatewayInterface) {
+        return (Class<ResponseBody>) responseType;
+    }
+
+    protected <Result> Result resolveGatewayResult(Class<Result> responseType, GatewayInterface GatewayInterface, SessionResponse<?> sessionResponse) {
+        Object responseBody = sessionResponse.getResponseBody();
+        if ((!ObjectUtils.isEmpty(responseBody)) && responseBody.getClass().isAssignableFrom(responseType)) {
+            return (Result) responseBody;
+        }
+        return null;
+    }
 
 }

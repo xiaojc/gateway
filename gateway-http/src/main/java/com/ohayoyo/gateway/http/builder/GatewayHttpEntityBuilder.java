@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public abstract class GatewayHttpEntityBuilder<Body, SubHttpEntity extends HttpEntity<Body>> {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpEntityBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpEntityBuilder.class);
 
     private HttpHeaders headers;
 

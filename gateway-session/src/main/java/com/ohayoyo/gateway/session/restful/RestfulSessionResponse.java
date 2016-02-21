@@ -1,12 +1,16 @@
 package com.ohayoyo.gateway.session.restful;
 
-import com.ohayoyo.gateway.session.core.GatewaySessionResponse;
+import com.ohayoyo.gateway.session.core.SessionResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
 
 /**
  * @author 蓝明乐
  */
-public class RestfulGatewaySessionResponse<ResponseBody> implements GatewaySessionResponse<ResponseBody> {
+public class RestfulSessionResponse<ResponseBody> implements SessionResponse<ResponseBody> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestfulSessionResponse.class);
 
     private Integer statusCode;
 

@@ -14,6 +14,8 @@ import com.ohayoyo.gateway.session.core.AbstractGatewayContext;
 import com.ohayoyo.gateway.session.core.GatewaySession;
 import com.ohayoyo.gateway.session.restful.RestfulGatewaySession;
 import com.ohayoyo.gateway.session.validator.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -27,6 +29,8 @@ import org.springframework.util.ObjectUtils;
  * @author 蓝明乐
  */
 class ConfigurableGatewayContext extends AbstractGatewayContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurableGatewayContext.class);
 
     public ConfigurableGatewayContext() {
     }
@@ -98,7 +102,7 @@ class ConfigurableGatewayContext extends AbstractGatewayContext {
 
     private void configDefaultGatewayInterfaceValidator() {
         if (ObjectUtils.isEmpty(this.getGatewayInterfaceValidator())) {
-            GatewayInterfaceValidator gatewayInterfaceValidator = new SessionGatewayInterfaceValidator();
+            GatewayInterfaceValidator gatewayInterfaceValidator = new SessionInterfaceValidator();
             gatewayInterfaceValidator.setGatewayContext(this);
             this.setGatewayInterfaceValidator(gatewayInterfaceValidator);
         }
@@ -106,7 +110,7 @@ class ConfigurableGatewayContext extends AbstractGatewayContext {
 
     private void configDefaultGatewayDataValidator() {
         if (ObjectUtils.isEmpty(this.getGatewayDataValidator())) {
-            GatewayDataValidator gatewayDataValidator = new SessionGatewayDataValidator();
+            GatewayDataValidator gatewayDataValidator = new SessionDataValidator();
             gatewayDataValidator.setGatewayContext(this);
             this.setGatewayDataValidator(gatewayDataValidator);
         }
@@ -114,7 +118,7 @@ class ConfigurableGatewayContext extends AbstractGatewayContext {
 
     private void configDefaultGatewayResultValidator() {
         if (ObjectUtils.isEmpty(this.getGatewayResultValidator())) {
-            GatewayResultValidator gatewayResultValidator = new SessionGatewayResultValidator();
+            GatewayResultValidator gatewayResultValidator = new SessionResultValidator();
             gatewayResultValidator.setGatewayContext(this);
             this.setGatewayResultValidator(gatewayResultValidator);
         }

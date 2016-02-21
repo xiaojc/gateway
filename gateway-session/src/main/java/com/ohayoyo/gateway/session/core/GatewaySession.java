@@ -8,6 +8,6 @@ import com.ohayoyo.gateway.session.exception.GatewaySessionException;
  */
 public interface GatewaySession extends GatewayAccessor {
 
-    <ResponseBody, RequestBody> GatewaySessionResponse<ResponseBody> session(Class<ResponseBody> responseBodyClass, GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) throws GatewaySessionException;
+    <ResponseBody, RequestBody> SessionResponse<ResponseBody> session(Class<ResponseBody> responseBodyClass, GatewayInterface gatewayInterface, SessionRequest<RequestBody> sessionRequest) throws GatewaySessionException;
 
 }

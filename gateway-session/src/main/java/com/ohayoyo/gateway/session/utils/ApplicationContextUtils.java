@@ -13,7 +13,7 @@ import java.util.List;
  */
 public final class ApplicationContextUtils {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ApplicationContextUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationContextUtils.class);
 
     public static <T> T tryScanFirstBean(ApplicationContext applicationContext, Class<T> type) {
         T t = null;

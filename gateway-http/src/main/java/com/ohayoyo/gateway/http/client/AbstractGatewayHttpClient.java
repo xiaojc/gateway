@@ -23,7 +23,7 @@ import java.net.URI;
  */
 public abstract class AbstractGatewayHttpClient implements GatewayHttpClient {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayHttpClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGatewayHttpClient.class);
 
     private GatewayHttpMessageConverters gatewayHttpMessageConverters;
 

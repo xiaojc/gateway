@@ -17,7 +17,7 @@ import java.io.PushbackInputStream;
  */
 public class GatewayHttpResponseWrapper implements ClientHttpResponse {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpResponseWrapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpResponseWrapper.class);
 
     private final ClientHttpResponse clientHttpResponse;
 
