@@ -66,21 +66,21 @@ public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
     }
 
 
-    protected final <RequestBody> URI resolveRequestUri(GatewayInterface gatewayInterface, GatewaySessionRequest gatewaySessionRequest) {
+    protected final <RequestBody> URI resolveRequestUri(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
         String select = gatewaySessionRequest.getSelect();
         Map<String, String> requestPathVariables = gatewaySessionRequest.getRequestPathVariables();
         MultiValueMap<String, String> requestQueries = gatewaySessionRequest.getRequestQueries();
-        com.ohayoyo.gateway.define.http.GatewayRequest requestDefine = gatewayInterface.getRequest();
-        Set<GatewayProtocol> protocolDefines = requestDefine.getProtocols();
-        Set<GatewayHost> hostDefines = requestDefine.getHosts();
-        GatewayPath pathDefine = requestDefine.getPath();
-        String fragment = requestDefine.getFragment();
-        GatewayProtocol protocolDefine = GatewaySelectorUtils.selectProtocolDefine(select, protocolDefines);
-        GatewayHost hostDefine = GatewaySelectorUtils.selectHostDefine(select, hostDefines);
-        String scheme = protocolDefine.getName().toLowerCase();
-        String host = hostDefine.getHostname();
-        int port = GatewaySelectorUtils.selectHostDefinePort(protocolDefine, hostDefine);
-        String[] pathSegments = GatewayPathUtils.pathSegments(pathDefine);
+        GatewayRequest gatewayRequest = gatewayInterface.getRequest();
+        Set<GatewayProtocol> gatewayProtocols = gatewayRequest.getProtocols();
+        Set<GatewayHost> gatewayHosts = gatewayRequest.getHosts();
+        GatewayPath gatewayPath = gatewayRequest.getPath();
+        String fragment = gatewayRequest.getFragment();
+        GatewayProtocol gatewayProtocol = GatewaySelectorUtils.selectProtocolDefine(select, gatewayProtocols);
+        GatewayHost gatewayHost = GatewaySelectorUtils.selectHostDefine(select, gatewayHosts);
+        String scheme = gatewayProtocol.getName().toLowerCase();
+        String host = gatewayHost.getHostname();
+        int port = GatewaySelectorUtils.selectHostDefinePort(gatewayProtocol, gatewayHost);
+        String[] pathSegments = GatewayPathUtils.pathSegments(gatewayPath);
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance();
         uriComponentsBuilder.scheme(scheme);
         uriComponentsBuilder.host(host);
@@ -105,15 +105,15 @@ public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
         return uri;
     }
 
-    protected final <RequestBody> RequestEntity<RequestBody> resolveRequestEntity(GatewayInterface gatewayInterface, GatewaySessionRequest gatewaySessionRequest) {
+    protected final <RequestBody> RequestEntity<RequestBody> resolveRequestEntity(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
         URI uri = this.resolveRequestUri(gatewayInterface, gatewaySessionRequest);
         HttpMethod httpMethod = this.resolveRequestHttpMethod(gatewayInterface, gatewaySessionRequest);
         MultiValueMap<String, String> requestHeaders = gatewaySessionRequest.getRequestHeaders();
-        RequestBody requestEntity = (RequestBody) gatewaySessionRequest.getRequestBody();
+        RequestBody requestEntity = gatewaySessionRequest.getRequestBody();
         return (RequestEntity<RequestBody>) GatewayHttpRequestEntityBuilder.newInstance().url(uri).headers(requestHeaders).httpMethod(httpMethod).body(requestEntity).build();
     }
 
-    protected final <RequestBody> HttpMethod resolveRequestHttpMethod(GatewayInterface gatewayInterface, GatewaySessionRequest gatewaySessionRequest) {
+    protected final <RequestBody> HttpMethod resolveRequestHttpMethod(GatewayInterface gatewayInterface, GatewaySessionRequest<RequestBody> gatewaySessionRequest) {
         String select = gatewaySessionRequest.getSelect();
         GatewayRequest gatewayRequest = gatewayInterface.getRequest();
         Set<GatewayMethod> gatewayMethods = gatewayRequest.getMethods();
@@ -123,10 +123,10 @@ public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
         return httpMethod;
     }
 
-    protected final MediaType resolveEntityDefineContentType(GatewayEntity entityDefine) {
+    protected final MediaType resolveGatewayEntityType(GatewayEntity gatewayEntity) {
         MediaType customContentType = null;
-        if (!ObjectUtils.isEmpty(entityDefine)) {
-            String contentType = entityDefine.getType();
+        if (!ObjectUtils.isEmpty(gatewayEntity)) {
+            String contentType = gatewayEntity.getType();
             if (!StringUtils.isEmpty(contentType)) {
                 try {
                     customContentType = MediaType.parseMediaType(contentType);
@@ -139,21 +139,21 @@ public abstract class AbstractBehaviorSession extends AbstractGatewaySession {
     }
 
     protected final MediaType resolveCustomRequestContentType(GatewayInterface gatewayInterface) {
-        com.ohayoyo.gateway.define.http.GatewayRequest requestDefine = gatewayInterface.getRequest();
+        com.ohayoyo.gateway.define.http.GatewayRequest gatewayRequest = gatewayInterface.getRequest();
         MediaType customRequestContentType = null;
-        if (!ObjectUtils.isEmpty(requestDefine)) {
-            GatewayEntity entityDefine = requestDefine.getEntity();
-            customRequestContentType = resolveEntityDefineContentType(entityDefine);
+        if (!ObjectUtils.isEmpty(gatewayRequest)) {
+            GatewayEntity gatewayEntity = gatewayRequest.getEntity();
+            customRequestContentType = resolveGatewayEntityType(gatewayEntity);
         }
         return customRequestContentType;
     }
 
     protected final MediaType resolveCustomResponseContentType(GatewayInterface gatewayInterface) {
-        com.ohayoyo.gateway.define.http.GatewayResponse responseDefine = gatewayInterface.getResponse();
+        GatewayResponse gatewayResponse = gatewayInterface.getResponse();
         MediaType customResponseContentType = null;
-        if (!ObjectUtils.isEmpty(responseDefine)) {
-            GatewayEntity entityDefine = responseDefine.getEntity();
-            customResponseContentType = resolveEntityDefineContentType(entityDefine);
+        if (!ObjectUtils.isEmpty(gatewayResponse)) {
+            GatewayEntity gatewayEntity = gatewayResponse.getEntity();
+            customResponseContentType = resolveGatewayEntityType(gatewayEntity);
         }
         return customResponseContentType;
     }
