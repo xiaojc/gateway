@@ -7,6 +7,6 @@
 
     <bean class="com.ohayoyo.spring.configure.mongo.SimpleMongoConfigure"/>
 
-    <bean class="com.ohayoyo.gateway.channel.test.config.SpringJunit4PropertyConfigurer" />
+    <bean class="com.ohayoyo.spring.test.junit4.SpringJunit4PropertyConfigurer" />
 
 </beans>

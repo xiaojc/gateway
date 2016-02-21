@@ -24,8 +24,8 @@ public abstract class AbstractGatewayChannel extends AbstractGatewayAccessor imp
     }
 
     @Override
-    public String channel(String interfaceDefineKey, SessionRequest<Object> sessionRequest) throws GatewayChannelException {
-        return channel(String.class, interfaceDefineKey, sessionRequest);
+    public String channel(String key, SessionRequest<Object> sessionRequest) throws GatewayChannelException {
+        return channel(String.class, key, sessionRequest);
     }
 
     @Override
@@ -34,21 +34,21 @@ public abstract class AbstractGatewayChannel extends AbstractGatewayAccessor imp
     }
 
     @Override
-    public <Result> Result channel(Class<Result> responseType, String interfaceDefineKey, SessionRequest<Object> sessionRequest) throws GatewayChannelException {
+    public <Result> Result channel(Class<Result> responseType, String key, SessionRequest<Object> sessionRequest) throws GatewayChannelException {
         Assert.notNull(responseType);
-        Assert.notNull(interfaceDefineKey);
+        Assert.notNull(key);
         Result result = null;
         try {
             GatewayContext gatewayContext = this.getGatewayContext();
             GatewayContainer gatewayContainer = gatewayContext.getGatewayContainer();
             GatewaySession gatewaySession = gatewayContext.getGatewaySession();
-            GatewayInterface GatewayInterface = gatewayContainer.query(interfaceDefineKey);
+            GatewayInterface GatewayInterface = gatewayContainer.query(key);
             if (!ObjectUtils.isEmpty(GatewayInterface)) {
                 Class<?> responseBodyClass = this.resolveResponseType(responseType, GatewayInterface);
                 SessionResponse<?> sessionResponse = gatewaySession.session(responseBodyClass, GatewayInterface, sessionRequest);
                 result = this.resolveGatewayResult(responseType, GatewayInterface, sessionResponse);
             } else {
-                GatewayChannelException.exception("根据给定的接口定义键,没有找合适的接口定义,这个键是:%s", interfaceDefineKey);
+                GatewayChannelException.exception("根据给定的接口定义键,没有找合适的接口定义,这个键是:%s", key);
             }
         } catch (GatewaySessionException ex) {
             GatewayChannelException.exception("%s", ex.getMessage());
