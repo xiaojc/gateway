@@ -4,17 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.ohayoyo.platform</groupId>
-        <artifactId>platform-project-parent</artifactId>
-        <version>1.0.1.BUILD-SNAPSHOT</version>
+        <artifactId>platform-project</artifactId>
+        <version>1.0.0.BUILD-SNAPSHOT</version>
         <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ohayoyo.gateway</groupId>
-    <artifactId>gateway</artifactId>
+    <artifactId>gateway-bom</artifactId>
     <version>1.0.0.DEV-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>gateway</name>
-    <description>oahyoyo platform subproject gateway</description>
+    <packaging>jar</packaging>
+    <name>gateway-bom</name>
+    <description>oahyoyo platform gateway</description>
     <url>https://github.com/ohayoyo/gateway</url>
     <organization>
         <name>ohayoyo</name>
@@ -91,64 +91,41 @@
         </pluginRepository>
     </pluginRepositories>
     <properties>
-        <java.version>1.6</java.version>
-        <jackson.version>2.6.5</jackson.version>
-        <netty.version>4.0.34.Final</netty.version>
-        <com.ohayoyo.spring.version>1.0.0.BUILD-SNAPSHOT</com.ohayoyo.spring.version>
+        <com.ohayoyo.gateway.gateway-define.version>1.0.0.DEV-SNAPSHOT</com.ohayoyo.gateway.gateway-define.version>
+        <com.ohayoyo.gateway.gateway-http.version>1.0.0.DEV-SNAPSHOT</com.ohayoyo.gateway.gateway-http.version>
+        <com.ohayoyo.gateway.gateway-session.version>1.0.0.DEV-SNAPSHOT</com.ohayoyo.gateway.gateway-session.version>
+        <com.ohayoyo.gateway.gateway-channel.version>1.0.0.DEV-SNAPSHOT</com.ohayoyo.gateway.gateway-channel.version>
     </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>com.ohayoyo.gateway</groupId>
+                <artifactId>gateway-define</artifactId>
+                <version>${com.ohayoyo.gateway.gateway-define.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-xml</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>com.ohayoyo.gateway</groupId>
+                <artifactId>gateway-http</artifactId>
+                <version>${com.ohayoyo.gateway.gateway-http.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>com.ohayoyo.gateway</groupId>
+                <artifactId>gateway-session</artifactId>
+                <version>${com.ohayoyo.gateway.gateway-session.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ohayoyo.spring</groupId>
-                <artifactId>spring-audit-core</artifactId>
-                <version>${com.ohayoyo.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ohayoyo.spring</groupId>
-                <artifactId>spring-audit-jpa</artifactId>
-                <version>${com.ohayoyo.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ohayoyo.spring</groupId>
-                <artifactId>spring-audit-mongo</artifactId>
-                <version>${com.ohayoyo.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ohayoyo.spring</groupId>
-                <artifactId>spring-configure-mongo</artifactId>
-                <version>${com.ohayoyo.spring.version}</version>
+                <groupId>com.ohayoyo.gateway</groupId>
+                <artifactId>gateway-channel</artifactId>
+                <version>${com.ohayoyo.gateway.gateway-channel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <modules>
-        <module>gateway-define</module>
-        <module>gateway-http</module>
-        <module>gateway-session</module>
-        <module>gateway-channel</module>
-        <module>gateway-memory</module>
-        <module>gateway-mongo</module>
-    </modules>
     <profiles>
         <profile>
             <id>repo.ohayoyo.com</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
-                <jdk>1.6</jdk>
+                <jdk>${java.version}</jdk>
                 <file>
                     <exists>${java.home}/../lib/tools.jar</exists>
                 </file>
