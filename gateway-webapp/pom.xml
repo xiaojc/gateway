@@ -10,10 +10,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ohayoyo.gateway</groupId>
-    <artifactId>gateway-channel</artifactId>
+    <artifactId>gateway-webapp</artifactId>
     <version>1.0.0.DEV-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>gateway-channel</name>
+    <packaging>war</packaging>
+    <name>gateway-webapp</name>
     <description>oahyoyo platform gateway</description>
     <url>https://github.com/ohayoyo/gateway</url>
     <organization>
@@ -114,7 +114,7 @@
             </dependency>
             <dependency>
                 <groupId>com.ohayoyo.gateway</groupId>
-                <artifactId>gateway-memory</artifactId>
+                <artifactId>gateway-channel</artifactId>
                 <version>1.0.0.DEV-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -147,15 +147,28 @@
         </dependency>
         <dependency>
             <groupId>com.ohayoyo.gateway</groupId>
-            <artifactId>gateway-memory</artifactId>
+            <artifactId>gateway-channel</artifactId>
             <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.ohayoyo.gateway</groupId>
             <artifactId>gateway-mongo</artifactId>
             <scope>compile</scope>
-            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.ohayoyo.spring</groupId>
+            <artifactId>spring-config-profile</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ohayoyo.spring</groupId>
+            <artifactId>spring-config-mongo</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ohayoyo.spring</groupId>
+            <artifactId>spring-config-thymeleaf</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -171,19 +184,16 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
             <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -222,19 +232,14 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ohayoyo.spring</groupId>
-            <artifactId>spring-config-profile</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ohayoyo.spring</groupId>
-            <artifactId>spring-config-mongo</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.ohayoyo.platform</groupId>
