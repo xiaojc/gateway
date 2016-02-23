@@ -2,7 +2,6 @@ package com.ohayoyo.gateway.channel.test;
 
 import com.ohayoyo.gateway.channel.GatewayChannel;
 import com.ohayoyo.gateway.channel.test.model.TestPack;
-import com.ohayoyo.gateway.mongo.model.MongoGatewayField;
 import com.ohayoyo.gateway.mongo.model.*;
 import com.ohayoyo.gateway.mongo.repository.MongoGatewayInterfaceRepository;
 import com.ohayoyo.gateway.session.RestfulSessionRequestBuilder;
@@ -65,7 +64,7 @@ public class MongoGatewayChannelTest {
     @Autowired
     private MongoGatewayInterfaceRepository mongoGatewayInterfaceRepository;
 
-    @Test
+    //@Test
     public void testSave() {
         MongoGatewayInterface mongoGatewayInterface = new MongoGatewayInterface();
         mongoGatewayInterface.setKey("meinv");
@@ -130,12 +129,10 @@ public class MongoGatewayChannelTest {
     public void testApiHuceoComMeinvOther2() throws Exception {
         String key = "meinv";
         long start1 = System.currentTimeMillis();
-        gatewayChannel.channel(TestPack.class, key);
-        long end1 = System.currentTimeMillis();
         TestPack testPack = gatewayChannel.channel(TestPack.class, key);
-        long end2 = System.currentTimeMillis();
+        long end1 = System.currentTimeMillis();
         logger.debug("{}", testPack);
-        System.out.println((end1 - start1) + ":" + (end2 - end1));
+        System.out.println((end1 - start1));
     }
 
     @Test
