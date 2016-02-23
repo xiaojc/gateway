@@ -21,9 +21,9 @@ public class RestfulBuilderFactoryConfig {
 
     @Bean(name = "restfulSessionResponseBuilderFactory")
     @Autowired
-    public RestfulSessionResponseBuilderFactory restfulSessionResponseBuilderFactory(GatewayContext gatewayContex) {
+    public RestfulSessionResponseBuilderFactory restfulSessionResponseBuilderFactory(GatewayContext gatewayContext) {
         RestfulSessionResponseBuilderFactory restfulSessionResponseBuilderFactory = new RestfulSessionResponseBuilderFactory();
-        restfulSessionResponseBuilderFactory.setGatewayContext(gatewayContex);
+        restfulSessionResponseBuilderFactory.setGatewayContext(gatewayContext);
         return restfulSessionResponseBuilderFactory;
     }
 
