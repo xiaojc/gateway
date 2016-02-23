@@ -1,8 +1,8 @@
 package com.ohayoyo.gateway.channel.test;
 
-import com.ohayoyo.gateway.channel.core.GatewayChannel;
+import com.ohayoyo.gateway.channel.GatewayChannel;
 import com.ohayoyo.gateway.channel.test.model.TestPack;
-import com.ohayoyo.gateway.session.builder.RestfulSessionRequestBuilder;
+import com.ohayoyo.gateway.session.RestfulSessionRequestBuilder;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

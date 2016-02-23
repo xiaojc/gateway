@@ -3,12 +3,93 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.ohayoyo.gateway</groupId>
-        <artifactId>gateway</artifactId>
-        <version>1.0.0.DEV-SNAPSHOT</version>
+        <groupId>com.ohayoyo.platform</groupId>
+        <artifactId>platform-project</artifactId>
+        <version>1.0.0.BUILD-SNAPSHOT</version>
+        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ohayoyo.gateway</groupId>
     <artifactId>gateway-session</artifactId>
+    <version>1.0.0.DEV-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>gateway-session</name>
+    <description>oahyoyo platform gateway</description>
+    <url>https://github.com/ohayoyo/gateway</url>
+    <organization>
+        <name>ohayoyo</name>
+        <url>https://github.com/ohayoyo</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:https://github.com/ohayoyo/gateway</connection>
+        <url>https://github.com/ohayoyo/gateway</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>lanmingle</id>
+            <name>lanmingle</name>
+            <email>lanmingle@icloud.com</email>
+            <organization>ohayoyo</organization>
+            <url>https://github.com/ohayoyo</url>
+            <roles>
+                <role>Project lead</role>
+            </roles>
+        </developer>
+    </developers>
+    <repositories>
+        <repository>
+            <id>maven-libs-release</id>
+            <name>maven-libs-release</name>
+            <url>http://repo.ohayoyo.com/maven-libs-release/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven-libs-snapshot</id>
+            <name>maven-libs-snapshot</name>
+            <url>http://repo.ohayoyo.com/maven-libs-snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-libs-release</id>
+            <name>maven-plugins-release</name>
+            <url>http://repo.ohayoyo.com/maven-plugins-release/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>maven-libs-snapshot</id>
+            <name>maven-plugins-snapshot</name>
+            <url>http://repo.ohayoyo.com/maven-plugins-snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -19,6 +100,11 @@
             <dependency>
                 <groupId>com.ohayoyo.gateway</groupId>
                 <artifactId>gateway-http</artifactId>
+                <version>1.0.0.DEV-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ohayoyo.gateway</groupId>
+                <artifactId>gateway-utils</artifactId>
                 <version>1.0.0.DEV-SNAPSHOT</version>
             </dependency>
         </dependencies>
@@ -32,6 +118,11 @@
         <dependency>
             <groupId>com.ohayoyo.gateway</groupId>
             <artifactId>gateway-http</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ohayoyo.gateway</groupId>
+            <artifactId>gateway-utils</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -92,14 +183,72 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
+            <groupId>com.ohayoyo.platform</groupId>
+            <artifactId>platform-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>repo.ohayoyo.com</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>${java.version}</jdk>
+                <file>
+                    <exists>${java.home}/../lib/tools.jar</exists>
+                </file>
+            </activation>
+            <properties>
+                <tools.jar>${java.home}/../lib/tools.jar</tools.jar>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>maven-libs-release</id>
+                    <name>maven-libs-release</name>
+                    <url>http://repo.ohayoyo.com/maven-libs-release/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>maven-libs-snapshot</id>
+                    <name>maven-libs-snapshot</name>
+                    <url>http://repo.ohayoyo.com/maven-libs-snapshot/</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>maven-libs-release</id>
+                    <name>maven-plugins-release</name>
+                    <url>http://repo.ohayoyo.com/maven-plugins-release/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>maven-libs-snapshot</id>
+                    <name>maven-plugins-snapshot</name>
+                    <url>http://repo.ohayoyo.com/maven-plugins-snapshot/</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
 </project>

@@ -1,12 +1,12 @@
 package com.ohayoyo.gateway.channel.test;
 
-import com.ohayoyo.gateway.channel.core.GatewayChannel;
+import com.ohayoyo.gateway.channel.GatewayChannel;
 import com.ohayoyo.gateway.channel.test.model.TestPack;
-import com.ohayoyo.gateway.mongo.core.MongoGatewayField;
-import com.ohayoyo.gateway.mongo.http.*;
+import com.ohayoyo.gateway.mongo.model.MongoGatewayField;
+import com.ohayoyo.gateway.mongo.model.*;
 import com.ohayoyo.gateway.mongo.repository.MongoGatewayInterfaceRepository;
-import com.ohayoyo.gateway.session.builder.RestfulSessionRequestBuilder;
-import com.ohayoyo.spring.configure.core.version.VersionName;
+import com.ohayoyo.gateway.session.RestfulSessionRequestBuilder;
+import com.ohayoyo.spring.config.profile.ProfileVersion;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ import java.util.Set;
         "classpath:/conf/mongo/test-gateway-channel-mongo.xml"
 })
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(VersionName.DEV_SNAPSHOT)
+@ActiveProfiles(ProfileVersion.DEV_SNAPSHOT)
 public class MongoGatewayChannelTest {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -108,7 +108,7 @@ public class MongoGatewayChannelTest {
         mongoGatewayEntity.setType("application/x-www-form-urlencoded");
         mongoGatewayRequest.setEntity(mongoGatewayEntity);
         MongoGatewayResponse mongoGatewayResponse = new MongoGatewayResponse();
-        MongoGatewayEntity responseMongoGatewayEntity = new MongoGatewayEntity() ;
+        MongoGatewayEntity responseMongoGatewayEntity = new MongoGatewayEntity();
         responseMongoGatewayEntity.setType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         mongoGatewayResponse.setEntity(responseMongoGatewayEntity);
         mongoGatewayInterface.setRequest(mongoGatewayRequest);

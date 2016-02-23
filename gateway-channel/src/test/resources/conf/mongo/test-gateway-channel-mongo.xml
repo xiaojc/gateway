@@ -5,8 +5,8 @@
 
     <import resource="classpath:/conf/gateway-channel-mongo.xml"/>
 
-    <bean class="com.ohayoyo.spring.configure.mongo.SimpleMongoConfigure"/>
+    <bean class="com.ohayoyo.spring.config.mongo.SimpleMongoConfig" />
 
-    <bean class="com.ohayoyo.spring.test.junit4.SpringJunit4PropertyConfigurer" />
+    <bean class="com.ohayoyo.spring.config.profile.ProfileConfig"/>
 
 </beans>

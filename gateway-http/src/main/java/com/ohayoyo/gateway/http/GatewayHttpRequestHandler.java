@@ -1,0 +1,96 @@
+package com.ohayoyo.gateway.http;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.client.ClientHttpRequest;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * @author 蓝明乐
+ */
+public class GatewayHttpRequestHandler extends AbstractGatewayHttpRequest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayHttpRequestHandler.class);
+
+    @Override
+    protected <RequestBody> void requestHeadersHandler(MediaType customRequestContentType, RequestEntity<RequestBody> requestEntity, ClientHttpRequest clientHttpRequest) {
+        HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
+        HttpHeaders requestHeaders = requestEntity.getHeaders();
+        HttpHeaders newHttpHeaders = new HttpHeaders();
+        if (!ObjectUtils.isEmpty(httpHeaders)) {
+            newHttpHeaders.putAll(httpHeaders);
+        }
+        if (!ObjectUtils.isEmpty(requestHeaders)) {
+            newHttpHeaders.putAll(requestHeaders);
+        }
+        if (!newHttpHeaders.isEmpty()) {
+            MediaType defaultRequestContentType = newHttpHeaders.getContentType();
+            if (!ObjectUtils.isEmpty(defaultRequestContentType)) {
+                String defaultRequestContentTypeValue = defaultRequestContentType.toString();
+                newHttpHeaders.set(DEFAULT_REQUEST_CONTENT_TYPE, defaultRequestContentTypeValue);
+            }
+            if (!ObjectUtils.isEmpty(customRequestContentType)) {
+                String customRequestContentTypeValue = customRequestContentType.toString();
+                newHttpHeaders.set(CUSTOM_REQUEST_CONTENT_TYPE, customRequestContentTypeValue);
+                newHttpHeaders.setContentType(customRequestContentType);
+            }
+            httpHeaders.putAll(newHttpHeaders);
+        }
+        if (httpHeaders.getContentLength() == -1) {
+            httpHeaders.setContentLength(0L);
+        }
+    }
+
+    @Override
+    protected void requestAcceptHeaderHandler(GatewayHttpMessageConverters gatewayHttpMessageConverters, ClientHttpRequest clientHttpRequest) {
+        HttpHeaders httpHeaders = clientHttpRequest.getHeaders();
+        List<MediaType> acceptHeader = httpHeaders.getAccept();
+        if (CollectionUtils.isEmpty(acceptHeader)) {
+            Set<MediaType> supportedMediaTypes = new HashSet<MediaType>();
+            for (HttpMessageConverter<?> httpMessageConverter : gatewayHttpMessageConverters) {
+                List<MediaType> httpMessageConverterSupportedMediaTypes = httpMessageConverter.getSupportedMediaTypes();
+                if (!CollectionUtils.isEmpty(httpMessageConverterSupportedMediaTypes)) {
+                    for (MediaType httpMessageConverterSupportedMediaType : httpMessageConverterSupportedMediaTypes) {
+                        supportedMediaTypes.add(httpMessageConverterSupportedMediaType);
+                    }
+                }
+            }
+            List<MediaType> acceptSupportedMediaTypes = new ArrayList<MediaType>();
+            acceptSupportedMediaTypes.addAll(supportedMediaTypes);
+            if (!supportedMediaTypes.isEmpty()) {
+                MediaType.sortBySpecificity(acceptSupportedMediaTypes);
+                httpHeaders.setAccept(acceptSupportedMediaTypes);
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <RequestBody> void requestBodyHandler(RequestEntity<RequestBody> requestEntity, GatewayHttpMessageConverters gatewayHttpMessageConverters, ClientHttpRequest clientHttpRequest) throws GatewayHttpException, IOException {
+        if ((!ObjectUtils.isEmpty(requestEntity)) && requestEntity.hasBody()) {
+            RequestBody requestBody = requestEntity.getBody();
+            Class<RequestBody> requestBodyClass = (Class<RequestBody>) requestBody.getClass();
+            HttpHeaders requestHeaders = clientHttpRequest.getHeaders();
+            MediaType contentType = requestHeaders.getContentType();
+            for (HttpMessageConverter<?> httpMessageConverter : gatewayHttpMessageConverters) {
+                if (httpMessageConverter.canWrite(requestBodyClass, contentType)) {
+                    ((HttpMessageConverter<RequestBody>) httpMessageConverter).write(requestBody, contentType, clientHttpRequest);
+                    return;
+                }
+            }
+            GatewayHttpException.exception("没有匹配合适的HTTP消息转换器支持写入数据操作,内容类型:%s,请求实体类型:%s.", contentType, requestBodyClass);
+        }
+    }
+
+}
